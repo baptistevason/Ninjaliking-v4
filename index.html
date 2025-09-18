@@ -28,6 +28,10 @@
                     <i class="fas fa-search-plus"></i>
                     <span>Exploration SERP</span>
                 </button>
+                <button class="nav-btn" data-page="ereputation">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>E-Réputation</span>
+                </button>
                 <button class="nav-btn" data-page="projects">
                     <i class="fas fa-folder-open"></i>
                     <span>Projets</span>
@@ -51,43 +55,62 @@
                 <div class="search-section">
                     <div class="search-form">
                         <input type="text" id="keywordInput" placeholder="Entrez vos mots-clés...">
-                        <button onclick="generateSearches()" class="btn btn-primary">
-                            <i class="fas fa-external-link-alt"></i> Générer les recherches
+                        <button onclick="generateSearches('google')" class="btn btn-primary">
+                            <i class="fab fa-google"></i> Google
+                        </button>
+                        <button onclick="generateSearches('bing')" class="btn btn-primary">
+                            <i class="fab fa-microsoft"></i> Bing
                         </button>
                     </div>
                 </div>
 
                 <div class="categories-grid">
-                    <div class="category-card" data-category="avis">
+                    <div class="category-card" data-category="blogs">
                         <div class="card-icon">
-                            <i class="fas fa-star"></i>
+                            <i class="fas fa-blog"></i>
                         </div>
-                        <h3>Sites d'avis clients</h3>
-                        <p>Rechercher sur les plateformes d'avis</p>
-                    </div>
-
-                    <div class="category-card" data-category="commentaires">
-                        <div class="card-icon">
-                            <i class="fas fa-comments"></i>
-                        </div>
-                        <h3>Commentaires</h3>
-                        <p>Opportunités dans les commentaires</p>
+                        <h3>📝 Blogs</h3>
+                        <p>Opportunités de commentaires sur blogs</p>
                     </div>
 
                     <div class="category-card" data-category="forums">
                         <div class="card-icon">
                             <i class="fas fa-users"></i>
                         </div>
-                        <h3>Forums</h3>
+                        <h3>💬 Forums</h3>
                         <p>Discussions et forums spécialisés</p>
                     </div>
 
-                    <div class="category-card" data-category="articles">
+                    <div class="category-card" data-category="livres-dor">
                         <div class="card-icon">
-                            <i class="fas fa-newspaper"></i>
+                            <i class="fas fa-book"></i>
                         </div>
-                        <h3>Articles invités</h3>
-                        <p>Opportunités d'articles invités</p>
+                        <h3>📖 Livres d'or</h3>
+                        <p>Livres d'or et guestbooks</p>
+                    </div>
+
+                    <div class="category-card" data-category="annuaires">
+                        <div class="card-icon">
+                            <i class="fas fa-list"></i>
+                        </div>
+                        <h3>📚 Annuaires</h3>
+                        <p>Soumission dans les annuaires</p>
+                    </div>
+
+                    <div class="category-card" data-category="profils">
+                        <div class="card-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3>👤 Profils utilisateurs</h3>
+                        <p>Pages de profils utilisateurs</p>
+                    </div>
+
+                    <div class="category-card" data-category="hybrides">
+                        <div class="card-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <h3>⚙️ Hybrides</h3>
+                        <p>CMS et plateformes précises</p>
                     </div>
                 </div>
 
@@ -117,96 +140,233 @@
                 <div class="search-section">
                     <div class="search-form">
                         <input type="text" id="serpKeyword" placeholder="Entrez votre mot-clé pour tester...">
-                        <button onclick="testSerpOperators()" class="btn btn-primary">
-                            <i class="fas fa-external-link-alt"></i> Lancer les recherches
+                        <button onclick="testSerpOperators('google')" class="btn btn-primary">
+                            <i class="fab fa-google"></i> Google
+                        </button>
+                        <button onclick="testSerpOperators('bing')" class="btn btn-primary">
+                            <i class="fab fa-microsoft"></i> Bing
                         </button>
                     </div>
                 </div>
 
-                <div class="operators-grid">
-                    <div class="operator-category">
-                        <h3><i class="fas fa-clock"></i> Recherche temporelle</h3>
-                        <div class="operator-list">
-                            <label class="operator-item">
-                                <input type="checkbox" data-operator="daterange">
-                                <span>Daterange</span>
-                                <code>daterange:2024-01-01..2024-12-31</code>
-                            </label>
-                            <label class="operator-item">
-                                <input type="checkbox" data-operator="before">
-                                <span>Avant une date</span>
-                                <code>before:2024-01-01</code>
-                            </label>
-                            <label class="operator-item">
-                                <input type="checkbox" data-operator="after">
-                                <span>Après une date</span>
-                                <code>after:2024-01-01</code>
-                            </label>
+                <!-- Catégories d'opérateurs SERP -->
+                <div class="categories-grid">
+                    <div class="category-card" data-category="analyse-concurrents">
+                        <div class="card-icon">
+                            <i class="fas fa-search"></i>
                         </div>
+                        <h3>🔧 Analyse de sites concurrents</h3>
+                        <p>Selon une requête</p>
                     </div>
+                    
+                    <div class="category-card" data-category="contenus-autorite">
+                        <div class="card-icon">
+                            <i class="fas fa-archive"></i>
+                        </div>
+                        <h3>🗃 Contenus evergreen ou d'autorité</h3>
+                        <p>Contenus de référence</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="contenus-seo">
+                        <div class="card-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>📚 Contenus optimisés SEO</h3>
+                        <p>Détection de contenus SEO</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="operateurs-date">
+                        <div class="card-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3>📅 Opérateurs de date</h3>
+                        <p>Pour contenus récents</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="fichiers-telechargeables">
+                        <div class="card-icon">
+                            <i class="fas fa-file-download"></i>
+                        </div>
+                        <h3>🔍 Fichiers téléchargeables</h3>
+                        <p>PDF, DOC, XLS, etc.</p>
+                    </div>
+                </div>
 
-                    <div class="operator-category">
-                        <h3><i class="fas fa-heading"></i> Titres et contenus</h3>
-                        <div class="operator-list">
-                            <label class="operator-item">
-                                <input type="checkbox" data-operator="intitle">
-                                <span>Dans le titre</span>
-                                <code>intitle:"mot-clé"</code>
-                            </label>
-                            <label class="operator-item">
-                                <input type="checkbox" data-operator="intext">
-                                <span>Dans le contenu</span>
-                                <code>intext:"mot-clé"</code>
-                            </label>
-                            <label class="operator-item">
-                                <input type="checkbox" data-operator="inurl">
-                                <span>Dans l'URL</span>
-                                <code>inurl:mot-clé</code>
-                            </label>
-                        </div>
+                <!-- Sélection d'année (visible uniquement si des footprints avec année sont sélectionnés) -->
+                <div id="serpYearSelection" class="year-selection" style="display: none;">
+                    <h4><i class="fas fa-calendar"></i> Sélection d'année</h4>
+                    <div class="year-input">
+                        <label for="serpYear">Année :</label>
+                        <select id="serpYear">
+                            <option value="2024">2024</option>
+                            <option value="2025" selected>2025</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                        </select>
                     </div>
+                </div>
 
-                    <div class="operator-category">
-                        <h3><i class="fas fa-file"></i> Types de fichiers</h3>
-                        <div class="operator-list">
-                            <label class="operator-item">
-                                <input type="checkbox" data-operator="filetype:pdf">
-                                <span>Fichiers PDF</span>
-                                <code>filetype:pdf</code>
-                            </label>
-                            <label class="operator-item">
-                                <input type="checkbox" data-operator="filetype:doc">
-                                <span>Documents Word</span>
-                                <code>filetype:doc</code>
-                            </label>
-                            <label class="operator-item">
-                                <input type="checkbox" data-operator="filetype:ppt">
-                                <span>Présentations</span>
-                                <code>filetype:ppt</code>
-                            </label>
+                <!-- Sélection de dates (visible uniquement si des opérateurs de date sont sélectionnés) -->
+                <div id="serpDateSelection" class="date-selection" style="display: none;">
+                    <h4><i class="fas fa-calendar"></i> Sélection de dates</h4>
+                    <div class="date-inputs">
+                        <div class="date-input-group">
+                            <label for="serpDateFrom">Date de début :</label>
+                            <input type="date" id="serpDateFrom" class="date-input">
+                        </div>
+                        <div class="date-input-group">
+                            <label for="serpDateTo">Date de fin :</label>
+                            <input type="date" id="serpDateTo" class="date-input">
                         </div>
                     </div>
+                </div>
 
-                    <div class="operator-category">
-                        <h3><i class="fas fa-sitemap"></i> Sites spécifiques</h3>
-                        <div class="operator-list">
-                            <label class="operator-item">
-                                <input type="checkbox" data-operator="site:">
-                                <span>Site spécifique</span>
-                                <code>site:exemple.com</code>
-                            </label>
-                            <label class="operator-item">
-                                <input type="checkbox" data-operator="related:">
-                                <span>Sites similaires</span>
-                                <code>related:exemple.com</code>
-                            </label>
-                            <label class="operator-item">
-                                <input type="checkbox" data-operator="link:">
-                                <span>Sites qui lient vers</span>
-                                <code>link:exemple.com</code>
-                            </label>
+                <!-- Affichage des footprints sélectionnés -->
+                <div id="serpFootprintsSection" class="footprints-section" style="display: none;">
+                    <div class="footprints-header">
+                        <h3><i class="fas fa-list"></i> Footprints sélectionnés</h3>
+                        <div class="footprints-actions">
+                            <button class="btn btn-secondary" onclick="selectAllSerpFootprints()">
+                                <i class="fas fa-check-square"></i> Tout sélectionner
+                            </button>
+                            <button class="btn btn-secondary" onclick="deselectAllSerpFootprints()">
+                                <i class="fas fa-square"></i> Tout désélectionner
+                            </button>
                         </div>
                     </div>
+                    <div id="serpFootprintsList" class="footprints-list"></div>
+                </div>
+            </div>
+
+            <!-- Page E-Réputation -->
+            <div class="page" id="ereputation-page">
+                <div class="page-header">
+                    <h2>E-Réputation</h2>
+                    <p>Footprints SEO pour analyser la réputation en ligne</p>
+                </div>
+
+                <div class="search-section">
+                    <div class="search-form">
+                        <input type="text" id="ereputationKeyword" placeholder="Entrez votre mot-clé pour analyser l'e-réputation...">
+                        <button onclick="testEreputationOperators('google')" class="btn btn-primary">
+                            <i class="fab fa-google"></i> Google
+                        </button>
+                        <button onclick="testEreputationOperators('bing')" class="btn btn-primary">
+                            <i class="fab fa-microsoft"></i> Bing
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Catégories d'opérateurs E-Réputation -->
+                <div class="categories-grid">
+                    <div class="category-card" data-category="avis-notations">
+                        <div class="card-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3>📣 Avis & notations</h3>
+                        <p>Plateformes d'avis et notations</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="forums-discussion">
+                        <div class="card-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3>💬 Forums de discussion</h3>
+                        <p>Forums et discussions communautaires</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="blogs-articles">
+                        <div class="card-icon">
+                            <i class="fas fa-blog"></i>
+                        </div>
+                        <h3>📝 Blogs, articles et news</h3>
+                        <p>Contenus éditoriaux et articles</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="reseaux-sociaux">
+                        <div class="card-icon">
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                        <h3>👥 Réseaux sociaux</h3>
+                        <p>Via Google (Twitter, Facebook, etc.)</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="contenus-autorite">
+                        <div class="card-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h3>📂 Contenus à forte autorité</h3>
+                        <p>Fichiers (PDF, DOC, PPT)</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="charge-emotionnelle">
+                        <div class="card-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h3>🔎 Charge émotionnelle</h3>
+                        <p>Requêtes à forte suspicion</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="retours-utilisateurs">
+                        <div class="card-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <h3>💬 Retours utilisateurs</h3>
+                        <p>Recherches classiques sur les retours</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="filtres-temporels">
+                        <div class="card-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3>📅 Filtres temporels</h3>
+                        <p>Pour contenus récents</p>
+                    </div>
+                </div>
+
+                <!-- Sélection d'année (visible uniquement si des footprints avec année sont sélectionnés) -->
+                <div id="ereputationYearSelection" class="year-selection" style="display: none;">
+                    <h4><i class="fas fa-calendar"></i> Sélection d'année</h4>
+                    <div class="year-input">
+                        <label for="ereputationYear">Année :</label>
+                        <select id="ereputationYear">
+                            <option value="2024">2024</option>
+                            <option value="2025" selected>2025</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Sélection de dates (visible uniquement si des opérateurs de date sont sélectionnés) -->
+                <div id="ereputationDateSelection" class="date-selection" style="display: none;">
+                    <h4><i class="fas fa-calendar"></i> Sélection de dates</h4>
+                    <div class="date-inputs">
+                        <div class="date-input-group">
+                            <label for="ereputationDateFrom">Date de début :</label>
+                            <input type="date" id="ereputationDateFrom" class="date-input">
+                        </div>
+                        <div class="date-input-group">
+                            <label for="ereputationDateTo">Date de fin :</label>
+                            <input type="date" id="ereputationDateTo" class="date-input">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Affichage des footprints sélectionnés -->
+                <div id="ereputationFootprintsSection" class="footprints-section" style="display: none;">
+                    <div class="footprints-header">
+                        <h3><i class="fas fa-list"></i> Footprints sélectionnés</h3>
+                        <div class="footprints-actions">
+                            <button onclick="selectAllEreputationFootprints()" class="btn btn-secondary">
+                                <i class="fas fa-check-square"></i> Tout sélectionner
+                            </button>
+                            <button onclick="deselectAllEreputationFootprints()" class="btn btn-outline">
+                                <i class="fas fa-square"></i> Tout désélectionner
+                            </button>
+                        </div>
+                    </div>
+                    <div id="ereputationFootprintsList" class="footprints-list"></div>
                 </div>
             </div>
 

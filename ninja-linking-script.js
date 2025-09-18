@@ -1,5 +1,5 @@
 // Variables globales
-let selectedFootprints = [];
+let selectedFootprints = []; // Pour la page Ninjalinking
 let projects = [];
 let sites = [];
 let editingSiteId = null;
@@ -136,33 +136,34 @@ let projectSpots = [];
 
 // Données des footprints par catégorie
 const footprintsData = {
-    avis: [
-        'site:trustpilot.com "avis [mot-clé]"',
-        'site:google.com/maps "avis [mot-clé]"',
-        'site:yelp.com "avis [mot-clé]"',
-        'site:avis-verifies.com "avis [mot-clé]"',
-        'site:verified-reviews.com "avis [mot-clé]"'
-    ],
-    commentaires: [
-        'site:blog.fr "commentaire [mot-clé]"',
-        'site:wordpress.com "commentaire [mot-clé]"',
-        'site:medium.com "commentaire [mot-clé]"',
-        'site:linkedin.com "commentaire [mot-clé]"',
-        'site:reddit.com "commentaire [mot-clé]"'
+    blogs: [
+        '"mot-clé" inurl:blog "laisser un commentaire"',
+        '"mot-clé" "Vous devez être connecté pour publier un commentaire"',
+        '"mot-clé" "poster un commentaire sur cet article"',
+        '"mot-clé" inurl:/blog/ "Ajouter un commentaire"'
     ],
     forums: [
-        'site:forum.com "discussion [mot-clé]"',
-        'site:jeuxvideo.com "forum [mot-clé]"',
-        'site:hardware.fr "forum [mot-clé]"',
-        'site:clubic.com "forum [mot-clé]"',
-        'site:lesnumeriques.com "forum [mot-clé]"'
+        '"mot-clé" inurl:/forum/ "sujets actifs"',
+        '"mot-clé" intitle:"index du forum"',
+        '"mot-clé" inurl:forumdisplay.php?fid=',
+        '"mot-clé" inurl:viewtopic.php?'
     ],
-    articles: [
-        'site:blog.fr "article invité [mot-clé]"',
-        'site:medium.com "guest post [mot-clé]"',
-        'site:wordpress.com "article invité [mot-clé]"',
-        'site:linkedin.com "article [mot-clé]"',
-        'site:viadeo.com "article [mot-clé]"'
+    'livres-dor': [
+        '"mot-clé" intitle:"livre d\'or" "ajouter un message"',
+        '"mot-clé" inurl:guestbook'
+    ],
+    annuaires: [
+        '"mot-clé" intitle:"annuaire de sites" "proposer un site"',
+        '"mot-clé" "soumettre un site" inurl:annuaire',
+        '"mot-clé" inurl:/submit-link/'
+    ],
+    profils: [
+        '"mot-clé" inurl:/user/',
+        '"mot-clé" inurl:profile.php?id='
+    ],
+    hybrides: [
+        '"mot-clé" "Powered by WordPress" "laisser un commentaire"',
+        '"mot-clé" "propulsé par phpBB" "sujets actifs"'
     ]
 };
 
@@ -170,6 +171,8 @@ const footprintsData = {
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
     loadData();
+    // Afficher la page Ninjalinking par défaut
+    switchPage('ninjalinking');
 });
 
 function initializeApp() {
@@ -182,7 +185,16 @@ function initializeApp() {
     // Catégories de footprints
     const categoryCards = document.querySelectorAll('.category-card');
     categoryCards.forEach(card => {
-        card.addEventListener('click', () => toggleCategory(card.dataset.category));
+        card.addEventListener('click', () => {
+            // Vérifier si c'est une carte de la page SERP
+            if (card.closest('#serp-page')) {
+                toggleSerpCategory(card.dataset.category);
+            } else if (card.closest('#ereputation-page')) {
+                toggleEreputationCategory(card.dataset.category);
+            } else {
+                toggleCategory(card.dataset.category);
+            }
+        });
     });
 
     // Formulaires
@@ -268,6 +280,8 @@ function initializeApp() {
 }
 
 async function switchPage(pageId) {
+    console.log('Changement de page vers:', pageId);
+    
     // Désactiver tous les boutons de navigation
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('active');
@@ -282,11 +296,17 @@ async function switchPage(pageId) {
     const activeBtn = document.querySelector(`[data-page="${pageId}"]`);
     if (activeBtn) {
         activeBtn.classList.add('active');
+        console.log('Bouton activé:', activeBtn);
+    } else {
+        console.error('Bouton non trouvé pour:', pageId);
     }
 
     const activePage = document.getElementById(`${pageId}-page`);
     if (activePage) {
         activePage.classList.add('active');
+        console.log('Page activée:', activePage);
+    } else {
+        console.error('Page non trouvée pour:', `${pageId}-page`);
     }
 
     // Charger les données de la page
@@ -294,6 +314,9 @@ async function switchPage(pageId) {
         renderProjects();
     } else if (pageId === 'catalog') {
         renderSites();
+    } else if (pageId === 'serp') {
+        // Initialiser la page SERP si nécessaire
+        console.log('Page SERP chargée');
     }
 }
 
@@ -343,7 +366,7 @@ function renderFootprints() {
         const item = document.createElement('div');
         item.className = 'footprint-item';
         item.innerHTML = `
-            <input type="checkbox" class="footprint-checkbox">
+            <input type="checkbox" class="footprint-checkbox" data-footprint="${footprint}">
             <span class="footprint-text">${footprint}</span>
         `;
         footprintsList.appendChild(item);
@@ -351,12 +374,31 @@ function renderFootprints() {
 }
 
 function getCheckedFootprints() {
-    const checkedBoxes = document.querySelectorAll('.footprint-checkbox:checked');
+    // Récupérer les cases cochées de la page Ninjalinking uniquement
+    const checkedBoxes = document.querySelectorAll('#footprintsList .footprint-checkbox:checked');
     const checkedFootprints = [];
     
     checkedBoxes.forEach(checkbox => {
-        const footprintText = checkbox.nextElementSibling.textContent;
-        checkedFootprints.push(footprintText);
+        // Utiliser l'attribut data-footprint si disponible, sinon le texte
+        const footprint = checkbox.dataset.footprint || checkbox.nextElementSibling.textContent;
+        checkedFootprints.push(footprint);
+    });
+    
+    return checkedFootprints;
+}
+
+function getCheckedSerpFootprints() {
+    // Récupérer les cases cochées de la page SERP uniquement
+    const checkedBoxes = document.querySelectorAll('#serpFootprintsList .footprint-checkbox:checked');
+    const checkedFootprints = [];
+    
+    console.log('SERP - Nombre de cases cochées trouvées:', checkedBoxes.length);
+    
+    checkedBoxes.forEach((checkbox, index) => {
+        // Utiliser l'attribut data-footprint si disponible, sinon le texte
+        const footprint = checkbox.dataset.footprint || checkbox.nextElementSibling.textContent;
+        console.log(`SERP - Case ${index + 1}:`, footprint);
+        checkedFootprints.push(footprint);
     });
     
     return checkedFootprints;
@@ -376,7 +418,7 @@ function deselectAllFootprints() {
     });
 }
 
-function generateSearches() {
+function generateSearches(engine = 'google') {
     const keywordInput = document.getElementById('keywordInput');
     const keyword = keywordInput.value.trim();
 
@@ -388,55 +430,586 @@ function generateSearches() {
     // Récupérer seulement les footprints cochés
     const checkedFootprints = getCheckedFootprints();
     
+    console.log('Footprints cochés:', checkedFootprints);
+    
     if (checkedFootprints.length === 0) {
         alert('Veuillez cocher au moins un footprint à utiliser');
         return;
     }
 
-    // Remplacer [mot-clé] par le mot-clé réel
+    // Remplacer "mot-clé" par le mot-clé réel dans chaque footprint
     const searches = checkedFootprints.map(footprint => 
-        footprint.replace(/\[mot-clé\]/g, keyword)
+        footprint.replace(/mot-clé/g, keyword)
     );
 
-    // Ouvrir les recherches dans de nouveaux onglets
+    console.log('Recherches générées Ninjalinking:', searches);
+
+    // Déterminer l'URL de recherche
+    let baseUrl;
+    if (engine === 'bing') {
+        baseUrl = 'https://www.bing.com/search?q=';
+    } else {
+        baseUrl = 'https://www.google.com/search?q=';
+    }
+
+    // Ouvrir chaque recherche dans un nouvel onglet
     searches.forEach(search => {
-        const url = `https://www.google.com/search?q=${encodeURIComponent(search)}`;
+        const url = `${baseUrl}${encodeURIComponent(search)}`;
+        console.log('URL générée Ninjalinking:', url);
         window.open(url, '_blank');
     });
 }
 
-function testSerpOperators() {
-    const keywordInput = document.getElementById('serpKeyword');
-    const keyword = keywordInput.value.trim();
 
+// Données des footprints SERP par catégorie
+const serpFootprintsData = {
+    'analyse-concurrents': [
+        '"mot-clé" inurl:/blog/',
+        '"mot-clé" intitle:"guide complet"',
+        '"mot-clé" intitle:"avis"',
+        '"mot-clé" inurl:/comparatif/',
+        '"mot-clé" inurl:/produit/',
+        '"mot-clé" intitle:"test et avis"'
+    ],
+    'contenus-autorite': [
+        '"mot-clé" inurl:/2025/',
+        '"mot-clé" intitle:"tout savoir sur"',
+        '"mot-clé" intitle:"FAQ"',
+        '"mot-clé" inurl:/dossier/',
+        '"mot-clé" inurl:/ressources/'
+    ],
+    'contenus-seo': [
+        '"mot-clé" inurl:/seo/',
+        '"mot-clé" intitle:"guide"',
+        '"mot-clé" intitle:"meilleurs"',
+        '"mot-clé" intitle:"comment faire"'
+    ],
+    'operateurs-date': [
+        '"mot-clé" after:2024-01-01',
+        '"mot-clé" before:2023-12-31',
+        '"mot-clé" after:2023-01-01 before:2023-12-31',
+        '"mot-clé" after:2025-01-01'
+    ],
+    'fichiers-telechargeables': [
+        '"mot-clé" filetype:pdf',
+        '"mot-clé" filetype:doc',
+        '"mot-clé" filetype:xls',
+        '"mot-clé" filetype:ppt',
+        '"mot-clé" filetype:txt',
+        '"mot-clé" filetype:csv'
+    ]
+};
+
+// Données des footprints E-Réputation par catégorie
+const ereputationFootprintsData = {
+    'avis-notations': [
+        '"mot-clé" site:trustpilot.com',
+        '"mot-clé" site:avis-verifies.com',
+        '"mot-clé" site:tripadvisor.fr',
+        '"mot-clé" site:google.com inurl:/maps/place/',
+        '"mot-clé" intitle:"avis"',
+        '"mot-clé" intitle:"témoignages"',
+        '"mot-clé" "retours clients"'
+    ],
+    'forums-discussion': [
+        '"mot-clé" site:forum.hardware.fr',
+        '"mot-clé" site:commentcamarche.net',
+        '"mot-clé" site:jeuxvideo.com/forums/',
+        '"mot-clé" site:doctissimo.fr',
+        '"mot-clé" site:aufeminin.com/forum/',
+        '"mot-clé" site:forum.frandroid.com',
+        '"mot-clé" site:forum-auto.caradisiac.com',
+        '"mot-clé" inurl:/forum/',
+        '"mot-clé" inurl:viewtopic.php',
+        '"mot-clé" inurl:/discussions/'
+    ],
+    'blogs-articles': [
+        '"mot-clé" inurl:/blog/',
+        '"mot-clé" intitle:"notre avis sur"',
+        '"mot-clé" intitle:"expérience avec"',
+        '"mot-clé" "nous avons testé"',
+        '"mot-clé" "ce que pensent les utilisateurs"'
+    ],
+    'reseaux-sociaux': [
+        '"mot-clé" site:twitter.com',
+        '"mot-clé" site:facebook.com',
+        '"mot-clé" site:linkedin.com',
+        '"mot-clé" site:instagram.com',
+        '"mot-clé" site:reddit.com',
+        '"mot-clé" site:quora.com'
+    ],
+    'contenus-autorite': [
+        '"mot-clé" filetype:pdf',
+        '"mot-clé" filetype:doc',
+        '"mot-clé" filetype:ppt'
+    ],
+    'charge-emotionnelle': [
+        '"mot-clé" avis négatif',
+        '"mot-clé" arnaque',
+        '"mot-clé" escroquerie',
+        '"mot-clé" mensonge',
+        '"mot-clé" tromperie',
+        '"mot-clé" mauvaise expérience',
+        '"mot-clé" retour d\'expérience',
+        '"mot-clé" problème avec',
+        '"mot-clé" service client nul',
+        '"mot-clé" déçu',
+        '"mot-clé" déception',
+        '"mot-clé" plainte',
+        '"mot-clé" litige',
+        '"mot-clé" dangereux'
+    ],
+    'retours-utilisateurs': [
+        '"mot-clé" intitle:"avis"',
+        '"mot-clé" intitle:"témoignages"',
+        '"mot-clé" "retours clients"',
+        '"mot-clé" "retour d\'expérience"',
+        '"mot-clé" "que pensent les gens de"',
+        '"mot-clé" "est-ce fiable"',
+        '"mot-clé" "votre avis"'
+    ],
+    'filtres-temporels': [
+        '"mot-clé" after:2024-01-01',
+        '"mot-clé" before:2023-12-31',
+        '"mot-clé" after:2023-01-01 before:2023-12-31'
+    ]
+};
+
+
+// Variables pour les footprints SERP (copie exacte de Ninjalinking)
+let selectedSerpFootprints = [];
+
+// Variables pour les footprints E-Réputation
+let selectedEreputationFootprints = [];
+
+// Fonction pour basculer la sélection d'une catégorie SERP (copie exacte de toggleCategory)
+function toggleSerpCategory(category) {
+    const card = document.querySelector(`#serp-page [data-category="${category}"]`);
+    const footprintsSection = document.getElementById('serpFootprintsSection');
+    const footprintsList = document.getElementById('serpFootprintsList');
+
+    if (card.classList.contains('selected')) {
+        // Désélectionner la catégorie
+        card.classList.remove('selected');
+        removeSerpFootprintsByCategory(category);
+    } else {
+        // Sélectionner la catégorie
+        card.classList.add('selected');
+        addSerpFootprintsByCategory(category);
+    }
+
+    // Afficher/masquer la section footprints
+    if (selectedSerpFootprints.length > 0) {
+        footprintsSection.style.display = 'block';
+        renderSerpFootprints();
+    } else {
+        footprintsSection.style.display = 'none';
+    }
+    
+    // Afficher/masquer la sélection d'année et de dates
+    updateSerpYearSelection();
+    updateSerpDateSelection();
+}
+
+function addSerpFootprintsByCategory(category) {
+    const footprints = serpFootprintsData[category] || [];
+    footprints.forEach(footprint => {
+        if (!selectedSerpFootprints.includes(footprint)) {
+            selectedSerpFootprints.push(footprint);
+        }
+    });
+}
+
+function removeSerpFootprintsByCategory(category) {
+    const footprints = serpFootprintsData[category] || [];
+    selectedSerpFootprints = selectedSerpFootprints.filter(footprint => !footprints.includes(footprint));
+}
+
+function renderSerpFootprints() {
+    const footprintsList = document.getElementById('serpFootprintsList');
+    footprintsList.innerHTML = '';
+
+    selectedSerpFootprints.forEach(footprint => {
+        const item = document.createElement('div');
+        item.className = 'footprint-item';
+        
+        // Afficher le footprint complet sans division
+        let displayText = footprint;
+        
+        item.innerHTML = `
+            <input type="checkbox" class="footprint-checkbox" data-footprint="${footprint}">
+            <span class="footprint-text">${displayText}</span>
+            <button class="remove-footprint" onclick="removeSerpFootprint('${footprint}')">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        footprintsList.appendChild(item);
+    });
+}
+
+function removeSerpFootprint(footprint) {
+    selectedSerpFootprints = selectedSerpFootprints.filter(f => f !== footprint);
+    
+    // Vérifier si une catégorie doit être désélectionnée
+    for (const category in serpFootprintsData) {
+        const categoryFootprints = serpFootprintsData[category];
+        if (categoryFootprints.includes(footprint)) {
+            const hasSelectedFootprints = categoryFootprints.some(f => selectedSerpFootprints.includes(f));
+            if (!hasSelectedFootprints) {
+                const card = document.querySelector(`#serp-page [data-category="${category}"]`);
+                card.classList.remove('selected');
+            }
+            break;
+        }
+    }
+    
+    renderSerpFootprints();
+    
+    // Masquer la section si plus de footprints
+    if (selectedSerpFootprints.length === 0) {
+        document.getElementById('serpFootprintsSection').style.display = 'none';
+    }
+}
+
+function getSelectedSerpOperators() {
+    return selectedSerpFootprints;
+}
+
+// Fonction pour mettre à jour l'affichage de la sélection de dates
+function updateSerpYearSelection() {
+    const yearSelection = document.getElementById('serpYearSelection');
+    const hasYearFootprints = selectedSerpFootprints.some(footprint => 
+        footprint.includes('/2025/')
+    );
+    
+    if (hasYearFootprints) {
+        yearSelection.style.display = 'block';
+    } else {
+        yearSelection.style.display = 'none';
+    }
+}
+
+function updateSerpDateSelection() {
+    const dateSelection = document.getElementById('serpDateSelection');
+    const hasDateFootprints = selectedSerpFootprints.some(footprint => 
+        footprint.includes('after:') || footprint.includes('before:')
+    );
+    
+    if (hasDateFootprints) {
+        dateSelection.style.display = 'block';
+    } else {
+        dateSelection.style.display = 'none';
+    }
+}
+
+// Fonction pour lancer les recherches sur Google ou Bing
+function testSerpOperators(engine = 'google') {
+    const keyword = document.getElementById('serpKeyword').value.trim();
     if (!keyword) {
         alert('Veuillez entrer un mot-clé');
         return;
     }
-
-    const selectedOperators = getSelectedSerpOperators();
-    if (selectedOperators.length === 0) {
-        alert('Veuillez sélectionner au moins un opérateur');
+    
+    // Récupérer seulement les footprints cochés de la page SERP
+    const checkedFootprints = getCheckedSerpFootprints();
+    
+    console.log('SERP - Footprints cochés:', checkedFootprints);
+    
+    if (checkedFootprints.length === 0) {
+        alert('Veuillez cocher au moins un footprint à utiliser');
         return;
     }
-
-    // Générer les recherches avec les opérateurs
-    selectedOperators.forEach(operator => {
-        let search = keyword;
-        if (operator.includes(':')) {
-            search = `${operator} ${keyword}`;
-        } else {
-            search = `${operator}:"${keyword}"`;
+    
+    // Récupérer l'année et les dates sélectionnées
+    const selectedYear = document.getElementById('serpYear').value;
+    const dateFrom = document.getElementById('serpDateFrom').value;
+    const dateTo = document.getElementById('serpDateTo').value;
+    
+    console.log('SERP - Année sélectionnée:', selectedYear);
+    console.log('SERP - Date de début:', dateFrom);
+    console.log('SERP - Date de fin:', dateTo);
+    
+    // Remplacer "mot-clé" par le mot-clé réel dans chaque footprint
+    const searches = checkedFootprints.map(footprint => {
+        let processedFootprint = footprint;
+        
+        console.log('SERP - Footprint original:', footprint);
+        
+        // Remplacer "mot-clé" par le mot-clé réel
+        processedFootprint = processedFootprint.replace(/mot-clé/g, keyword);
+        
+        // Remplacer l'année dans les footprints
+        if (footprint.includes('/2025/')) {
+            processedFootprint = processedFootprint.replace('/2025/', `/${selectedYear}/`);
         }
         
-        const url = `https://www.google.com/search?q=${encodeURIComponent(search)}`;
+        // Remplacer les dates dans les footprints
+        if (dateFrom) {
+            // Remplacer toutes les dates after: par la date de début sélectionnée
+            processedFootprint = processedFootprint.replace(/after:\d{4}-\d{2}-\d{2}/g, `after:${dateFrom}`);
+        }
+        if (dateTo) {
+            // Remplacer toutes les dates before: par la date de fin sélectionnée
+            processedFootprint = processedFootprint.replace(/before:\d{4}-\d{2}-\d{2}/g, `before:${dateTo}`);
+        }
+        
+        console.log('SERP - Footprint traité:', processedFootprint);
+        
+        return processedFootprint;
+    });
+    
+    console.log('SERP - Recherches générées:', searches);
+    
+    // Déterminer l'URL de recherche
+    let baseUrl;
+    if (engine === 'bing') {
+        baseUrl = 'https://www.bing.com/search?q=';
+    } else {
+        baseUrl = 'https://www.google.com/search?q=';
+    }
+    
+    // Ouvrir chaque recherche dans un nouvel onglet
+    searches.forEach(search => {
+        const url = `${baseUrl}${encodeURIComponent(search)}`;
+        console.log('SERP - URL générée:', url);
         window.open(url, '_blank');
     });
 }
 
-function getSelectedSerpOperators() {
-    const checkboxes = document.querySelectorAll('.operator-item input[type="checkbox"]:checked');
-    return Array.from(checkboxes).map(cb => cb.dataset.operator);
+// Fonctions pour E-Réputation (copie des fonctions SERP)
+function toggleEreputationCategory(category) {
+    const card = document.querySelector(`#ereputation-page [data-category="${category}"]`);
+    const footprintsSection = document.getElementById('ereputationFootprintsSection');
+    
+    if (card.classList.contains('selected')) {
+        card.classList.remove('selected');
+        removeEreputationFootprintsByCategory(category);
+    } else {
+        card.classList.add('selected');
+        addEreputationFootprintsByCategory(category);
+    }
+    
+    if (selectedEreputationFootprints.length > 0) {
+        footprintsSection.style.display = 'block';
+        renderEreputationFootprints();
+    } else {
+        footprintsSection.style.display = 'none';
+    }
+    
+    // Afficher/masquer la sélection d'année et de dates
+    updateEreputationYearSelection();
+    updateEreputationDateSelection();
+}
+
+function addEreputationFootprintsByCategory(category) {
+    const footprints = ereputationFootprintsData[category] || [];
+    footprints.forEach(footprint => {
+        if (!selectedEreputationFootprints.includes(footprint)) {
+            selectedEreputationFootprints.push(footprint);
+        }
+    });
+}
+
+function removeEreputationFootprintsByCategory(category) {
+    const footprints = ereputationFootprintsData[category] || [];
+    selectedEreputationFootprints = selectedEreputationFootprints.filter(footprint => !footprints.includes(footprint));
+}
+
+function renderEreputationFootprints() {
+    const footprintsList = document.getElementById('ereputationFootprintsList');
+    footprintsList.innerHTML = '';
+
+    selectedEreputationFootprints.forEach(footprint => {
+        const item = document.createElement('div');
+        item.className = 'footprint-item';
+        
+        // Afficher le footprint complet sans division
+        let displayText = footprint;
+        
+        item.innerHTML = `
+            <input type="checkbox" class="footprint-checkbox" data-footprint="${footprint}">
+            <span class="footprint-text">${displayText}</span>
+            <button class="remove-footprint" onclick="removeEreputationFootprint('${footprint}')">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        footprintsList.appendChild(item);
+    });
+}
+
+function removeEreputationFootprint(footprint) {
+    selectedEreputationFootprints = selectedEreputationFootprints.filter(f => f !== footprint);
+    
+    // Vérifier si toutes les catégories de ce footprint sont désélectionnées
+    Object.keys(ereputationFootprintsData).forEach(category => {
+        const categoryFootprints = ereputationFootprintsData[category];
+        if (categoryFootprints.includes(footprint)) {
+            const hasOtherFootprints = categoryFootprints.some(f => selectedEreputationFootprints.includes(f));
+            if (!hasOtherFootprints) {
+                const card = document.querySelector(`#ereputation-page [data-category="${category}"]`);
+                if (card) {
+                    card.classList.remove('selected');
+                }
+            }
+        }
+    });
+    
+    renderEreputationFootprints();
+    
+    if (selectedEreputationFootprints.length === 0) {
+        document.getElementById('ereputationFootprintsSection').style.display = 'none';
+    }
+    
+    updateEreputationYearSelection();
+    updateEreputationDateSelection();
+}
+
+function getCheckedEreputationFootprints() {
+    // Récupérer les cases cochées de la page E-Réputation uniquement
+    const checkedBoxes = document.querySelectorAll('#ereputationFootprintsList .footprint-checkbox:checked');
+    const checkedFootprints = [];
+    
+    console.log('E-Réputation - Nombre de cases cochées trouvées:', checkedBoxes.length);
+    
+    checkedBoxes.forEach((checkbox, index) => {
+        // Utiliser l'attribut data-footprint si disponible, sinon le texte
+        const footprint = checkbox.dataset.footprint || checkbox.nextElementSibling.textContent;
+        console.log(`E-Réputation - Case ${index + 1}:`, footprint);
+        checkedFootprints.push(footprint);
+    });
+    
+    return checkedFootprints;
+}
+
+function updateEreputationYearSelection() {
+    const yearSelection = document.getElementById('ereputationYearSelection');
+    const hasYearFootprints = selectedEreputationFootprints.some(footprint => 
+        footprint.includes('/2025/')
+    );
+    
+    if (hasYearFootprints) {
+        yearSelection.style.display = 'block';
+    } else {
+        yearSelection.style.display = 'none';
+    }
+}
+
+function updateEreputationDateSelection() {
+    const dateSelection = document.getElementById('ereputationDateSelection');
+    const hasDateFootprints = selectedEreputationFootprints.some(footprint => 
+        footprint.includes('after:') || footprint.includes('before:')
+    );
+    
+    if (hasDateFootprints) {
+        dateSelection.style.display = 'block';
+    } else {
+        dateSelection.style.display = 'none';
+    }
+}
+
+// Fonction pour lancer les recherches E-Réputation sur Google ou Bing
+function testEreputationOperators(engine = 'google') {
+    const keyword = document.getElementById('ereputationKeyword').value.trim();
+    if (!keyword) {
+        alert('Veuillez entrer un mot-clé');
+        return;
+    }
+    
+    // Récupérer seulement les footprints cochés de la page E-Réputation
+    const checkedFootprints = getCheckedEreputationFootprints();
+    
+    console.log('E-Réputation - Footprints cochés:', checkedFootprints);
+    
+    if (checkedFootprints.length === 0) {
+        alert('Veuillez cocher au moins un footprint à utiliser');
+        return;
+    }
+    
+    // Récupérer l'année et les dates sélectionnées
+    const selectedYear = document.getElementById('ereputationYear').value;
+    const dateFrom = document.getElementById('ereputationDateFrom').value;
+    const dateTo = document.getElementById('ereputationDateTo').value;
+    
+    console.log('E-Réputation - Année sélectionnée:', selectedYear);
+    console.log('E-Réputation - Date de début:', dateFrom);
+    console.log('E-Réputation - Date de fin:', dateTo);
+    
+    // Remplacer "mot-clé" par le mot-clé réel dans chaque footprint
+    const searches = checkedFootprints.map(footprint => {
+        let processedFootprint = footprint;
+        
+        console.log('E-Réputation - Footprint original:', footprint);
+        
+        // Remplacer "mot-clé" par le mot-clé réel
+        processedFootprint = processedFootprint.replace(/mot-clé/g, keyword);
+        
+        // Remplacer l'année dans les footprints
+        if (footprint.includes('/2025/')) {
+            processedFootprint = processedFootprint.replace('/2025/', `/${selectedYear}/`);
+        }
+        
+        // Remplacer les dates dans les footprints
+        if (dateFrom) {
+            // Remplacer toutes les dates after: par la date de début sélectionnée
+            processedFootprint = processedFootprint.replace(/after:\d{4}-\d{2}-\d{2}/g, `after:${dateFrom}`);
+        }
+        if (dateTo) {
+            // Remplacer toutes les dates before: par la date de fin sélectionnée
+            processedFootprint = processedFootprint.replace(/before:\d{4}-\d{2}-\d{2}/g, `before:${dateTo}`);
+        }
+        
+        console.log('E-Réputation - Footprint traité:', processedFootprint);
+        
+        return processedFootprint;
+    });
+    
+    console.log('E-Réputation - Recherches générées:', searches);
+    
+    // Déterminer l'URL de recherche
+    let baseUrl;
+    if (engine === 'bing') {
+        baseUrl = 'https://www.bing.com/search?q=';
+    } else {
+        baseUrl = 'https://www.google.com/search?q=';
+    }
+    
+    // Ouvrir chaque recherche dans un nouvel onglet
+    searches.forEach(search => {
+        const url = `${baseUrl}${encodeURIComponent(search)}`;
+        console.log('E-Réputation - URL générée:', url);
+        window.open(url, '_blank');
+    });
+}
+
+
+// Fonctions pour sélectionner/désélectionner tous les footprints SERP (copie exacte de Ninjalinking)
+function selectAllSerpFootprints() {
+    const checkboxes = document.querySelectorAll('#serpFootprintsList .footprint-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = true;
+    });
+}
+
+function deselectAllSerpFootprints() {
+    const checkboxes = document.querySelectorAll('#serpFootprintsList .footprint-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+}
+
+// Fonctions pour sélectionner/désélectionner tous les footprints E-Réputation
+function selectAllEreputationFootprints() {
+    const checkboxes = document.querySelectorAll('#ereputationFootprintsList .footprint-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = true;
+    });
+}
+
+function deselectAllEreputationFootprints() {
+    const checkboxes = document.querySelectorAll('#ereputationFootprintsList .footprint-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
 }
 
 // Gestion des projets
@@ -646,9 +1219,6 @@ function renderProjects() {
         const objectiveClass = project.objective === 'SEO' ? 'seo' : 'reputation';
         
         card.innerHTML = `
-            <div class="project-checkbox-container">
-                <input type="checkbox" class="project-checkbox" data-project-id="${project.id}" onchange="handleProjectSelection()">
-            </div>
             <div class="project-header">
                 <div class="project-info">
                     <h3 class="project-title">${project.name}</h3>
@@ -657,6 +1227,7 @@ function renderProjects() {
                     </a>
                 </div>
                 <div class="project-actions">
+                    <input type="checkbox" class="project-checkbox" data-project-id="${project.id}" onchange="handleProjectSelection()">
                     <button class="project-action-btn edit" onclick="openProjectModal(${project.id})" title="Modifier">
                         <i class="fas fa-edit"></i>
                     </button>
