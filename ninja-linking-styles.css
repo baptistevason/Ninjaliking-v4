@@ -91,7 +91,7 @@ body {
 /* Contenu principal */
 .main-content {
     flex: 1;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 2rem;
     width: 100%;
@@ -1383,7 +1383,8 @@ body {
 .catalog-table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 1000px;
+    min-width: 1200px;
+    table-layout: fixed;
 }
 
 .catalog-table th {
@@ -1398,10 +1399,59 @@ body {
     letter-spacing: 0.05em;
 }
 
+/* Largeurs spécifiques des colonnes */
+.catalog-table th:nth-child(1),
+.catalog-table td:nth-child(1) {
+    width: 50px; /* Checkbox */
+}
+
+.catalog-table th:nth-child(2),
+.catalog-table td:nth-child(2) {
+    width: 25%; /* URL */
+}
+
+.catalog-table th:nth-child(3),
+.catalog-table td:nth-child(3) {
+    width: 10%; /* TYPE */
+}
+
+.catalog-table th:nth-child(4),
+.catalog-table td:nth-child(4) {
+    width: 12%; /* THÉMATIQUE */
+}
+
+.catalog-table th:nth-child(5),
+.catalog-table td:nth-child(5) {
+    width: 10%; /* TRAFIC */
+}
+
+.catalog-table th:nth-child(6),
+.catalog-table td:nth-child(6) {
+    width: 12%; /* TRUST FLOW */
+}
+
+.catalog-table th:nth-child(7),
+.catalog-table td:nth-child(7) {
+    width: 15%; /* TOPICAL TRUST FLOW */
+}
+
+.catalog-table th:nth-child(8),
+.catalog-table td:nth-child(8) {
+    width: 8%; /* FOLLOW */
+}
+
+.catalog-table th:nth-child(9),
+.catalog-table td:nth-child(9) {
+    width: 8%; /* ACTIONS */
+}
+
 .catalog-table td {
     padding: 1rem;
     border-bottom: 1px solid #f1f5f9;
     vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .catalog-table tr:hover {
@@ -1416,6 +1466,10 @@ body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    word-break: break-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .site-url:hover {
@@ -1750,7 +1804,7 @@ body {
     }
     
     .catalog-table {
-        min-width: 1000px;
+        min-width: 1200px;
     }
     
     .catalog-table th,
