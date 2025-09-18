@@ -1161,6 +1161,11 @@ function openSiteModal(siteId = null) {
     modal.style.display = 'block';
 }
 
+// Fonction pour éditer un site (alias pour openSiteModal)
+function editSite(siteId) {
+    openSiteModal(siteId);
+}
+
 function closeSiteModal() {
     document.getElementById('siteModal').style.display = 'none';
     editingSiteId = null;
@@ -1313,7 +1318,7 @@ function renderSites() {
             <td>${site.follow}</td>
             <td>
                 <div class="table-actions">
-                    <button class="action-btn edit" onclick="openSiteModal(${site.id})" title="Modifier">
+                    <button class="action-btn edit" onclick="editSite(${site.id})" title="Modifier">
                         <i class="fas fa-edit"></i>
                     </button>
                     <button class="action-btn delete" onclick="deleteSite(${site.id})" title="Supprimer">
