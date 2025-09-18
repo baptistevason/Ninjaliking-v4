@@ -1,0 +1,31 @@
+{
+  "name": "ninja-linking-saas",
+  "version": "1.0.0",
+  "description": "Outil professionnel de ninja linking et gestion de projets SEO avec Supabase",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'Ready for deployment'",
+    "start": "npx serve ."
+  },
+  "devDependencies": {
+    "serve": "^14.0.0"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "keywords": [
+    "seo",
+    "ninja-linking",
+    "supabase",
+    "database",
+    "saas"
+  ],
+  "author": "Baptiste",
+  "license": "MIT",
+  "homepage": "https://ninja-linking-saas.netlify.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/votre-username/ninja-linking-saas.git"
+  }
+}

@@ -1,0 +1,83 @@
+-- Schema SQL pour Supabase
+-- Copiez et exécutez ces commandes dans l'éditeur SQL de Supabase
+
+-- 1. Table des projets
+CREATE TABLE projects (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    url VARCHAR(500) NOT NULL,
+    objective VARCHAR(50) NOT NULL CHECK (objective IN ('SEO', 'E-Réputation')),
+    traffic INTEGER DEFAULT 0,
+    trust_flow INTEGER DEFAULT 0 CHECK (trust_flow >= 0 AND trust_flow <= 100),
+    ttf VARCHAR(100) DEFAULT 'Généraliste',
+    referring_domains INTEGER DEFAULT 0,
+    keywords JSONB DEFAULT '[]'::jsonb,
+    spots JSONB DEFAULT '[]'::jsonb,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 2. Table des sites du catalogue
+CREATE TABLE sites (
+    id BIGSERIAL PRIMARY KEY,
+    url VARCHAR(500) NOT NULL UNIQUE,
+    type VARCHAR(100) NOT NULL,
+    theme VARCHAR(100) NOT NULL,
+    traffic INTEGER DEFAULT 0,
+    trust_flow INTEGER DEFAULT 0 CHECK (trust_flow >= 0 AND trust_flow <= 100),
+    ttf VARCHAR(100) DEFAULT 'Généraliste',
+    follow VARCHAR(10) DEFAULT 'Oui' CHECK (follow IN ('Oui', 'Non')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 3. Index pour les performances
+CREATE INDEX idx_projects_created_at ON projects(created_at);
+CREATE INDEX idx_projects_objective ON projects(objective);
+CREATE INDEX idx_sites_type ON sites(type);
+CREATE INDEX idx_sites_theme ON sites(theme);
+CREATE INDEX idx_sites_url ON sites(url);
+
+-- 4. RLS (Row Level Security) - Optionnel si vous voulez de l'authentification
+-- Décommentez si vous utilisez l'authentification Supabase
+
+-- ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
+-- ALTER TABLE sites ENABLE ROW LEVEL SECURITY;
+
+-- CREATE POLICY "Users can view own projects" ON projects
+--     FOR SELECT USING (auth.uid() = user_id);
+
+-- CREATE POLICY "Users can insert own projects" ON projects
+--     FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+-- CREATE POLICY "Users can update own projects" ON projects
+--     FOR UPDATE USING (auth.uid() = user_id);
+
+-- CREATE POLICY "Users can delete own projects" ON projects
+--     FOR DELETE USING (auth.uid() = user_id);
+
+-- 5. Trigger pour mettre à jour updated_at automatiquement
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = timezone('utc'::text, now());
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+CREATE TRIGGER update_projects_updated_at BEFORE UPDATE
+    ON projects FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- 6. Données d'exemple (optionnel)
+INSERT INTO projects (name, url, objective, traffic, trust_flow, ttf, referring_domains, keywords) VALUES
+('Exemple Projet SEO', 'https://exemple-seo.com', 'SEO', 15000, 45, 'Business', 150, '["seo", "référencement", "marketing"]'),
+('Exemple E-Réputation', 'https://exemple-reputation.com', 'E-Réputation', 5000, 30, 'Généraliste', 50, '["réputation", "brand", "communication"]');
+
+INSERT INTO sites (url, type, theme, traffic, trust_flow, ttf, follow) VALUES
+('https://site1.com', 'Blog', 'Tech', 10000, 40, 'Technologie', 'Oui'),
+('https://site2.com', 'Forum', 'Business', 25000, 55, 'Business', 'Oui'),
+('https://site3.com', 'Annuaire', 'Généraliste', 5000, 35, 'Généraliste', 'Non');
+
+-- 7. Vérification des données
+SELECT 'Projects:' as table_name, count(*) as count FROM projects
+UNION ALL
+SELECT 'Sites:' as table_name, count(*) as count FROM sites;
