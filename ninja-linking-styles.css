@@ -380,6 +380,55 @@ body {
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
+/* Styles identiques pour la page E-Réputation */
+#ereputation-page .date-selection {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+#ereputation-page .date-selection h4 {
+    margin: 0 0 1rem 0;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#ereputation-page .date-inputs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+#ereputation-page .date-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#ereputation-page .date-input-group label {
+    font-weight: 500;
+    color: #374151;
+    font-size: 0.9rem;
+}
+
+#ereputation-page .date-input {
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: border-color 0.3s ease;
+}
+
+#ereputation-page .date-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
 /* Styles pour la sélection d'année */
 #serp-page .year-selection {
     background: #f8fafc;
@@ -423,6 +472,150 @@ body {
     outline: none;
     border-color: #3b82f6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Styles identiques pour la sélection d'année de la page E-Réputation */
+#ereputation-page .year-selection {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+#ereputation-page .year-selection h4 {
+    margin: 0 0 1rem 0;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#ereputation-page .year-input {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+#ereputation-page .year-input label {
+    font-weight: 500;
+    color: #374151;
+    font-size: 0.9rem;
+}
+
+#ereputation-page .year-input select {
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background: white;
+    min-width: 120px;
+    transition: border-color 0.3s ease;
+}
+
+#ereputation-page .year-input select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Styles pour la page IA */
+#ia-page .prompts-section {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+#ia-page .prompts-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+#ia-page .prompts-header h3 {
+    margin: 0;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#ia-page .prompts-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+#ia-page .prompts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#ia-page .prompt-item {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#ia-page .prompt-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+#ia-page .prompt-text {
+    flex: 1;
+    color: #374151;
+    line-height: 1.5;
+    font-size: 0.9rem;
+}
+
+#ia-page .remove-prompt {
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#ia-page .remove-prompt:hover {
+    background: #dc2626;
+}
+
+#ia-page .esb-button {
+    background: #10a37f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    align-self: flex-start;
+}
+
+#ia-page .esb-button:hover {
+    background: #0d8a6b;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 163, 127, 0.3);
+}
+
+#ia-page .esb-button i {
+    font-size: 1rem;
 }
 
 /* Styles pour les footprints SERP */

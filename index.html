@@ -32,6 +32,10 @@
                     <i class="fas fa-shield-alt"></i>
                     <span>E-Réputation</span>
                 </button>
+                <button class="nav-btn" data-page="ia">
+                    <i class="fas fa-robot"></i>
+                    <span>IA</span>
+                </button>
                 <button class="nav-btn" data-page="projects">
                     <i class="fas fa-folder-open"></i>
                     <span>Projets</span>
@@ -367,6 +371,87 @@
                         </div>
                     </div>
                     <div id="ereputationFootprintsList" class="footprints-list"></div>
+                </div>
+            </div>
+
+            <!-- Page IA -->
+            <div class="page" id="ia-page">
+                <div class="page-header">
+                    <h2>IA</h2>
+                    <p>Prompts ChatGPT pour analyser et optimiser votre présence digitale</p>
+                </div>
+
+                <div class="search-section">
+                    <div class="search-form">
+                        <input type="text" id="iaKeyword" placeholder="Entrez votre mot-clé pour générer des prompts IA...">
+                    </div>
+                </div>
+
+                <!-- Catégories de prompts IA -->
+                <div class="categories-grid">
+                    <div class="category-card" data-category="ereputation">
+                        <div class="card-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>🛡️ E-Réputation</h3>
+                        <p>Analyse de la réputation en ligne</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="concurrence">
+                        <div class="card-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>📊 Concurrence</h3>
+                        <p>Analyse concurrentielle</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="seo">
+                        <div class="card-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>🔍 SEO</h3>
+                        <p>Optimisation du référencement</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="contenu">
+                        <div class="card-icon">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <h3>📝 Contenu</h3>
+                        <p>Stratégie de contenu</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="social">
+                        <div class="card-icon">
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                        <h3>📱 Social Media</h3>
+                        <p>Stratégie réseaux sociaux</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="marketing">
+                        <div class="card-icon">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <h3>🎯 Marketing</h3>
+                        <p>Stratégie marketing complète</p>
+                    </div>
+                </div>
+
+                <!-- Affichage des prompts sélectionnés -->
+                <div id="iaPromptsSection" class="prompts-section" style="display: none;">
+                    <div class="prompts-header">
+                        <h3><i class="fas fa-robot"></i> Prompts sélectionnés</h3>
+                        <div class="prompts-actions">
+                            <button onclick="selectAllIaPrompts()" class="btn btn-secondary">
+                                <i class="fas fa-check-square"></i> Tout sélectionner
+                            </button>
+                            <button onclick="deselectAllIaPrompts()" class="btn btn-outline">
+                                <i class="fas fa-square"></i> Tout désélectionner
+                            </button>
+                        </div>
+                    </div>
+                    <div id="iaPromptsList" class="prompts-list"></div>
                 </div>
             </div>
 

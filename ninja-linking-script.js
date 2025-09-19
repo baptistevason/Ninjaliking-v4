@@ -191,6 +191,8 @@ function initializeApp() {
                 toggleSerpCategory(card.dataset.category);
             } else if (card.closest('#ereputation-page')) {
                 toggleEreputationCategory(card.dataset.category);
+            } else if (card.closest('#ia-page')) {
+                toggleIaCategory(card.dataset.category);
             } else {
                 toggleCategory(card.dataset.category);
             }
@@ -204,6 +206,12 @@ function initializeApp() {
         console.log('Événement submit attaché au formulaire de projet');
     } else {
         console.error('Formulaire de projet non trouvé');
+    }
+
+    // Event listener pour mettre à jour les prompts IA quand le mot-clé change
+    const iaKeywordInput = document.getElementById('iaKeyword');
+    if (iaKeywordInput) {
+        iaKeywordInput.addEventListener('input', updateIaPrompts);
     }
 
     const siteForm = document.getElementById('siteForm');
@@ -575,12 +583,49 @@ const ereputationFootprintsData = {
     ]
 };
 
+// Données des prompts IA par catégorie
+const iaPromptsData = {
+    'ereputation': [
+        'Analyse l\'e-réputation en ligne du mot-clé : "mot-clé". Identifie les pages critiques, les plateformes d\'avis, forums, réseaux sociaux ou articles de blog qui mentionnent ce mot-clé. Dresse un bilan synthétique des risques ou signaux positifs.',
+        'Effectue une veille e-réputation complète pour "mot-clé". Recherche les mentions négatives, les avis clients, les discussions sur les forums et les réseaux sociaux. Propose un plan d\'action pour améliorer l\'image de marque.',
+        'Analyse la présence digitale de "mot-clé" sur les principales plateformes (Google, Trustpilot, TripAdvisor, forums, réseaux sociaux). Identifie les points d\'amélioration et les opportunités de communication.'
+    ],
+    'concurrence': [
+        'Analyse la concurrence pour "mot-clé". Identifie les principaux concurrents, leurs stratégies marketing, leurs points forts et faibles. Propose des recommandations pour se différencier.',
+        'Effectue une analyse concurrentielle approfondie de "mot-clé". Compare les offres, les prix, les stratégies de communication et les positions sur les moteurs de recherche.',
+        'Dresse un panorama concurrentiel complet pour "mot-clé". Analyse les forces et faiblesses de chaque acteur, leurs stratégies digitales et leurs performances.'
+    ],
+    'seo': [
+        'Optimise le référencement naturel pour "mot-clé". Analyse les mots-clés pertinents, la structure du site, le contenu et propose un plan d\'action SEO complet.',
+        'Effectue un audit SEO complet pour "mot-clé". Identifie les opportunités d\'amélioration technique, de contenu et de netlinking. Propose une stratégie de référencement.',
+        'Analyse la visibilité de "mot-clé" sur les moteurs de recherche. Identifie les mots-clés à cibler, les contenus à créer et les optimisations techniques nécessaires.'
+    ],
+    'contenu': [
+        'Crée une stratégie de contenu pour "mot-clé". Propose des sujets d\'articles, des formats de contenu et un calendrier éditorial adapté à la cible.',
+        'Développe un plan de création de contenu autour de "mot-clé". Identifie les besoins informationnels de la cible et propose des formats de contenu engageants.',
+        'Conçoit une stratégie éditoriale pour "mot-clé". Analyse les sujets tendances, les formats performants et propose un plan de publication optimisé.'
+    ],
+    'social': [
+        'Développe une stratégie de communication sur les réseaux sociaux pour "mot-clé". Identifie les plateformes pertinentes, les types de contenu et les tactiques d\'engagement.',
+        'Crée un plan de présence sociale pour "mot-clé". Analyse les audiences, les tendances et propose une stratégie de community management.',
+        'Optimise la présence sur les réseaux sociaux pour "mot-clé". Identifie les opportunités d\'engagement, les formats de contenu performants et les tactiques de croissance.'
+    ],
+    'marketing': [
+        'Développe une stratégie marketing complète pour "mot-clé". Analyse le marché, la cible et propose un mix marketing adapté (digital, traditionnel, événementiel).',
+        'Crée un plan marketing 360° pour "mot-clé". Identifie les canaux de communication, les messages clés et les tactiques d\'acquisition et de fidélisation.',
+        'Conçoit une stratégie de croissance pour "mot-clé". Analyse les leviers de croissance, les opportunités de partenariat et propose un plan d\'action marketing.'
+    ]
+};
+
 
 // Variables pour les footprints SERP (copie exacte de Ninjalinking)
 let selectedSerpFootprints = [];
 
 // Variables pour les footprints E-Réputation
 let selectedEreputationFootprints = [];
+
+// Variables pour les prompts IA
+let selectedIaPrompts = [];
 
 // Fonction pour basculer la sélection d'une catégorie SERP (copie exacte de toggleCategory)
 function toggleSerpCategory(category) {
@@ -676,9 +721,10 @@ function getSelectedSerpOperators() {
 }
 
 // Fonction pour mettre à jour l'affichage de la sélection de dates
-function updateSerpYearSelection() {
-    const yearSelection = document.getElementById('serpYearSelection');
-    const hasYearFootprints = selectedSerpFootprints.some(footprint => 
+// Fonctions unifiées pour la gestion des sélecteurs
+function updateYearSelection(pagePrefix, selectedFootprints) {
+    const yearSelection = document.getElementById(`${pagePrefix}YearSelection`);
+    const hasYearFootprints = selectedFootprints.some(footprint => 
         footprint.includes('/2025/')
     );
     
@@ -689,9 +735,9 @@ function updateSerpYearSelection() {
     }
 }
 
-function updateSerpDateSelection() {
-    const dateSelection = document.getElementById('serpDateSelection');
-    const hasDateFootprints = selectedSerpFootprints.some(footprint => 
+function updateDateSelection(pagePrefix, selectedFootprints) {
+    const dateSelection = document.getElementById(`${pagePrefix}DateSelection`);
+    const hasDateFootprints = selectedFootprints.some(footprint => 
         footprint.includes('after:') || footprint.includes('before:')
     );
     
@@ -700,6 +746,27 @@ function updateSerpDateSelection() {
     } else {
         dateSelection.style.display = 'none';
     }
+}
+
+// Fonction unifiée pour récupérer les dates et l'année sélectionnées
+function getSelectedDatesAndYear(pagePrefix) {
+    const selectedYear = document.getElementById(`${pagePrefix}Year`).value;
+    const dateFrom = document.getElementById(`${pagePrefix}DateFrom`).value;
+    const dateTo = document.getElementById(`${pagePrefix}DateTo`).value;
+    
+    return {
+        year: selectedYear,
+        dateFrom: dateFrom,
+        dateTo: dateTo
+    };
+}
+
+function updateSerpYearSelection() {
+    updateYearSelection('serp', selectedSerpFootprints);
+}
+
+function updateSerpDateSelection() {
+    updateDateSelection('serp', selectedSerpFootprints);
 }
 
 // Fonction pour lancer les recherches sur Google ou Bing
@@ -721,9 +788,7 @@ function testSerpOperators(engine = 'google') {
     }
     
     // Récupérer l'année et les dates sélectionnées
-    const selectedYear = document.getElementById('serpYear').value;
-    const dateFrom = document.getElementById('serpDateFrom').value;
-    const dateTo = document.getElementById('serpDateTo').value;
+    const { year: selectedYear, dateFrom, dateTo } = getSelectedDatesAndYear('serp');
     
     console.log('SERP - Année sélectionnée:', selectedYear);
     console.log('SERP - Date de début:', dateFrom);
@@ -882,29 +947,11 @@ function getCheckedEreputationFootprints() {
 }
 
 function updateEreputationYearSelection() {
-    const yearSelection = document.getElementById('ereputationYearSelection');
-    const hasYearFootprints = selectedEreputationFootprints.some(footprint => 
-        footprint.includes('/2025/')
-    );
-    
-    if (hasYearFootprints) {
-        yearSelection.style.display = 'block';
-    } else {
-        yearSelection.style.display = 'none';
-    }
+    updateYearSelection('ereputation', selectedEreputationFootprints);
 }
 
 function updateEreputationDateSelection() {
-    const dateSelection = document.getElementById('ereputationDateSelection');
-    const hasDateFootprints = selectedEreputationFootprints.some(footprint => 
-        footprint.includes('after:') || footprint.includes('before:')
-    );
-    
-    if (hasDateFootprints) {
-        dateSelection.style.display = 'block';
-    } else {
-        dateSelection.style.display = 'none';
-    }
+    updateDateSelection('ereputation', selectedEreputationFootprints);
 }
 
 // Fonction pour lancer les recherches E-Réputation sur Google ou Bing
@@ -926,9 +973,7 @@ function testEreputationOperators(engine = 'google') {
     }
     
     // Récupérer l'année et les dates sélectionnées
-    const selectedYear = document.getElementById('ereputationYear').value;
-    const dateFrom = document.getElementById('ereputationDateFrom').value;
-    const dateTo = document.getElementById('ereputationDateTo').value;
+    const { year: selectedYear, dateFrom, dateTo } = getSelectedDatesAndYear('ereputation');
     
     console.log('E-Réputation - Année sélectionnée:', selectedYear);
     console.log('E-Réputation - Date de début:', dateFrom);
@@ -979,6 +1024,135 @@ function testEreputationOperators(engine = 'google') {
         console.log('E-Réputation - URL générée:', url);
         window.open(url, '_blank');
     });
+}
+
+// Fonctions pour la page IA
+function toggleIaCategory(category) {
+    const card = document.querySelector(`#ia-page [data-category="${category}"]`);
+    const promptsSection = document.getElementById('iaPromptsSection');
+    
+    if (card.classList.contains('selected')) {
+        card.classList.remove('selected');
+        removeIaPromptsByCategory(category);
+    } else {
+        card.classList.add('selected');
+        addIaPromptsByCategory(category);
+    }
+    
+    if (selectedIaPrompts.length > 0) {
+        promptsSection.style.display = 'block';
+        renderIaPrompts();
+    } else {
+        promptsSection.style.display = 'none';
+    }
+}
+
+function addIaPromptsByCategory(category) {
+    const prompts = iaPromptsData[category] || [];
+    prompts.forEach(prompt => {
+        if (!selectedIaPrompts.includes(prompt)) {
+            selectedIaPrompts.push(prompt);
+        }
+    });
+}
+
+function removeIaPromptsByCategory(category) {
+    const prompts = iaPromptsData[category] || [];
+    selectedIaPrompts = selectedIaPrompts.filter(prompt => !prompts.includes(prompt));
+}
+
+function renderIaPrompts() {
+    const promptsList = document.getElementById('iaPromptsList');
+    promptsList.innerHTML = '';
+
+    selectedIaPrompts.forEach((prompt, index) => {
+        const item = document.createElement('div');
+        item.className = 'prompt-item';
+        
+        // Remplacer "mot-clé" par le mot-clé réel
+        const processedPrompt = prompt.replace(/mot-clé/g, document.getElementById('iaKeyword').value || 'mot-clé');
+        
+        item.innerHTML = `
+            <div class="prompt-content">
+                <span class="prompt-text">${processedPrompt}</span>
+                <button class="remove-prompt" onclick="removeIaPrompt('${prompt.replace(/'/g, "\\'")}')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <button type="button" class="esb-button esb-share-button esb-button-chatgpt" data-prompt="${processedPrompt.replace(/"/g, '&quot;')}">
+                <i class="fas fa-robot"></i> Lancer sur ChatGPT
+            </button>
+        `;
+        promptsList.appendChild(item);
+    });
+    
+    // Ajouter les event listeners pour les boutons ChatGPT
+    const chatgptButtons = promptsList.querySelectorAll('.esb-button-chatgpt');
+    chatgptButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const prompt = this.getAttribute('data-prompt');
+            launchChatGPT(prompt);
+        });
+    });
+}
+
+function removeIaPrompt(prompt) {
+    selectedIaPrompts = selectedIaPrompts.filter(p => p !== prompt);
+    
+    // Vérifier si toutes les catégories de ce prompt sont désélectionnées
+    Object.keys(iaPromptsData).forEach(category => {
+        const categoryPrompts = iaPromptsData[category];
+        if (categoryPrompts.includes(prompt)) {
+            const hasOtherPrompts = categoryPrompts.some(p => selectedIaPrompts.includes(p));
+            if (!hasOtherPrompts) {
+                const card = document.querySelector(`#ia-page [data-category="${category}"]`);
+                if (card) {
+                    card.classList.remove('selected');
+                }
+            }
+        }
+    });
+    
+    renderIaPrompts();
+    
+    if (selectedIaPrompts.length === 0) {
+        document.getElementById('iaPromptsSection').style.display = 'none';
+    }
+}
+
+function selectAllIaPrompts() {
+    const checkboxes = document.querySelectorAll('#iaPromptsList .prompt-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = true;
+    });
+}
+
+function deselectAllIaPrompts() {
+    const checkboxes = document.querySelectorAll('#iaPromptsList .prompt-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+}
+
+// Fonction pour mettre à jour les prompts quand le mot-clé change
+function updateIaPrompts() {
+    if (selectedIaPrompts.length > 0) {
+        renderIaPrompts();
+    }
+}
+
+// Fonction pour lancer ChatGPT avec un prompt
+function launchChatGPT(prompt) {
+    // Encoder le prompt pour l'URL
+    const encodedPrompt = encodeURIComponent(prompt);
+    
+    // URL de ChatGPT avec le prompt (nouveau format)
+    const chatgptUrl = `https://chat.openai.com/?model=gpt-4&prompt=${encodedPrompt}`;
+    
+    // Ouvrir ChatGPT dans un nouvel onglet
+    window.open(chatgptUrl, '_blank');
+    
+    console.log('ChatGPT lancé avec le prompt:', prompt);
 }
 
 
