@@ -1028,8 +1028,12 @@ function testEreputationOperators(engine = 'google') {
 
 // Fonctions pour la page IA
 function toggleIaCategory(category) {
+    console.log('Toggle IA category:', category);
     const card = document.querySelector(`#ia-page [data-category="${category}"]`);
     const promptsSection = document.getElementById('iaPromptsSection');
+    
+    console.log('Card found:', card);
+    console.log('Prompts section found:', promptsSection);
     
     if (card.classList.contains('selected')) {
         card.classList.remove('selected');
@@ -1038,6 +1042,8 @@ function toggleIaCategory(category) {
         card.classList.add('selected');
         addIaPromptsByCategory(category);
     }
+    
+    console.log('Selected IA prompts:', selectedIaPrompts);
     
     if (selectedIaPrompts.length > 0) {
         promptsSection.style.display = 'block';
@@ -1049,11 +1055,13 @@ function toggleIaCategory(category) {
 
 function addIaPromptsByCategory(category) {
     const prompts = iaPromptsData[category] || [];
+    console.log('Adding prompts for category:', category, 'Prompts found:', prompts);
     prompts.forEach(prompt => {
         if (!selectedIaPrompts.includes(prompt)) {
             selectedIaPrompts.push(prompt);
         }
     });
+    console.log('After adding, selected prompts:', selectedIaPrompts);
 }
 
 function removeIaPromptsByCategory(category) {
@@ -1062,7 +1070,9 @@ function removeIaPromptsByCategory(category) {
 }
 
 function renderIaPrompts() {
+    console.log('Rendering IA prompts:', selectedIaPrompts);
     const promptsList = document.getElementById('iaPromptsList');
+    console.log('Prompts list element:', promptsList);
     promptsList.innerHTML = '';
 
     selectedIaPrompts.forEach((prompt, index) => {
