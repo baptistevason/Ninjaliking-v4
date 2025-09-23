@@ -140,13 +140,19 @@ const footprintsData = {
         '"mot-clé" inurl:blog "laisser un commentaire"',
         '"mot-clé" "Vous devez être connecté pour publier un commentaire"',
         '"mot-clé" "poster un commentaire sur cet article"',
-        '"mot-clé" inurl:/blog/ "Ajouter un commentaire"'
+        '"mot-clé" inurl:/blog/ "Ajouter un commentaire"',
+        '"mot-clé" "les adresses internet seront converties automatiquement"',
+        '"mot-clé" "répondre à ce message" "dans la même rubrique"',
+        '"mot-clé" "ajouter un commentaire" "tags HTML autorisés : <a>"'
     ],
     forums: [
         '"mot-clé" inurl:/forum/ "sujets actifs"',
         '"mot-clé" intitle:"index du forum"',
         '"mot-clé" inurl:forumdisplay.php?fid=',
-        '"mot-clé" inurl:viewtopic.php?'
+        '"mot-clé" inurl:viewtopic.php?',
+        '"mot-clé" "powered by vbulletin" | "propulsé par vbulletin"',
+        '"mot-clé" "powered by phpbb" | "propulsé par phpbb"',
+        '"mot-clé" "powered by punbb" | "propulsé par punbb"'
     ],
     'livres-dor': [
         '"mot-clé" intitle:"livre d\'or" "ajouter un message"',
@@ -159,11 +165,19 @@ const footprintsData = {
     ],
     profils: [
         '"mot-clé" inurl:/user/',
-        '"mot-clé" inurl:profile.php?id='
+        '"mot-clé" inurl:profile.php?id=',
+        '"mot-clé" "Connectez-vous ou inscrivez-vous pour publier un commentaire"',
+        '"mot-clé" "Ce formulaire accepte les raccourcis SPIP"',
+        '"mot-clé" "créez votre profil public"'
     ],
     hybrides: [
         '"mot-clé" "Powered by WordPress" "laisser un commentaire"',
         '"mot-clé" "propulsé par phpBB" "sujets actifs"'
+    ],
+    'articles-invites': [
+        '"mot-clé" "publiez vos contributions"',
+        '"mot-clé" "proposez vos articles"',
+        '"mot-clé" "soumettre un article" publication sur le site'
     ]
 };
 
@@ -467,6 +481,7 @@ function generateSearches(engine = 'google') {
         window.open(url, '_blank');
     });
 }
+
 
 
 // Données des footprints SERP par catégorie

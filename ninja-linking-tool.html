@@ -101,9 +101,28 @@
                             <button class="btn btn-secondary" onclick="deselectAllFootprints()">
                                 <i class="fas fa-square"></i> Tout désélectionner
                             </button>
+                            <button class="btn btn-primary" onclick="showFavorites()">
+                                <i class="fas fa-heart"></i> Mes favoris
+                            </button>
                         </div>
                     </div>
                     <div class="footprints-list" id="footprintsList"></div>
+                </div>
+
+                <!-- Section Favoris -->
+                <div class="favorites-section" id="favoritesSection" style="display: none;">
+                    <div class="favorites-header">
+                        <h3><i class="fas fa-heart"></i> Mes Footprints Favoris</h3>
+                        <div class="favorites-actions">
+                            <button class="btn btn-secondary" onclick="hideFavorites()">
+                                <i class="fas fa-arrow-left"></i> Retour
+                            </button>
+                            <button class="btn btn-danger" onclick="clearAllFavorites()">
+                                <i class="fas fa-trash"></i> Vider les favoris
+                            </button>
+                        </div>
+                    </div>
+                    <div class="favorites-list" id="favoritesList"></div>
                 </div>
             </div>
 

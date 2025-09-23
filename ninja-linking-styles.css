@@ -321,7 +321,10 @@ body {
     font-family: 'Courier New', monospace;
     font-size: 0.9rem;
     color: #374151;
+    line-height: 1.4;
 }
+
+
 
 /* Grille des catégories SERP */
 #serp-page .categories-grid {
@@ -573,8 +576,9 @@ body {
 
 #ia-page .prompt-text {
     flex: 1;
+    font-family: 'Courier New', monospace;
     color: #374151;
-    line-height: 1.5;
+    line-height: 1.4;
     font-size: 0.9rem;
 }
 
