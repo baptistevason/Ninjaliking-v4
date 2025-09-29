@@ -6,6 +6,7 @@ let editingSiteId = null;
 let editingProjectId = null;
 let db = null;
 let isSupabaseConfigured = false;
+let currentSort = { column: null, direction: 'asc' };
 
 // Initialiser Supabase
 async function initSupabase() {
@@ -130,7 +131,7 @@ async function migrateToSupabase() {
         alert('❌ Erreur lors de la migration. Vos données restent en local.');
     }
 }
-let currentKeywords = [];
+window.currentKeywords = [];
 let currentProjectId = null;
 let projectSpots = [];
 
@@ -1252,25 +1253,52 @@ function closeProjectModal() {
 }
 
 // Gestion des mots-clés
-function addKeyword() {
+window.addKeyword = function() {
+    console.log('addKeyword appelée');
     const input = document.getElementById('keywordInput');
-    const keyword = input.value.trim();
     
-    if (keyword && !currentKeywords.includes(keyword)) {
-        currentKeywords.push(keyword);
+    if (!input) {
+        console.error('Input keywordInput non trouvé');
+        return;
+    }
+    
+    const keywordsText = input.value.trim();
+    console.log('Mots-clés saisis:', keywordsText);
+    
+    if (keywordsText) {
+        // Séparer les mots-clés par virgule et nettoyer
+        const keywords = keywordsText.split(',')
+            .map(k => k.trim())
+            .filter(k => k.length > 0);
+        
+        // Ajouter les nouveaux mots-clés (éviter les doublons)
+        keywords.forEach(keyword => {
+            if (!currentKeywords.includes(keyword)) {
+                currentKeywords.push(keyword);
+            }
+        });
+        
         input.value = '';
         renderKeywords();
+        
+        // Afficher une notification si des mots-clés ont été ajoutés
+        if (keywords.length > 0) {
+            showNotification(`✅ ${keywords.length} mot(s)-clé(s) ajouté(s)`, 'success');
+        }
     }
 }
 
-function removeKeyword(keyword) {
+window.removeKeyword = function(keyword) {
     currentKeywords = currentKeywords.filter(k => k !== keyword);
     renderKeywords();
 }
 
-function renderKeywords() {
+window.renderKeywords = function() {
     const container = document.getElementById('keywordsTags');
-    if (!container) return;
+    if (!container) {
+        console.error('Container keywordsTags non trouvé');
+        return;
+    }
     
     container.innerHTML = '';
     
@@ -1355,6 +1383,9 @@ async function saveProject(e) {
         renderProjects();
         updateProjectStats();
         closeProjectModal();
+        
+        // Afficher une confirmation de succès
+        showNotification('✅ Projet ajouté avec succès !', 'success');
         
     } catch (error) {
         console.error('❌ Erreur sauvegarde projet:', error);
@@ -1455,7 +1486,7 @@ function renderProjects() {
                 </div>
                 <div class="project-detail">
                     <span class="project-detail-label">TTF</span>
-                    <span class="project-detail-value">${project.ttf || 'N/A'}</span>
+                    <span class="project-detail-value"><span class="ttf-tag ttf-${(project.ttf || 'business').toLowerCase()}">${project.ttf || 'N/A'}</span></span>
                 </div>
                 <div class="project-detail">
                     <span class="project-detail-label">Domaines référents</span>
@@ -1827,12 +1858,28 @@ function cancelProjectEdit() {
 
 function addEditKeyword() {
     const input = document.getElementById('editKeywordInput');
-    const keyword = input.value.trim();
+    const keywordsText = input.value.trim();
     
-    if (keyword && !editKeywords.includes(keyword)) {
-        editKeywords.push(keyword);
+    if (keywordsText) {
+        // Séparer les mots-clés par virgule et nettoyer
+        const keywords = keywordsText.split(',')
+            .map(k => k.trim())
+            .filter(k => k.length > 0);
+        
+        // Ajouter les nouveaux mots-clés (éviter les doublons)
+        keywords.forEach(keyword => {
+            if (!editKeywords.includes(keyword)) {
+                editKeywords.push(keyword);
+            }
+        });
+        
         input.value = '';
         renderEditKeywords();
+        
+        // Afficher une notification si des mots-clés ont été ajoutés
+        if (keywords.length > 0) {
+            showNotification(`✅ ${keywords.length} mot(s)-clé(s) ajouté(s)`, 'success');
+        }
     }
 }
 
@@ -1898,6 +1945,9 @@ function saveProjectFromDetail(e) {
         
         // Fermer le formulaire d'édition
         cancelProjectEdit();
+        
+        // Afficher une confirmation de succès
+        showNotification('✅ Projet mis à jour avec succès !', 'success');
         
         console.log('Projet mis à jour depuis la page de détail');
     }
@@ -2063,6 +2113,7 @@ function renderSites() {
 
     filteredSites.forEach(site => {
         const row = document.createElement('tr');
+        row.setAttribute('data-site-id', site.id);
         const trustFlowClass = getTrustFlowClass(site.trustFlow);
         const trustFlowWidth = Math.min(site.trustFlow, 100);
         
@@ -2075,7 +2126,7 @@ function renderSites() {
             </td>
             <td><span class="type-tag">${site.type}</span></td>
             <td>${site.theme}</td>
-            <td>${site.traffic.toLocaleString()}</td>
+            <td>${formatNumber(site.traffic)}</td>
             <td>
                 <div class="trust-flow-container">
                     <div class="trust-flow-bar">
@@ -2084,7 +2135,7 @@ function renderSites() {
                     <span class="trust-flow-value">${site.trustFlow}</span>
                 </div>
             </td>
-            <td><span class="ttf-tag">${site.ttf}</span></td>
+            <td><span class="ttf-tag ttf-${site.ttf.toLowerCase()}">${site.ttf}</span></td>
             <td>${site.follow}</td>
             <td>
                 <div class="table-actions">
@@ -2715,7 +2766,7 @@ function showImportPreview() {
             <td>${site.url}</td>
             <td>${site.type}</td>
             <td>${site.theme}</td>
-            <td>${site.traffic.toLocaleString()}</td>
+            <td>${formatNumber(site.traffic)}</td>
             <td>${site.trustFlow}</td>
             <td>${site.ttf}</td>
             <td>${site.follow}</td>
@@ -3142,6 +3193,208 @@ window.addEventListener('unhandledrejection', function(event) {
         event.preventDefault(); // Empêche l'affichage de l'erreur
     }
 });
+
+// Fonction de notification
+function showNotification(message, type = 'info') {
+    // Créer l'élément de notification
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <span class="notification-message">${message}</span>
+            <button class="notification-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
+        </div>
+    `;
+    
+    // Ajouter les styles si pas déjà présents
+    if (!document.getElementById('notification-styles')) {
+        const style = document.createElement('style');
+        style.id = 'notification-styles';
+        style.textContent = `
+            .notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 10000;
+                max-width: 400px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                animation: slideInRight 0.3s ease;
+            }
+            .notification-success {
+                background: #d1fae5;
+                border: 1px solid #a7f3d0;
+                color: #065f46;
+            }
+            .notification-error {
+                background: #fee2e2;
+                border: 1px solid #fecaca;
+                color: #991b1b;
+            }
+            .notification-info {
+                background: #dbeafe;
+                border: 1px solid #bfdbfe;
+                color: #1d4ed8;
+            }
+            .notification-content {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 12px 16px;
+            }
+            .notification-close {
+                background: none;
+                border: none;
+                font-size: 18px;
+                cursor: pointer;
+                margin-left: 12px;
+                opacity: 0.7;
+            }
+            .notification-close:hover {
+                opacity: 1;
+            }
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    // Ajouter à la page
+    document.body.appendChild(notification);
+    
+    // Supprimer automatiquement après 5 secondes
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
+}
+
+// Fonction de formatage des nombres
+function formatNumber(num) {
+    if (num === 0) return '0';
+    if (num < 1000) return num.toString();
+    if (num < 1000000) return (num / 1000).toFixed(0) + 'K';
+    if (num < 1000000000) return (num / 1000000).toFixed(1) + 'M';
+    return (num / 1000000000).toFixed(1) + 'B';
+}
+
+// Fonction pour parser les nombres formatés
+function parseFormattedNumber(str) {
+    if (!str) return 0;
+    str = str.toString().trim();
+    if (str === '0' || str === '') return 0;
+    
+    const lastChar = str.slice(-1).toUpperCase();
+    const num = parseFloat(str.slice(0, -1));
+    
+    switch (lastChar) {
+        case 'K': return num * 1000;
+        case 'M': return num * 1000000;
+        case 'B': return num * 1000000000;
+        default: return parseFloat(str) || 0;
+    }
+}
+
+// Fonctions de tri du tableau
+function sortTable(column) {
+    const table = document.getElementById('catalogTable');
+    const tbody = document.getElementById('catalogTableBody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    
+    // Déterminer la direction du tri
+    if (currentSort.column === column) {
+        currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+    } else {
+        currentSort.column = column;
+        currentSort.direction = 'asc';
+    }
+    
+    // Mettre à jour les indicateurs visuels
+    updateSortIndicators();
+    
+    // Trier les lignes
+    rows.sort((a, b) => {
+        const aValue = getCellValue(a, column);
+        const bValue = getCellValue(b, column);
+        
+        let comparison = 0;
+        
+        // Tri numérique pour les colonnes numériques
+        if (column === 'traffic' || column === 'trustFlow') {
+            const aNum = parseFormattedNumber(aValue);
+            const bNum = parseFormattedNumber(bValue);
+            comparison = aNum - bNum;
+        } else {
+            // Tri alphabétique pour les autres colonnes
+            comparison = aValue.localeCompare(bValue, 'fr', { numeric: true });
+        }
+        
+        return currentSort.direction === 'asc' ? comparison : -comparison;
+    });
+    
+    // Réorganiser les lignes dans le DOM
+    rows.forEach(row => tbody.appendChild(row));
+}
+
+function getCellValue(row, column) {
+    const cellIndex = getColumnIndex(column);
+    const cell = row.children[cellIndex];
+    
+    if (!cell) return '';
+    
+    // Pour les colonnes avec des éléments spéciaux (liens, badges, etc.)
+    if (column === 'url') {
+        const link = cell.querySelector('a');
+        return link ? link.textContent.trim() : cell.textContent.trim();
+    } else if (column === 'trustFlow') {
+        const valueSpan = cell.querySelector('.trust-flow-value');
+        return valueSpan ? valueSpan.textContent.trim() : cell.textContent.trim();
+    } else if (column === 'ttf') {
+        const badge = cell.querySelector('.ttf-tag');
+        return badge ? badge.textContent.trim() : cell.textContent.trim();
+    } else if (column === 'traffic') {
+        // Pour le trafic, on récupère la valeur brute depuis les données
+        const siteId = row.getAttribute('data-site-id');
+        if (siteId) {
+            const site = sites.find(s => s.id == siteId);
+            return site ? site.traffic.toString() : cell.textContent.trim();
+        }
+        return cell.textContent.trim();
+    } else {
+        return cell.textContent.trim();
+    }
+}
+
+function getColumnIndex(column) {
+    const columnMap = {
+        'url': 1,
+        'type': 2,
+        'theme': 3,
+        'traffic': 4,
+        'trustFlow': 5,
+        'ttf': 6,
+        'follow': 7
+    };
+    return columnMap[column] || 0;
+}
+
+function updateSortIndicators() {
+    // Supprimer tous les indicateurs existants
+    document.querySelectorAll('.catalog-table th.sortable').forEach(th => {
+        th.classList.remove('sort-asc', 'sort-desc');
+    });
+    
+    // Ajouter l'indicateur pour la colonne active
+    if (currentSort.column) {
+        const activeTh = document.querySelector(`th[data-sort="${currentSort.column}"]`);
+        if (activeTh) {
+            activeTh.classList.add(currentSort.direction === 'asc' ? 'sort-asc' : 'sort-desc');
+        }
+    }
+}
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', async function() {

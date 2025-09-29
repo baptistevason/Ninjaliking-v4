@@ -203,13 +203,17 @@ body {
 .category-card {
     background: white;
     border-radius: 12px;
-    padding: 2rem;
+    padding: 1.5rem;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
     border: 2px solid #e2e8f0;
     position: relative;
     overflow: hidden;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .category-card:hover {
@@ -234,28 +238,31 @@ body {
 }
 
 .card-icon {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     background: linear-gradient(135deg, #3b82f6, #1d4ed8);
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 1rem;
+    margin: 0 auto 0.75rem;
     color: white;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
 }
 
 .category-card h3 {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 600;
     color: #1e293b;
     margin-bottom: 0.5rem;
+    line-height: 1.3;
 }
 
 .category-card p {
     color: #64748b;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin: 0;
 }
 
 /* Section footprints */
@@ -329,9 +336,45 @@ body {
 /* Grille des catégories SERP */
 #serp-page .categories-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
     margin-bottom: 2rem;
+}
+
+/* Grille des catégories E-Réputation */
+#ereputation-page .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Responsive pour la page SERP */
+@media (max-width: 1200px) {
+    #serp-page .categories-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    #ereputation-page .categories-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    #serp-page .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    #ereputation-page .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    #serp-page .categories-grid {
+        grid-template-columns: 1fr;
+    }
+    #ereputation-page .categories-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Sélection de dates SERP */
@@ -757,16 +800,16 @@ body {
 }
 
 .operator-card .card-icon {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     background: linear-gradient(135deg, #3b82f6, #1d4ed8);
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 1rem;
+    margin: 0 auto 0.75rem;
     color: white;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
 }
 
 .operator-card h3 {
@@ -1804,6 +1847,39 @@ body {
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    transition: background-color 0.3s ease;
+}
+
+.catalog-table th:hover {
+    background: #e2e8f0;
+}
+
+.catalog-table th.sortable {
+    padding-right: 2rem;
+}
+
+.catalog-table th.sortable::after {
+    content: '↕';
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.8rem;
+    color: #9ca3af;
+    transition: color 0.3s ease;
+}
+
+.catalog-table th.sort-asc::after {
+    content: '↑';
+    color: #3b82f6;
+}
+
+.catalog-table th.sort-desc::after {
+    content: '↓';
+    color: #3b82f6;
 }
 
 /* Largeurs spécifiques des colonnes */
@@ -2502,6 +2578,24 @@ body {
     border: 2px solid #3b82f6;
     box-shadow: 0 4px 6px rgba(59, 130, 246, 0.1);
 }
+
+/* Couleurs TTF (Topical Trust Flow) */
+.ttf-arts { background: #9933CC; color: white; }
+.ttf-adult { background: #000000; color: white; }
+.ttf-business { background: #00AEEF; color: white; }
+.ttf-computers { background: #FF9900; color: white; }
+.ttf-games { background: #999999; color: white; }
+.ttf-health { background: #DC3912; color: white; }
+.ttf-home { background: #FF6600; color: white; }
+.ttf-news { background: #3366CC; color: white; }
+.ttf-reference { background: #109618; color: white; }
+.ttf-regional { background: #990000; color: white; }
+.ttf-science { background: #66CC33; color: white; }
+.ttf-shopping { background: #FF33CC; color: white; }
+.ttf-society { background: #FFCC00; color: black; }
+.ttf-sports { background: #0066CC; color: white; }
+.ttf-recreation { background: #FF6600; color: white; }
+.ttf-world { background: #999966; color: white; }
 
 /* Responsive */
 @media (max-width: 768px) {

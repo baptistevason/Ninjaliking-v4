@@ -631,11 +631,22 @@
                                 <div class="form-group">
                                     <label for="editProjectTTF">TTF</label>
                                     <select id="editProjectTTF">
+                                        <option value="Arts">Arts</option>
+                                        <option value="Adult">Adult</option>
                                         <option value="Business">Business</option>
-                                        <option value="Généraliste">Généraliste</option>
-                                        <option value="Technologie">Technologie</option>
-                                        <option value="Mode">Mode</option>
-                                        <option value="Sport">Sport</option>
+                                        <option value="Computers">Computers</option>
+                                        <option value="Games">Games</option>
+                                        <option value="Health">Health</option>
+                                        <option value="Home">Home</option>
+                                        <option value="News">News</option>
+                                        <option value="Reference">Reference</option>
+                                        <option value="Regional">Regional</option>
+                                        <option value="Science">Science</option>
+                                        <option value="Shopping">Shopping</option>
+                                        <option value="Society">Society</option>
+                                        <option value="Sports">Sports</option>
+                                        <option value="Recreation">Recreation</option>
+                                        <option value="World">World</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -765,11 +776,19 @@
                             <i class="fas fa-filter"></i>
                             <select id="themeFilter">
                                 <option value="">Toutes les thématiques</option>
-                                <option value="Business">Business</option>
-                                <option value="Généraliste">Généraliste</option>
-                                <option value="Technologie">Technologie</option>
-                                <option value="Mode">Mode</option>
-                                <option value="Sport">Sport</option>
+                                <option value="Actualités & Médias">Actualités & Médias</option>
+                                <option value="Business & Marketing">Business & Marketing</option>
+                                <option value="E-commerce & Affiliation">E-commerce & Affiliation</option>
+                                <option value="Éducation & Formation">Éducation & Formation</option>
+                                <option value="Santé & Bien-être">Santé & Bien-être</option>
+                                <option value="Technologie & Informatique">Technologie & Informatique</option>
+                                <option value="Lifestyle & Loisirs">Lifestyle & Loisirs</option>
+                                <option value="Finance & Crypto">Finance & Crypto</option>
+                                <option value="Immobilier">Immobilier</option>
+                                <option value="Automobile">Automobile</option>
+                                <option value="Cuisine & Alimentation">Cuisine & Alimentation</option>
+                                <option value="Animaux">Animaux</option>
+                                <option value="Développement personnel">Développement personnel</option>
                             </select>
                         </div>
                     </div>
@@ -805,13 +824,13 @@
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" id="selectAllSites"></th>
-                                    <th>URL</th>
-                                    <th>TYPE</th>
-                                    <th>THÉMATIQUE</th>
-                                    <th>TRAFIC</th>
-                                    <th>TRUST FLOW</th>
-                                    <th>TOPICAL TRUST FLOW (TTF)</th>
-                                    <th>FOLLOW</th>
+                                    <th class="sortable" data-sort="url" onclick="sortTable('url')">URL</th>
+                                    <th class="sortable" data-sort="type" onclick="sortTable('type')">TYPE</th>
+                                    <th class="sortable" data-sort="theme" onclick="sortTable('theme')">THÉMATIQUE</th>
+                                    <th class="sortable" data-sort="traffic" onclick="sortTable('traffic')">TRAFIC</th>
+                                    <th class="sortable" data-sort="trustFlow" onclick="sortTable('trustFlow')">TRUST FLOW</th>
+                                    <th class="sortable" data-sort="ttf" onclick="sortTable('ttf')">TOPICAL TRUST FLOW (TTF)</th>
+                                    <th class="sortable" data-sort="follow" onclick="sortTable('follow')">FOLLOW</th>
                                     <th>ACTIONS</th>
                                 </tr>
                             </thead>
@@ -861,11 +880,22 @@
                     <div class="form-group">
                         <label for="projectTTF">TTF</label>
                         <select id="projectTTF">
+                            <option value="Arts">Arts</option>
+                            <option value="Adult">Adult</option>
                             <option value="Business">Business</option>
-                            <option value="Généraliste">Généraliste</option>
-                            <option value="Technologie">Technologie</option>
-                            <option value="Mode">Mode</option>
-                            <option value="Sport">Sport</option>
+                            <option value="Computers">Computers</option>
+                            <option value="Games">Games</option>
+                            <option value="Health">Health</option>
+                            <option value="Home">Home</option>
+                            <option value="News">News</option>
+                            <option value="Reference">Reference</option>
+                            <option value="Regional">Regional</option>
+                            <option value="Science">Science</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Society">Society</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Recreation">Recreation</option>
+                            <option value="World">World</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -921,11 +951,19 @@
                     <div class="form-group">
                         <label for="spotTheme">Thématique</label>
                         <select id="spotTheme">
-                            <option value="Business">Business</option>
-                            <option value="Généraliste">Généraliste</option>
-                            <option value="Technologie">Technologie</option>
-                            <option value="Mode">Mode</option>
-                            <option value="Sport">Sport</option>
+                            <option value="Actualités & Médias">Actualités & Médias</option>
+                            <option value="Business & Marketing">Business & Marketing</option>
+                            <option value="E-commerce & Affiliation">E-commerce & Affiliation</option>
+                            <option value="Éducation & Formation">Éducation & Formation</option>
+                            <option value="Santé & Bien-être">Santé & Bien-être</option>
+                            <option value="Technologie & Informatique">Technologie & Informatique</option>
+                            <option value="Lifestyle & Loisirs">Lifestyle & Loisirs</option>
+                            <option value="Finance & Crypto">Finance & Crypto</option>
+                            <option value="Immobilier">Immobilier</option>
+                            <option value="Automobile">Automobile</option>
+                            <option value="Cuisine & Alimentation">Cuisine & Alimentation</option>
+                            <option value="Animaux">Animaux</option>
+                            <option value="Développement personnel">Développement personnel</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -1066,11 +1104,19 @@
                     <div class="form-group">
                         <label for="siteTheme">Thématique</label>
                         <select id="siteTheme">
-                            <option value="Business">Business</option>
-                            <option value="Généraliste">Généraliste</option>
-                            <option value="Technologie">Technologie</option>
-                            <option value="Mode">Mode</option>
-                            <option value="Sport">Sport</option>
+                            <option value="Actualités & Médias">Actualités & Médias</option>
+                            <option value="Business & Marketing">Business & Marketing</option>
+                            <option value="E-commerce & Affiliation">E-commerce & Affiliation</option>
+                            <option value="Éducation & Formation">Éducation & Formation</option>
+                            <option value="Santé & Bien-être">Santé & Bien-être</option>
+                            <option value="Technologie & Informatique">Technologie & Informatique</option>
+                            <option value="Lifestyle & Loisirs">Lifestyle & Loisirs</option>
+                            <option value="Finance & Crypto">Finance & Crypto</option>
+                            <option value="Immobilier">Immobilier</option>
+                            <option value="Automobile">Automobile</option>
+                            <option value="Cuisine & Alimentation">Cuisine & Alimentation</option>
+                            <option value="Animaux">Animaux</option>
+                            <option value="Développement personnel">Développement personnel</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -1084,11 +1130,22 @@
                     <div class="form-group">
                         <label for="siteTTF">Topical Trust Flow (TTF)</label>
                         <select id="siteTTF">
+                            <option value="Arts">Arts</option>
+                            <option value="Adult">Adult</option>
                             <option value="Business">Business</option>
-                            <option value="Généraliste">Généraliste</option>
-                            <option value="Technologie">Technologie</option>
-                            <option value="Mode">Mode</option>
-                            <option value="Sport">Sport</option>
+                            <option value="Computers">Computers</option>
+                            <option value="Games">Games</option>
+                            <option value="Health">Health</option>
+                            <option value="Home">Home</option>
+                            <option value="News">News</option>
+                            <option value="Reference">Reference</option>
+                            <option value="Regional">Regional</option>
+                            <option value="Science">Science</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Society">Society</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Recreation">Recreation</option>
+                            <option value="World">World</option>
                         </select>
                     </div>
                     <div class="form-group">
