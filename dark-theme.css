@@ -1,0 +1,235 @@
+/* ============ THÈME SOMBRE ============ */
+:root {
+    /* Couleurs sombres - Palette moderne */
+    --dark-primary: #1a202c;         /* Noir doux */
+    --dark-secondary: #2d3748;       /* Gris foncé */
+    --dark-accent: #4a5568;          /* Gris moyen */
+    --dark-text: #f7fafc;            /* Blanc doux */
+    --dark-text-secondary: #e2e8f0;   /* Gris clair */
+    --dark-border: #4a5568;          /* Bordure grise */
+    --dark-hover: #2d3748;           /* Hover gris foncé */
+    
+    /* Couleurs d'accent sombres */
+    --dark-blue: #3182ce;            /* Bleu sombre */
+    --dark-green: #38a169;          /* Vert sombre */
+    --dark-red: #e53e3e;             /* Rouge sombre */
+    --dark-yellow: #d69e2e;           /* Jaune sombre */
+    --dark-purple: #805ad5;          /* Violet sombre */
+    
+    /* Dégradés sombres */
+    --dark-gradient-1: linear-gradient(135deg, #1a202c 0%, #2d3748 50%, #4a5568 100%);
+    --dark-gradient-2: linear-gradient(135deg, #2d3748 0%, #4a5568 50%, #718096 100%);
+    --dark-gradient-3: linear-gradient(135deg, #3182ce 0%, #2c5282 50%, #2a4365 100%);
+    --dark-gradient-4: linear-gradient(135deg, #805ad5 0%, #553c9a 50%, #44337a 100%);
+    
+    /* Ombres sombres */
+    --dark-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    --dark-shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.4);
+    --dark-shadow-hover: 0 6px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* Application du thème sombre */
+body.dark-theme {
+    background: var(--dark-gradient-1);
+    color: var(--dark-text);
+}
+
+.dark-theme .auth-container {
+    background: var(--dark-gradient-3);
+}
+
+.dark-theme .auth-modal {
+    background: var(--dark-secondary);
+    border: 2px solid var(--dark-border);
+    box-shadow: var(--dark-shadow-lg);
+}
+
+.dark-theme .auth-header h1 {
+    color: var(--dark-text);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.dark-theme .auth-header p {
+    color: var(--dark-text-secondary);
+}
+
+.dark-theme .header {
+    background: var(--dark-gradient-3);
+    box-shadow: var(--dark-shadow);
+}
+
+.dark-theme .navigation {
+    background: var(--dark-secondary);
+    border-bottom: 2px solid var(--dark-border);
+}
+
+.dark-theme .nav-btn {
+    color: var(--dark-text-secondary);
+}
+
+.dark-theme .nav-btn:hover {
+    color: var(--dark-blue);
+    background: var(--dark-hover);
+}
+
+.dark-theme .nav-btn.active {
+    color: var(--dark-blue);
+    border-bottom-color: var(--dark-blue);
+    background: var(--dark-hover);
+}
+
+.dark-theme .main-content {
+    background: var(--dark-gradient-1);
+}
+
+.dark-theme .btn-primary {
+    background: var(--dark-gradient-3);
+    color: white;
+    border: 1px solid var(--dark-blue);
+    box-shadow: var(--dark-shadow);
+}
+
+.dark-theme .btn-primary:hover {
+    background: linear-gradient(135deg, #2c5282 0%, #2a4365 100%);
+    box-shadow: var(--dark-shadow-hover);
+}
+
+.dark-theme .btn-secondary {
+    background: var(--dark-accent);
+    color: white;
+    border: 1px solid var(--dark-border);
+}
+
+.dark-theme .btn-secondary:hover {
+    background: var(--dark-hover);
+    box-shadow: var(--dark-shadow);
+}
+
+.dark-theme .btn-success {
+    background: var(--dark-green);
+    color: white;
+    border: 1px solid var(--dark-green);
+}
+
+.dark-theme .btn-success:hover {
+    background: #2f855a;
+    box-shadow: var(--dark-shadow);
+}
+
+.dark-theme .btn-info {
+    background: var(--dark-blue);
+    color: white;
+    border: 1px solid var(--dark-blue);
+}
+
+.dark-theme .btn-info:hover {
+    background: #2c5282;
+    box-shadow: var(--dark-shadow);
+}
+
+.dark-theme .btn-warning {
+    background: var(--dark-yellow);
+    color: white;
+    border: 1px solid var(--dark-yellow);
+}
+
+.dark-theme .btn-warning:hover {
+    background: #b7791f;
+    box-shadow: var(--dark-shadow);
+}
+
+.dark-theme .btn-danger {
+    background: var(--dark-red);
+    color: white;
+    border: 1px solid var(--dark-red);
+}
+
+.dark-theme .btn-danger:hover {
+    background: #c53030;
+    box-shadow: var(--dark-shadow);
+}
+
+.dark-theme .card {
+    background: var(--dark-secondary);
+    border: 2px solid var(--dark-border);
+    box-shadow: var(--dark-shadow);
+}
+
+.dark-theme .card:hover {
+    box-shadow: var(--dark-shadow-hover);
+}
+
+.dark-theme .card-icon {
+    background: var(--dark-gradient-3);
+}
+
+.dark-theme .form-group input,
+.dark-theme .form-group select,
+.dark-theme .form-group textarea {
+    border: 2px solid var(--dark-border);
+    background: var(--dark-secondary);
+    color: var(--dark-text);
+}
+
+.dark-theme .form-group input:focus,
+.dark-theme .form-group select:focus,
+.dark-theme .form-group textarea:focus {
+    border-color: var(--dark-blue);
+    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
+}
+
+.dark-theme .form-group label {
+    color: var(--dark-text);
+    font-weight: 600;
+}
+
+.dark-theme .table {
+    background: var(--dark-secondary);
+    border: 2px solid var(--dark-border);
+}
+
+.dark-theme .table th {
+    background: var(--dark-gradient-3);
+    color: white;
+    border-bottom: 2px solid var(--dark-border);
+}
+
+.dark-theme .table td {
+    border-bottom: 1px solid var(--dark-border);
+    color: var(--dark-text);
+}
+
+.dark-theme .table tr:hover {
+    background: var(--dark-hover);
+}
+
+.dark-theme .modal {
+    background: var(--dark-secondary);
+    border: 3px solid var(--dark-border);
+    box-shadow: var(--dark-shadow-lg);
+}
+
+.dark-theme .modal-header {
+    background: var(--dark-gradient-3);
+    color: white;
+    border-bottom: 2px solid var(--dark-border);
+}
+
+.dark-theme .modal-body {
+    background: var(--dark-secondary);
+    color: var(--dark-text);
+}
+
+.dark-theme .stats-card {
+    background: var(--dark-secondary);
+    border: 2px solid var(--dark-border);
+    box-shadow: var(--dark-shadow);
+}
+
+.dark-theme .stats-card .stat-value {
+    color: var(--dark-blue);
+}
+
+.dark-theme .stats-card .stat-label {
+    color: var(--dark-text-secondary);
+}

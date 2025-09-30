@@ -76,7 +76,8 @@ class SupabaseService {
                 email: email,
                 password: password,
                 options: {
-                    data: userData
+                    data: userData,
+                    emailRedirectTo: this.getEmailRedirectUrl()
                 }
             });
 
@@ -151,6 +152,27 @@ class SupabaseService {
     // Vérifier si l'utilisateur est connecté
     isAuthenticated() {
         return this.currentUser !== null;
+    }
+
+    // Obtenir l'URL de redirection pour l'email de confirmation
+    getEmailRedirectUrl() {
+        // Configuration personnalisable
+        const customRedirectUrl = localStorage.getItem('email-redirect-url');
+        
+        if (customRedirectUrl) {
+            return customRedirectUrl;
+        }
+        
+        // URL de production par défaut (remplacez par votre domaine)
+        const productionUrl = 'https://ninjalinkingbv.netlify.app';
+        
+        // Si on est en localhost, utiliser l'URL de production
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            return productionUrl;
+        }
+        
+        // Sinon utiliser l'origine actuelle
+        return `${window.location.origin}`;
     }
 
     // Obtenir l'utilisateur actuel

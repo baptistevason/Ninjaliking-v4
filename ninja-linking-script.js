@@ -555,6 +555,28 @@ function closeSupabaseModal() {
     }
 }
 
+// Configurer l'URL de redirection pour l'email de confirmation
+function configureEmailRedirect() {
+    const currentUrl = localStorage.getItem('email-redirect-url') || window.location.origin;
+    
+    const newUrl = prompt(
+        `🔗 Configuration de l'URL de redirection pour l'email de confirmation\n\n` +
+        `URL actuelle: ${currentUrl}\n\n` +
+        `Entrez la nouvelle URL (ou laissez vide pour utiliser l'URL actuelle):`,
+        currentUrl
+    );
+    
+    if (newUrl !== null) {
+        if (newUrl.trim() === '') {
+            localStorage.removeItem('email-redirect-url');
+            alert('✅ URL de redirection réinitialisée à l\'URL par défaut');
+        } else {
+            localStorage.setItem('email-redirect-url', newUrl.trim());
+            alert(`✅ URL de redirection configurée: ${newUrl.trim()}`);
+        }
+    }
+}
+
 // Migrer vers Supabase
 async function migrateToSupabase() {
     if (!db || !isSupabaseConfigured) return;

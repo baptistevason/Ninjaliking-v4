@@ -1,0 +1,175 @@
+/* ============ THÈME BLANC/CLAIR ============ */
+:root {
+    /* Couleurs blanc/clair - Palette propre */
+    --white-primary: #ffffff;        /* Blanc pur */
+    --white-secondary: #f8fafc;      /* Gris très clair */
+    --white-accent: #e2e8f0;         /* Gris clair */
+    --white-text: #1a202c;            /* Noir doux */
+    --white-text-secondary: #4a5568;  /* Gris foncé */
+    --white-border: #e2e8f0;         /* Bordure grise */
+    --white-hover: #f1f5f9;          /* Hover gris clair */
+    
+    /* Couleurs d'accent */
+    --white-blue: #3b82f6;           /* Bleu */
+    --white-green: #10b981;          /* Vert */
+    --white-red: #ef4444;            /* Rouge */
+    --white-yellow: #f59e0b;         /* Jaune */
+    
+    /* Dégradés blanc */
+    --white-gradient-1: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #e2e8f0 100%);
+    --white-gradient-2: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
+    --white-gradient-3: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #1e40af 100%);
+    
+    /* Ombres blanc */
+    --white-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    --white-shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.15);
+    --white-shadow-hover: 0 6px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Application du thème blanc */
+body.white-theme {
+    background: var(--white-gradient-1);
+    color: var(--white-text);
+}
+
+.white-theme .auth-container {
+    background: var(--white-gradient-3);
+}
+
+.white-theme .auth-modal {
+    background: var(--white-primary);
+    border: 2px solid var(--white-border);
+    box-shadow: var(--white-shadow-lg);
+}
+
+.white-theme .auth-header h1 {
+    color: var(--white-text);
+    text-shadow: none;
+}
+
+.white-theme .auth-header p {
+    color: var(--white-text-secondary);
+}
+
+.white-theme .header {
+    background: var(--white-gradient-3);
+    box-shadow: var(--white-shadow);
+}
+
+.white-theme .navigation {
+    background: var(--white-primary);
+    border-bottom: 2px solid var(--white-border);
+}
+
+.white-theme .nav-btn {
+    color: var(--white-text-secondary);
+}
+
+.white-theme .nav-btn:hover {
+    color: var(--white-blue);
+    background: var(--white-hover);
+}
+
+.white-theme .nav-btn.active {
+    color: var(--white-blue);
+    border-bottom-color: var(--white-blue);
+    background: var(--white-hover);
+}
+
+.white-theme .main-content {
+    background: var(--white-gradient-1);
+}
+
+.white-theme .btn-primary {
+    background: var(--white-gradient-3);
+    color: white;
+    border: 1px solid var(--white-blue);
+    box-shadow: var(--white-shadow);
+}
+
+.white-theme .btn-primary:hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    box-shadow: var(--white-shadow-hover);
+}
+
+.white-theme .btn-secondary {
+    background: var(--white-text-secondary);
+    color: white;
+    border: 1px solid var(--white-border);
+}
+
+.white-theme .btn-secondary:hover {
+    background: var(--white-text);
+    box-shadow: var(--white-shadow);
+}
+
+.white-theme .card {
+    background: var(--white-primary);
+    border: 2px solid var(--white-border);
+    box-shadow: var(--white-shadow);
+}
+
+.white-theme .card:hover {
+    box-shadow: var(--white-shadow-hover);
+}
+
+.white-theme .card-icon {
+    background: var(--white-gradient-3);
+}
+
+.white-theme .form-group input,
+.white-theme .form-group select,
+.white-theme .form-group textarea {
+    border: 2px solid var(--white-border);
+    background: var(--white-primary);
+    color: var(--white-text);
+}
+
+.white-theme .form-group input:focus,
+.white-theme .form-group select:focus,
+.white-theme .form-group textarea:focus {
+    border-color: var(--white-blue);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.white-theme .form-group label {
+    color: var(--white-text);
+    font-weight: 600;
+}
+
+.white-theme .table {
+    background: var(--white-primary);
+    border: 2px solid var(--white-border);
+}
+
+.white-theme .table th {
+    background: var(--white-gradient-3);
+    color: white;
+    border-bottom: 2px solid var(--white-border);
+}
+
+.white-theme .table td {
+    border-bottom: 1px solid var(--white-border);
+    color: var(--white-text);
+}
+
+.white-theme .table tr:hover {
+    background: var(--white-hover);
+}
+
+.white-theme .modal {
+    background: var(--white-primary);
+    border: 3px solid var(--white-border);
+    box-shadow: var(--white-shadow-lg);
+}
+
+.white-theme .modal-header {
+    background: var(--white-gradient-3);
+    color: white;
+    border-bottom: 2px solid var(--white-border);
+}
+
+.white-theme .modal-body {
+    background: var(--white-primary);
+    color: var(--white-text);
+}

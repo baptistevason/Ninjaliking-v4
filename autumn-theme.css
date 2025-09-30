@@ -1,0 +1,220 @@
+/* ============ THÈME AUTOMNE - ÉLÉMENTS SUPPLÉMENTAIRES ============ */
+
+/* Boutons spéciaux automne */
+.btn-success {
+    background: var(--autumn-gradient-3);
+    color: white;
+    border: 1px solid var(--autumn-gold);
+    box-shadow: var(--autumn-shadow);
+}
+
+.btn-success:hover {
+    background: var(--autumn-gradient-2);
+    box-shadow: var(--autumn-shadow-hover);
+}
+
+.btn-info {
+    background: var(--autumn-copper);
+    color: white;
+    border: 1px solid var(--autumn-brown);
+}
+
+.btn-info:hover {
+    background: var(--autumn-brown);
+    box-shadow: var(--autumn-shadow);
+}
+
+.btn-warning {
+    background: var(--autumn-orange);
+    color: white;
+    border: 1px solid var(--autumn-red);
+}
+
+.btn-warning:hover {
+    background: var(--autumn-red);
+    box-shadow: var(--autumn-shadow);
+}
+
+.btn-danger {
+    background: var(--autumn-red);
+    color: white;
+    border: 1px solid var(--autumn-brown);
+}
+
+.btn-danger:hover {
+    background: var(--autumn-brown);
+    box-shadow: var(--autumn-shadow);
+}
+
+/* Formulaires automne */
+.form-group input,
+.form-group select,
+.form-group textarea {
+    border: 2px solid var(--autumn-accent);
+    background: var(--autumn-bg-primary);
+    color: var(--autumn-brown);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--autumn-primary);
+    box-shadow: 0 0 0 3px rgba(210, 105, 30, 0.1);
+}
+
+.form-group label {
+    color: var(--autumn-brown);
+    font-weight: 600;
+}
+
+/* Cartes automne */
+.card {
+    background: var(--autumn-bg-primary);
+    border: 2px solid var(--autumn-accent);
+    box-shadow: var(--autumn-shadow);
+}
+
+.card:hover {
+    box-shadow: var(--autumn-shadow-hover);
+    transform: translateY(-2px);
+}
+
+/* Statistiques automne */
+.stats-card {
+    background: var(--autumn-bg-primary);
+    border: 2px solid var(--autumn-accent);
+    box-shadow: var(--autumn-shadow);
+}
+
+.stats-card .stat-value {
+    color: var(--autumn-primary);
+}
+
+.stats-card .stat-label {
+    color: var(--autumn-copper);
+}
+
+/* Tableaux automne */
+.table {
+    background: var(--autumn-bg-primary);
+    border: 2px solid var(--autumn-accent);
+}
+
+.table th {
+    background: var(--autumn-gradient-1);
+    color: white;
+    border-bottom: 2px solid var(--autumn-accent);
+}
+
+.table td {
+    border-bottom: 1px solid var(--autumn-accent);
+    color: var(--autumn-brown);
+}
+
+.table tr:hover {
+    background: var(--autumn-bg-accent);
+}
+
+/* Modales automne */
+.modal {
+    background: var(--autumn-bg-primary);
+    border: 3px solid var(--autumn-accent);
+    box-shadow: var(--autumn-shadow-lg);
+}
+
+.modal-header {
+    background: var(--autumn-gradient-1);
+    color: white;
+    border-bottom: 2px solid var(--autumn-accent);
+}
+
+.modal-body {
+    background: var(--autumn-bg-primary);
+    color: var(--autumn-brown);
+}
+
+/* Badges automne */
+.badge {
+    background: var(--autumn-gradient-1);
+    color: white;
+    border: 1px solid var(--autumn-accent);
+}
+
+.badge-success {
+    background: var(--autumn-gradient-3);
+}
+
+.badge-warning {
+    background: var(--autumn-orange);
+}
+
+.badge-danger {
+    background: var(--autumn-red);
+}
+
+/* Animations automne */
+@keyframes autumn-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.autumn-fade-in {
+    animation: autumn-fade-in 0.6s ease-out;
+}
+
+/* Effets de survol automne */
+.autumn-hover {
+    transition: all 0.3s ease;
+}
+
+.autumn-hover:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--autumn-shadow-hover);
+}
+
+/* Icônes automne */
+.fas.fa-bullseye {
+    color: var(--autumn-gold);
+    text-shadow: 1px 1px 2px rgba(139, 69, 19, 0.3);
+}
+
+/* Texte automne */
+.autumn-text-primary {
+    color: var(--autumn-primary);
+}
+
+.autumn-text-secondary {
+    color: var(--autumn-copper);
+}
+
+.autumn-text-accent {
+    color: var(--autumn-accent);
+}
+
+/* Bordures automne */
+.autumn-border {
+    border: 2px solid var(--autumn-accent);
+}
+
+.autumn-border-thick {
+    border: 3px solid var(--autumn-primary);
+}
+
+/* Ombres automne */
+.autumn-shadow {
+    box-shadow: var(--autumn-shadow);
+}
+
+.autumn-shadow-lg {
+    box-shadow: var(--autumn-shadow-lg);
+}
+
+.autumn-shadow-hover {
+    box-shadow: var(--autumn-shadow-hover);
+}

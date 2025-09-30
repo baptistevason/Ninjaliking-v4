@@ -1,3 +1,34 @@
+/* ============ THÈME AUTOMNE ============ */
+:root {
+    /* Couleurs automne - Palette chaleureuse */
+    --autumn-primary: #d2691e;        /* Orange automne */
+    --autumn-secondary: #cd853f;      /* Pérou */
+    --autumn-accent: #b8860b;         /* Or foncé */
+    --autumn-warm: #daa520;           /* Or */
+    --autumn-brown: #8b4513;          /* Marron selle */
+    --autumn-red: #dc143c;            /* Rouge cramoisi */
+    --autumn-orange: #ff8c00;         /* Orange foncé */
+    --autumn-gold: #ffd700;           /* Or */
+    --autumn-copper: #b87333;        /* Cuivre */
+    
+    /* Couleurs de fond automne */
+    --autumn-bg-primary: #fdf6e3;    /* Crème chaud */
+    --autumn-bg-secondary: #f5f5dc;   /* Beige */
+    --autumn-bg-accent: #ffe4b5;      /* Moccasin */
+    --autumn-bg-dark: #2f1b14;        /* Brun foncé */
+    
+    /* Dégradés automne */
+    --autumn-gradient-1: linear-gradient(135deg, #d2691e 0%, #cd853f 50%, #daa520 100%);
+    --autumn-gradient-2: linear-gradient(135deg, #8b4513 0%, #b87333 50%, #d2691e 100%);
+    --autumn-gradient-3: linear-gradient(135deg, #ff8c00 0%, #ffd700 50%, #daa520 100%);
+    --autumn-gradient-bg: linear-gradient(135deg, #fdf6e3 0%, #ffe4b5 50%, #f5f5dc 100%);
+    
+    /* Ombres automne */
+    --autumn-shadow: 0 4px 20px rgba(210, 105, 30, 0.3);
+    --autumn-shadow-lg: 0 8px 30px rgba(139, 69, 19, 0.4);
+    --autumn-shadow-hover: 0 6px 25px rgba(205, 133, 63, 0.4);
+}
+
 /* Reset et base */
 * {
     margin: 0;
@@ -12,7 +43,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--autumn-gradient-1);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -20,13 +51,14 @@
 }
 
 .auth-modal {
-    background: white;
+    background: var(--autumn-bg-primary);
     border-radius: 16px;
     padding: 2rem;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--autumn-shadow-lg);
     width: 100%;
     max-width: 400px;
     margin: 1rem;
+    border: 2px solid var(--autumn-accent);
 }
 
 .auth-header {
@@ -35,13 +67,14 @@
 }
 
 .auth-header h1 {
-    color: #1a202c;
+    color: var(--autumn-brown);
     font-size: 1.8rem;
     margin-bottom: 0.5rem;
+    text-shadow: 1px 1px 2px rgba(139, 69, 19, 0.3);
 }
 
 .auth-header p {
-    color: #4a5568;
+    color: var(--autumn-copper);
     font-size: 0.9rem;
 }
 
@@ -254,11 +287,11 @@ body {
 
 /* Header */
 .header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--autumn-gradient-1);
     color: white;
     padding: 2rem 0;
     text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--autumn-shadow);
     position: relative;
 }
 
@@ -280,6 +313,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 1rem;
+    text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.5);
 }
 
 .header-content p {
@@ -289,8 +323,8 @@ body {
 
 /* Navigation */
 .navigation {
-    background: white;
-    border-bottom: 1px solid #e2e8f0;
+    background: var(--autumn-bg-primary);
+    border-bottom: 2px solid var(--autumn-accent);
     padding: 0;
     position: sticky;
     top: 0;
@@ -312,7 +346,7 @@ body {
     cursor: pointer;
     font-size: 1rem;
     font-weight: 500;
-    color: #64748b;
+    color: var(--autumn-copper);
     transition: all 0.3s ease;
     display: inline-flex;
     align-items: center;
@@ -322,14 +356,14 @@ body {
 }
 
 .nav-btn:hover {
-    color: #3b82f6;
-    background: #f1f5f9;
+    color: var(--autumn-primary);
+    background: var(--autumn-bg-accent);
 }
 
 .nav-btn.active {
-    color: #3b82f6;
-    border-bottom-color: #3b82f6;
-    background: #f8fafc;
+    color: var(--autumn-primary);
+    border-bottom-color: var(--autumn-primary);
+    background: var(--autumn-bg-accent);
 }
 
 /* Contenu principal */
@@ -339,6 +373,7 @@ body {
     margin: 0 auto;
     padding: 2rem;
     width: 100%;
+    background: var(--autumn-gradient-bg);
 }
 
 /* Pages */
@@ -417,23 +452,27 @@ body {
 }
 
 .btn-primary {
-    background: #3b82f6;
+    background: var(--autumn-gradient-1);
     color: white;
+    border: 1px solid var(--autumn-accent);
+    box-shadow: var(--autumn-shadow);
 }
 
 .btn-primary:hover {
-    background: #2563eb;
+    background: var(--autumn-gradient-2);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    box-shadow: var(--autumn-shadow-hover);
 }
 
 .btn-secondary {
-    background: #64748b;
+    background: var(--autumn-brown);
     color: white;
+    border: 1px solid var(--autumn-copper);
 }
 
 .btn-secondary:hover {
-    background: #475569;
+    background: var(--autumn-copper);
+    box-shadow: var(--autumn-shadow);
 }
 
 /* Grille des catégories */
@@ -484,7 +523,7 @@ body {
 .card-icon {
     width: 50px;
     height: 50px;
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    background: var(--autumn-gradient-1);
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -1046,7 +1085,7 @@ body {
 .operator-card .card-icon {
     width: 50px;
     height: 50px;
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    background: var(--autumn-gradient-1);
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -1155,7 +1194,7 @@ body {
 }
 
 .stat-icon.total {
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    background: var(--autumn-gradient-1);
 }
 
 .stat-icon.seo {
