@@ -76,7 +76,37 @@ $$ language 'plpgsql';
 CREATE TRIGGER update_projects_updated_at BEFORE UPDATE
     ON projects FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
--- 6. Données d'exemple (supprimées car nécessitent un user_id valide)
+-- 6. Ajouter une colonne de rôle aux utilisateurs
+-- Cette colonne sera ajoutée à la table auth.users via une fonction
+CREATE OR REPLACE FUNCTION add_user_role()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Ajouter le rôle 'user' par défaut pour tous les nouveaux utilisateurs
+    NEW.raw_user_meta_data = COALESCE(NEW.raw_user_meta_data, '{}'::jsonb) || '{"role": "user"}'::jsonb;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Créer le trigger pour ajouter automatiquement le rôle
+DROP TRIGGER IF EXISTS add_user_role_trigger ON auth.users;
+CREATE TRIGGER add_user_role_trigger
+    BEFORE INSERT ON auth.users
+    FOR EACH ROW
+    EXECUTE FUNCTION add_user_role();
+
+-- 7. Fonction pour vérifier si un utilisateur est admin
+CREATE OR REPLACE FUNCTION is_admin(user_id UUID)
+RETURNS BOOLEAN AS $$
+BEGIN
+    RETURN EXISTS (
+        SELECT 1 FROM auth.users 
+        WHERE id = user_id 
+        AND raw_user_meta_data->>'role' = 'admin'
+    );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- 8. Données d'exemple (supprimées car nécessitent un user_id valide)
 -- Les données d'exemple seront créées automatiquement lors de l'inscription des utilisateurs
 
 -- 7. Vérification des données

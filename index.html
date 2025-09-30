@@ -781,7 +781,7 @@
                         <div class="project-spots-header">
                             <h2>Spots du projet (<span id="projectSpotsCount">0</span>)</h2>
                             <div class="project-spots-actions">
-                                <button class="btn btn-success" onclick="exportProjectSpotsToExcel()">
+                                <button class="btn btn-success admin-only" onclick="exportProjectSpotsToExcel()" style="display: none;">
                                     <i class="fas fa-download"></i> Exporter Excel
                                 </button>
                                 <button class="btn btn-primary" onclick="openAddSpotModal()">
@@ -825,19 +825,19 @@
             <button class="btn btn-info" onclick="refreshSitesFromSupabase()">
                 <i class="fas fa-sync-alt"></i> Actualiser
             </button>
-            <button class="btn btn-success" onclick="openImportModal()">
+            <button class="btn btn-success admin-only" onclick="openImportModal()" style="display: none;">
                 <i class="fas fa-upload"></i> Importer
             </button>
-            <button class="btn btn-info" onclick="downloadCSVModel()">
+            <button class="btn btn-info admin-only" onclick="downloadCSVModel()" style="display: none;">
                 <i class="fas fa-download"></i> Modèle CSV
             </button>
-            <button class="btn btn-success" onclick="downloadExcelModel()">
+            <button class="btn btn-success admin-only" onclick="downloadExcelModel()" style="display: none;">
                 <i class="fas fa-download"></i> Modèle Excel
             </button>
-            <button class="btn btn-info" onclick="exportToExcel()">
+            <button class="btn btn-info admin-only" onclick="exportToExcel()" style="display: none;">
                 <i class="fas fa-download"></i> Exporter Excel
             </button>
-            <button class="btn btn-primary" onclick="openSiteModal()">
+            <button class="btn btn-primary admin-only" onclick="openSiteModal()" style="display: none;">
                 <i class="fas fa-plus"></i> Ajouter
             </button>
         </div>

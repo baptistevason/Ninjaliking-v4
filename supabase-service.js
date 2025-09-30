@@ -158,6 +158,21 @@ class SupabaseService {
         return this.currentUser;
     }
 
+    // Vérifier si l'utilisateur est admin
+    isAdmin() {
+        if (!this.currentUser) return false;
+        return this.currentUser.user_metadata?.role === 'admin' || 
+               this.currentUser.app_metadata?.role === 'admin';
+    }
+
+    // Obtenir le rôle de l'utilisateur
+    getUserRole() {
+        if (!this.currentUser) return 'guest';
+        return this.currentUser.user_metadata?.role || 
+               this.currentUser.app_metadata?.role || 
+               'user';
+    }
+
     // ============ PROJETS ============
     async saveProject(project) {
         this.checkInitialized();
@@ -490,6 +505,102 @@ class SupabaseService {
         } catch (error) {
             console.error('Erreur chargement sites publics:', error);
             return [];
+        }
+    }
+
+    // ============ FONCTIONS ADMIN ============
+    
+    // Vérifier les privilèges admin
+    checkAdminPrivileges() {
+        if (!this.isAuthenticated()) {
+            throw new Error('Authentification requise');
+        }
+        if (!this.isAdmin()) {
+            throw new Error('Privilèges administrateur requis');
+        }
+    }
+
+    // Exporter tous les sites (admin uniquement)
+    async exportAllSites() {
+        this.checkAdminPrivileges();
+        
+        try {
+            const { data, error } = await this.supabase
+                .from('sites')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            console.error('Erreur export sites admin:', error);
+            throw error;
+        }
+    }
+
+    // Exporter tous les projets (admin uniquement)
+    async exportAllProjects() {
+        this.checkAdminPrivileges();
+        
+        try {
+            const { data, error } = await this.supabase
+                .from('projects')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            console.error('Erreur export projets admin:', error);
+            throw error;
+        }
+    }
+
+    // Importer des sites en masse (admin uniquement)
+    async importSites(sitesData) {
+        this.checkAdminPrivileges();
+        
+        try {
+            const { data, error } = await this.supabase
+                .from('sites')
+                .insert(sitesData)
+                .select();
+
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            console.error('Erreur import sites admin:', error);
+            throw error;
+        }
+    }
+
+    // Obtenir les statistiques globales (admin uniquement)
+    async getGlobalStats() {
+        this.checkAdminPrivileges();
+        
+        try {
+            const [projectsResult, sitesResult] = await Promise.all([
+                this.supabase.from('projects').select('id, created_at, objective'),
+                this.supabase.from('sites').select('id, created_at, type')
+            ]);
+
+            if (projectsResult.error) throw projectsResult.error;
+            if (sitesResult.error) throw sitesResult.error;
+
+            const now = new Date();
+            const thirtyDaysAgo = new Date(now.getTime() - (30 * 24 * 60 * 60 * 1000));
+
+            return {
+                total_projects: projectsResult.data.length,
+                total_sites: sitesResult.data.length,
+                projects_last_30_days: projectsResult.data.filter(p => new Date(p.created_at) >= thirtyDaysAgo).length,
+                sites_last_30_days: sitesResult.data.filter(s => new Date(s.created_at) >= thirtyDaysAgo).length,
+                seo_projects: projectsResult.data.filter(p => p.objective === 'SEO').length,
+                reputation_projects: projectsResult.data.filter(p => p.objective === 'E-Réputation').length
+            };
+        } catch (error) {
+            console.error('Erreur stats globales:', error);
+            throw error;
         }
     }
 

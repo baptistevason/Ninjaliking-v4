@@ -8,6 +8,7 @@ let db = null;
 let isSupabaseConfigured = false;
 let isAuthenticated = false;
 let currentUser = null;
+let isAdmin = false;
 let currentSort = { column: null, direction: 'asc' };
 let currentSpotsSort = { column: null, direction: 'asc' };
 
@@ -88,6 +89,9 @@ function showMainApp() {
     // Mettre à jour l'interface utilisateur
     updateUserInterface();
     
+    // Afficher les sections privées pour les utilisateurs connectés
+    showPrivateSections();
+    
     // Charger les données
     loadData();
 }
@@ -119,12 +123,65 @@ function updateUserInterface() {
         userEmail.style.display = 'inline';
         logoutBtn.style.display = 'inline-block';
         loginBtn.style.display = 'none';
+        
+        // Vérifier si l'utilisateur est admin
+        isAdmin = db ? db.isAdmin() : false;
+        
+        // Mettre à jour l'affichage des fonctionnalités admin
+        updateAdminFeatures();
     } else {
         // Utilisateur non connecté
         userEmail.style.display = 'none';
         logoutBtn.style.display = 'none';
         loginBtn.style.display = 'inline-block';
+        isAdmin = false;
+        
+        // Masquer les fonctionnalités admin
+        hideAdminFeatures();
     }
+}
+
+// Mettre à jour l'affichage des fonctionnalités admin
+function updateAdminFeatures() {
+    // Afficher/masquer les boutons d'import/export selon les privilèges
+    const adminButtons = document.querySelectorAll('.admin-only');
+    adminButtons.forEach(button => {
+        button.style.display = isAdmin ? 'inline-block' : 'none';
+    });
+    
+    // Afficher/masquer les sections admin
+    const adminSections = document.querySelectorAll('.admin-section');
+    adminSections.forEach(section => {
+        section.style.display = isAdmin ? 'block' : 'none';
+    });
+    
+    // S'assurer que les sections privées sont visibles pour les utilisateurs connectés
+    showPrivateSections();
+    
+    // Ajouter un indicateur admin dans l'interface
+    if (isAdmin) {
+        const userEmail = document.getElementById('userEmail');
+        if (userEmail && !userEmail.querySelector('.admin-badge')) {
+            const adminBadge = document.createElement('span');
+            adminBadge.className = 'admin-badge';
+            adminBadge.innerHTML = ' <i class="fas fa-crown" style="color: #ffd700; font-size: 0.8rem;"></i>';
+            adminBadge.title = 'Administrateur';
+            userEmail.appendChild(adminBadge);
+        }
+    }
+}
+
+// Masquer les fonctionnalités admin
+function hideAdminFeatures() {
+    const adminButtons = document.querySelectorAll('.admin-only');
+    adminButtons.forEach(button => {
+        button.style.display = 'none';
+    });
+    
+    const adminSections = document.querySelectorAll('.admin-section');
+    adminSections.forEach(section => {
+        section.style.display = 'none';
+    });
 }
 
 // Masquer les sections privées pour les utilisateurs non authentifiés
@@ -141,8 +198,58 @@ function hidePrivateSections() {
         iaTab.style.display = 'none';
     }
     
+    // Flouter les sections des spots
+    blurSpotsSections();
+    
     // Afficher un message d'information
     showPublicAccessMessage();
+}
+
+// Afficher les sections privées pour les utilisateurs connectés
+function showPrivateSections() {
+    // Afficher l'onglet Projets
+    const projectsTab = document.querySelector('[data-page="projects"]');
+    if (projectsTab) {
+        projectsTab.style.display = 'inline-block';
+    }
+    
+    // Afficher l'onglet IA
+    const iaTab = document.querySelector('[data-page="ia"]');
+    if (iaTab) {
+        iaTab.style.display = 'inline-block';
+    }
+    
+    // Supprimer le flou des spots
+    unblurSpotsSections();
+}
+
+// Flouter les sections des spots pour les utilisateurs non connectés
+function blurSpotsSections() {
+    // Flouter la section des spots dans les projets
+    const projectSpotsSection = document.querySelector('.project-spots-section');
+    if (projectSpotsSection) {
+        projectSpotsSection.classList.add('spots-blurred');
+    }
+    
+    // Flouter la section des spots dans le catalogue
+    const catalogTableContainer = document.querySelector('.catalog-table-container');
+    if (catalogTableContainer) {
+        catalogTableContainer.classList.add('spots-blurred');
+    }
+    
+    // Flouter les sections de spots dans les autres pages
+    const spotsSections = document.querySelectorAll('.project-spots-table-container, .catalog-table-container');
+    spotsSections.forEach(section => {
+        section.classList.add('spots-blurred');
+    });
+}
+
+// Supprimer le flou des spots pour les utilisateurs connectés
+function unblurSpotsSections() {
+    const blurredSections = document.querySelectorAll('.spots-blurred');
+    blurredSections.forEach(section => {
+        section.classList.remove('spots-blurred');
+    });
 }
 
 // Afficher un message pour l'accès public
