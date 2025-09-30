@@ -92,6 +92,12 @@ function showMainApp() {
     // Afficher les sections privées pour les utilisateurs connectés
     showPrivateSections();
     
+    // Masquer le message d'accès public
+    hidePublicAccessMessage();
+    
+    // Restaurer le contenu du catalogue pour les utilisateurs connectés
+    restoreCatalogContent();
+    
     // Charger les données
     loadData();
 }
@@ -106,6 +112,9 @@ function showLimitedApp() {
     
     // Mettre à jour l'interface utilisateur
     updateUserInterface();
+    
+    // Afficher le message d'accès restreint pour le catalogue
+    showCatalogRestricted();
     
     // Charger les données publiques
     loadData();
@@ -158,6 +167,9 @@ function updateAdminFeatures() {
     // S'assurer que les sections privées sont visibles pour les utilisateurs connectés
     showPrivateSections();
     
+    // Masquer le message d'accès public pour les utilisateurs connectés
+    hidePublicAccessMessage();
+    
     // Ajouter un indicateur admin dans l'interface
     if (isAdmin) {
         const userEmail = document.getElementById('userEmail');
@@ -201,6 +213,9 @@ function hidePrivateSections() {
     // Flouter les sections des spots
     blurSpotsSections();
     
+    // Afficher le message d'accès restreint pour le catalogue
+    showCatalogRestricted();
+    
     // Afficher un message d'information
     showPublicAccessMessage();
 }
@@ -231,17 +246,57 @@ function blurSpotsSections() {
         projectSpotsSection.classList.add('spots-blurred');
     }
     
-    // Flouter la section des spots dans le catalogue
-    const catalogTableContainer = document.querySelector('.catalog-table-container');
-    if (catalogTableContainer) {
-        catalogTableContainer.classList.add('spots-blurred');
-    }
+    // Afficher le message d'accès restreint pour le catalogue
+    showCatalogRestricted();
     
     // Flouter les sections de spots dans les autres pages
-    const spotsSections = document.querySelectorAll('.project-spots-table-container, .catalog-table-container');
+    const spotsSections = document.querySelectorAll('.project-spots-table-container');
     spotsSections.forEach(section => {
         section.classList.add('spots-blurred');
     });
+}
+
+// Afficher le message d'accès restreint pour le catalogue
+function showCatalogRestricted() {
+    // Ne pas afficher si l'utilisateur est connecté
+    if (isAuthenticated) {
+        return;
+    }
+    
+    // Attendre que le contenu soit rendu
+    setTimeout(() => {
+        const catalogContent = document.querySelector('.catalog-content');
+        if (catalogContent) {
+            console.log('🔒 Affichage du message d\'accès restreint pour le catalogue');
+            // Remplacer le contenu par le message d'accès restreint
+            catalogContent.innerHTML = `
+                <div class="catalog-restricted">
+                    <div class="restricted-message">
+                        <h3>🔒 Accès Restreint</h3>
+                        <p>Pour accéder à la fonction catalogue, vous devez être connecté.</p>
+                    </div>
+                    <div class="auth-buttons">
+                        <button class="login-button" onclick="showAuthForm()">
+                            Se connecter
+                        </button>
+                        <a href="/compte" class="signup-button" onclick="showSignupForm(); return false;">
+                            Créer un compte
+                        </a>
+                    </div>
+                </div>
+            `;
+        } else {
+            console.log('❌ Élément .catalog-content non trouvé');
+        }
+    }, 500);
+}
+
+// Restaurer le contenu du catalogue pour les utilisateurs connectés
+function restoreCatalogContent() {
+    if (isAuthenticated) {
+        // Recharger le contenu du catalogue normal
+        renderSites();
+    }
 }
 
 // Supprimer le flou des spots pour les utilisateurs connectés
@@ -250,28 +305,52 @@ function unblurSpotsSections() {
     blurredSections.forEach(section => {
         section.classList.remove('spots-blurred');
     });
+    
+    // Restaurer le contenu du catalogue pour les utilisateurs connectés
+    restoreCatalogContent();
 }
 
 // Afficher un message pour l'accès public
 function showPublicAccessMessage() {
+    // Ne pas afficher le message si l'utilisateur est connecté
+    if (isAuthenticated) {
+        hidePublicAccessMessage();
+        return;
+    }
+    
     const catalogPage = document.getElementById('catalog-page');
     if (catalogPage) {
-        const message = document.createElement('div');
-        message.className = 'public-access-message';
-        message.innerHTML = `
-            <div style="background: #e3f2fd; border: 1px solid #2196f3; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
-                <h3 style="color: #1976d2; margin: 0 0 0.5rem 0;">
-                    <i class="fas fa-info-circle"></i> Accès Public
-                </h3>
-                <p style="margin: 0; color: #424242;">
-                    Vous consultez le catalogue public de sites. 
-                    <a href="#" onclick="showAuthForm()" style="color: #1976d2; font-weight: 600;">
-                        Connectez-vous
-                    </a> pour créer vos propres projets et gérer vos données.
-                </p>
-            </div>
-        `;
-        catalogPage.insertBefore(message, catalogPage.firstChild);
+        // Vérifier si le message existe déjà
+        let messageDiv = catalogPage.querySelector('.public-access-message');
+        if (!messageDiv) {
+            messageDiv = document.createElement('div');
+            messageDiv.className = 'public-access-message';
+            messageDiv.innerHTML = `
+                <div style="background: #e3f2fd; border: 1px solid #2196f3; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                    <h3 style="color: #1976d2; margin: 0 0 0.5rem 0;">
+                        <i class="fas fa-info-circle"></i> Accès Public
+                    </h3>
+                    <p style="margin: 0; color: #424242;">
+                        Vous consultez le catalogue public de sites. 
+                        <a href="#" onclick="showAuthForm()" style="color: #1976d2; font-weight: 600;">
+                            Connectez-vous
+                        </a> pour créer vos propres projets et gérer vos données.
+                    </p>
+                </div>
+            `;
+            catalogPage.insertBefore(messageDiv, catalogPage.firstChild);
+        }
+    }
+}
+
+// Masquer le message d'accès public
+function hidePublicAccessMessage() {
+    const catalogPage = document.getElementById('catalog-page');
+    if (catalogPage) {
+        const messageDiv = catalogPage.querySelector('.public-access-message');
+        if (messageDiv) {
+            messageDiv.remove();
+        }
     }
 }
 
@@ -2519,6 +2598,12 @@ function renderSites() {
         `;
         tbody.appendChild(row);
     });
+    
+    // Afficher le message d'accès restreint si l'utilisateur n'est pas connecté
+    if (!isAuthenticated) {
+        showCatalogRestricted();
+    }
+    // Si l'utilisateur est connecté, le contenu normal du catalogue s'affiche automatiquement
 }
 
 function getTrustFlowClass(trustFlow) {
