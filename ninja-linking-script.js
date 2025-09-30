@@ -204,10 +204,10 @@ function hidePrivateSections() {
         projectsTab.style.display = 'none';
     }
     
-    // Masquer l'onglet IA
+    // L'onglet IA reste visible pour tous les utilisateurs
     const iaTab = document.querySelector('[data-page="ia"]');
     if (iaTab) {
-        iaTab.style.display = 'none';
+        iaTab.style.display = 'inline-block';
     }
     
     // Flouter les sections des spots
@@ -228,7 +228,7 @@ function showPrivateSections() {
         projectsTab.style.display = 'inline-block';
     }
     
-    // Afficher l'onglet IA
+    // L'onglet IA est toujours visible pour tous les utilisateurs
     const iaTab = document.querySelector('[data-page="ia"]');
     if (iaTab) {
         iaTab.style.display = 'inline-block';
