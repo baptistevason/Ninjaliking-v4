@@ -1,10 +1,11 @@
-// Service Supabase pour Ninja Linking
+// Service Supabase pour Ninja Linking avec authentification
 class SupabaseService {
     constructor() {
         this.supabaseUrl = null;
         this.supabaseKey = null;
         this.supabase = null;
         this.isInitialized = false;
+        this.currentUser = null;
     }
 
     // Initialiser Supabase avec les credentials
@@ -21,6 +22,9 @@ class SupabaseService {
             // Créer le client Supabase
             this.supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
             this.isInitialized = true;
+            
+            // Vérifier la session utilisateur existante
+            await this.checkCurrentUser();
             
             console.log('✅ Supabase initialisé avec succès');
             return true;
@@ -48,12 +52,123 @@ class SupabaseService {
         }
     }
 
+    // ============ AUTHENTIFICATION ============
+    
+    // Vérifier l'utilisateur actuel
+    async checkCurrentUser() {
+        try {
+            const { data: { user } } = await this.supabase.auth.getUser();
+            this.currentUser = user;
+            return user;
+        } catch (error) {
+            console.error('Erreur vérification utilisateur:', error);
+            this.currentUser = null;
+            return null;
+        }
+    }
+
+    // Inscription d'un nouvel utilisateur
+    async signUp(email, password, userData = {}) {
+        this.checkInitialized();
+        
+        try {
+            const { data, error } = await this.supabase.auth.signUp({
+                email: email,
+                password: password,
+                options: {
+                    data: userData
+                }
+            });
+
+            if (error) throw error;
+            
+            this.currentUser = data.user;
+            console.log('✅ Inscription réussie');
+            return { success: true, user: data.user, session: data.session };
+        } catch (error) {
+            console.error('❌ Erreur inscription:', error);
+            return { success: false, error: error.message };
+        }
+    }
+
+    // Connexion d'un utilisateur
+    async signIn(email, password) {
+        this.checkInitialized();
+        
+        try {
+            const { data, error } = await this.supabase.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+
+            if (error) throw error;
+            
+            this.currentUser = data.user;
+            console.log('✅ Connexion réussie');
+            return { success: true, user: data.user, session: data.session };
+        } catch (error) {
+            console.error('❌ Erreur connexion:', error);
+            return { success: false, error: error.message };
+        }
+    }
+
+    // Déconnexion
+    async signOut() {
+        this.checkInitialized();
+        
+        try {
+            const { error } = await this.supabase.auth.signOut();
+            if (error) throw error;
+            
+            this.currentUser = null;
+            console.log('✅ Déconnexion réussie');
+            return { success: true };
+        } catch (error) {
+            console.error('❌ Erreur déconnexion:', error);
+            return { success: false, error: error.message };
+        }
+    }
+
+    // Réinitialisation de mot de passe
+    async resetPassword(email) {
+        this.checkInitialized();
+        
+        try {
+            const { error } = await this.supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: `${window.location.origin}/reset-password`
+            });
+
+            if (error) throw error;
+            
+            console.log('✅ Email de réinitialisation envoyé');
+            return { success: true };
+        } catch (error) {
+            console.error('❌ Erreur réinitialisation:', error);
+            return { success: false, error: error.message };
+        }
+    }
+
+    // Vérifier si l'utilisateur est connecté
+    isAuthenticated() {
+        return this.currentUser !== null;
+    }
+
+    // Obtenir l'utilisateur actuel
+    getCurrentUser() {
+        return this.currentUser;
+    }
+
     // ============ PROJETS ============
     async saveProject(project) {
         this.checkInitialized();
         
+        if (!this.isAuthenticated()) {
+            throw new Error('Utilisateur non authentifié');
+        }
+        
         try {
             const projectData = {
+                user_id: this.currentUser.id,
                 name: project.name,
                 url: project.url,
                 objective: project.objective,
@@ -90,10 +205,15 @@ class SupabaseService {
     async getProjects() {
         this.checkInitialized();
         
+        if (!this.isAuthenticated()) {
+            throw new Error('Utilisateur non authentifié');
+        }
+        
         try {
             const { data, error } = await this.supabase
                 .from('projects')
                 .select('*')
+                .eq('user_id', this.currentUser.id)
                 .order('created_at', { ascending: false });
 
             if (error) throw error;
@@ -117,6 +237,10 @@ class SupabaseService {
     async updateProject(id, project) {
         this.checkInitialized();
         
+        if (!this.isAuthenticated()) {
+            throw new Error('Utilisateur non authentifié');
+        }
+        
         try {
             const projectData = {
                 name: project.name,
@@ -135,6 +259,7 @@ class SupabaseService {
                 .from('projects')
                 .update(projectData)
                 .eq('id', id)
+                .eq('user_id', this.currentUser.id)
                 .select()
                 .single();
 
@@ -156,11 +281,16 @@ class SupabaseService {
     async deleteProject(id) {
         this.checkInitialized();
         
+        if (!this.isAuthenticated()) {
+            throw new Error('Utilisateur non authentifié');
+        }
+        
         try {
             const { error } = await this.supabase
                 .from('projects')
                 .delete()
-                .eq('id', id);
+                .eq('id', id)
+                .eq('user_id', this.currentUser.id);
 
             if (error) throw error;
             return true;
@@ -173,11 +303,16 @@ class SupabaseService {
     async deleteProjects(ids) {
         this.checkInitialized();
         
+        if (!this.isAuthenticated()) {
+            throw new Error('Utilisateur non authentifié');
+        }
+        
         try {
             const { error } = await this.supabase
                 .from('projects')
                 .delete()
-                .in('id', ids);
+                .in('id', ids)
+                .eq('user_id', this.currentUser.id);
 
             if (error) throw error;
             return true;
@@ -187,9 +322,13 @@ class SupabaseService {
         }
     }
 
-    // ============ SITES ============
+    // ============ SITES (PUBLIC) ============
     async saveSite(site) {
         this.checkInitialized();
+        
+        if (!this.isAuthenticated()) {
+            throw new Error('Utilisateur non authentifié');
+        }
         
         try {
             const siteData = {
@@ -199,10 +338,11 @@ class SupabaseService {
                 traffic: site.traffic || 0,
                 trust_flow: site.trustFlow || 0,
                 ttf: site.ttf || 'Généraliste',
-                follow: site.follow || 'Oui'
+                follow: site.follow || 'Oui',
+                created_by: this.currentUser.id
             };
 
-            // Upsert pour éviter les doublons sur l'URL
+            // Upsert pour éviter les doublons sur l'URL (public)
             const { data, error } = await this.supabase
                 .from('sites')
                 .upsert([siteData], { onConflict: 'url' })
@@ -225,6 +365,10 @@ class SupabaseService {
     async saveSites(sites) {
         this.checkInitialized();
         
+        if (!this.isAuthenticated()) {
+            throw new Error('Utilisateur non authentifié');
+        }
+        
         try {
             const sitesData = sites.map(site => ({
                 url: site.url,
@@ -233,7 +377,8 @@ class SupabaseService {
                 traffic: site.traffic || 0,
                 trust_flow: site.trustFlow || 0,
                 ttf: site.ttf || 'Généraliste',
-                follow: site.follow || 'Oui'
+                follow: site.follow || 'Oui',
+                created_by: this.currentUser.id
             }));
 
             const { data, error } = await this.supabase
@@ -258,6 +403,7 @@ class SupabaseService {
         this.checkInitialized();
         
         try {
+            // Sites publics - pas besoin d'authentification pour la lecture
             const { data, error } = await this.supabase
                 .from('sites')
                 .select('*')
@@ -279,11 +425,17 @@ class SupabaseService {
     async deleteSite(id) {
         this.checkInitialized();
         
+        if (!this.isAuthenticated()) {
+            throw new Error('Utilisateur non authentifié');
+        }
+        
         try {
+            // Seul le créateur peut supprimer un site
             const { error } = await this.supabase
                 .from('sites')
                 .delete()
-                .eq('id', id);
+                .eq('id', id)
+                .eq('created_by', this.currentUser.id);
 
             if (error) throw error;
             return true;
@@ -296,11 +448,17 @@ class SupabaseService {
     async deleteSites(ids) {
         this.checkInitialized();
         
+        if (!this.isAuthenticated()) {
+            throw new Error('Utilisateur non authentifié');
+        }
+        
         try {
+            // Seul le créateur peut supprimer des sites
             const { error } = await this.supabase
                 .from('sites')
                 .delete()
-                .in('id', ids);
+                .in('id', ids)
+                .eq('created_by', this.currentUser.id);
 
             if (error) throw error;
             return true;
@@ -310,14 +468,44 @@ class SupabaseService {
         }
     }
 
-    // ============ STATISTIQUES ============
-    async getProjectStats() {
+    // ============ SITES PUBLICS (SANS AUTHENTIFICATION) ============
+    
+    // Obtenir les sites publics (accessible sans authentification)
+    async getPublicSites() {
         this.checkInitialized();
         
         try {
             const { data, error } = await this.supabase
+                .from('sites')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+
+            return data.map(site => ({
+                ...site,
+                trustFlow: site.trust_flow,
+                createdAt: site.created_at
+            }));
+        } catch (error) {
+            console.error('Erreur chargement sites publics:', error);
+            return [];
+        }
+    }
+
+    // ============ STATISTIQUES ============
+    async getProjectStats() {
+        this.checkInitialized();
+        
+        if (!this.isAuthenticated()) {
+            throw new Error('Utilisateur non authentifié');
+        }
+        
+        try {
+            const { data, error } = await this.supabase
                 .from('projects')
-                .select('objective, created_at');
+                .select('objective, created_at')
+                .eq('user_id', this.currentUser.id);
 
             if (error) throw error;
 

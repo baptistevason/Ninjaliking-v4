@@ -6,6 +6,8 @@ let editingSiteId = null;
 let editingProjectId = null;
 let db = null;
 let isSupabaseConfigured = false;
+let isAuthenticated = false;
+let currentUser = null;
 let currentSort = { column: null, direction: 'asc' };
 let currentSpotsSort = { column: null, direction: 'asc' };
 
@@ -25,6 +27,10 @@ async function initSupabase() {
             const success = await db.initialize(supabaseUrl, supabaseKey);
             if (success) {
                 isSupabaseConfigured = true;
+                
+                // Vérifier l'authentification
+                await checkAuthentication();
+                
                 console.log('✅ Supabase configuré');
                 return true;
             }
@@ -35,6 +41,256 @@ async function initSupabase() {
     } catch (error) {
         console.error('❌ Erreur initialisation Supabase:', error);
         return false;
+    }
+}
+
+// ============ AUTHENTIFICATION ============
+
+// Vérifier l'authentification
+async function checkAuthentication() {
+    if (!db) return false;
+    
+    try {
+        const user = await db.checkCurrentUser();
+        if (user) {
+            isAuthenticated = true;
+            currentUser = user;
+            showMainApp();
+            return true;
+        } else {
+            isAuthenticated = false;
+            currentUser = null;
+            // Permettre l'accès au catalogue public
+            showLimitedApp();
+            return false;
+        }
+    } catch (error) {
+        console.error('Erreur vérification authentification:', error);
+        isAuthenticated = false;
+        currentUser = null;
+        // Permettre l'accès au catalogue public même en cas d'erreur
+        showLimitedApp();
+        return false;
+    }
+}
+
+// Afficher le formulaire d'authentification
+function showAuthForm() {
+    document.getElementById('auth-container').style.display = 'flex';
+    document.getElementById('main-app').style.display = 'none';
+}
+
+// Afficher l'application principale
+function showMainApp() {
+    document.getElementById('auth-container').style.display = 'none';
+    document.getElementById('main-app').style.display = 'block';
+    
+    // Mettre à jour l'interface utilisateur
+    updateUserInterface();
+    
+    // Charger les données
+    loadData();
+}
+
+// Afficher l'application avec accès limité (catalogue public uniquement)
+function showLimitedApp() {
+    document.getElementById('auth-container').style.display = 'none';
+    document.getElementById('main-app').style.display = 'block';
+    
+    // Masquer les sections privées
+    hidePrivateSections();
+    
+    // Mettre à jour l'interface utilisateur
+    updateUserInterface();
+    
+    // Charger les données publiques
+    loadData();
+}
+
+// Mettre à jour l'interface utilisateur selon l'état d'authentification
+function updateUserInterface() {
+    const userEmail = document.getElementById('userEmail');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const loginBtn = document.getElementById('loginBtn');
+    
+    if (isAuthenticated && currentUser) {
+        // Utilisateur connecté
+        userEmail.textContent = currentUser.email;
+        userEmail.style.display = 'inline';
+        logoutBtn.style.display = 'inline-block';
+        loginBtn.style.display = 'none';
+    } else {
+        // Utilisateur non connecté
+        userEmail.style.display = 'none';
+        logoutBtn.style.display = 'none';
+        loginBtn.style.display = 'inline-block';
+    }
+}
+
+// Masquer les sections privées pour les utilisateurs non authentifiés
+function hidePrivateSections() {
+    // Masquer l'onglet Projets
+    const projectsTab = document.querySelector('[data-page="projects"]');
+    if (projectsTab) {
+        projectsTab.style.display = 'none';
+    }
+    
+    // Masquer l'onglet IA
+    const iaTab = document.querySelector('[data-page="ia"]');
+    if (iaTab) {
+        iaTab.style.display = 'none';
+    }
+    
+    // Afficher un message d'information
+    showPublicAccessMessage();
+}
+
+// Afficher un message pour l'accès public
+function showPublicAccessMessage() {
+    const catalogPage = document.getElementById('catalog-page');
+    if (catalogPage) {
+        const message = document.createElement('div');
+        message.className = 'public-access-message';
+        message.innerHTML = `
+            <div style="background: #e3f2fd; border: 1px solid #2196f3; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                <h3 style="color: #1976d2; margin: 0 0 0.5rem 0;">
+                    <i class="fas fa-info-circle"></i> Accès Public
+                </h3>
+                <p style="margin: 0; color: #424242;">
+                    Vous consultez le catalogue public de sites. 
+                    <a href="#" onclick="showAuthForm()" style="color: #1976d2; font-weight: 600;">
+                        Connectez-vous
+                    </a> pour créer vos propres projets et gérer vos données.
+                </p>
+            </div>
+        `;
+        catalogPage.insertBefore(message, catalogPage.firstChild);
+    }
+}
+
+// Basculer vers le formulaire d'inscription
+function showSignupForm() {
+    document.getElementById('login-form').classList.remove('active');
+    document.getElementById('signup-form').classList.add('active');
+    document.getElementById('reset-form').classList.remove('active');
+}
+
+// Basculer vers le formulaire de connexion
+function showLoginForm() {
+    document.getElementById('signup-form').classList.remove('active');
+    document.getElementById('login-form').classList.add('active');
+    document.getElementById('reset-form').classList.remove('active');
+}
+
+// Basculer vers le formulaire de réinitialisation
+function showResetForm() {
+    document.getElementById('login-form').classList.remove('active');
+    document.getElementById('signup-form').classList.remove('active');
+    document.getElementById('reset-form').classList.add('active');
+}
+
+// Gérer la connexion
+async function handleLogin(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    if (!db) {
+        alert('❌ Supabase non configuré');
+        return;
+    }
+    
+    try {
+        const result = await db.signIn(email, password);
+        if (result.success) {
+            isAuthenticated = true;
+            currentUser = result.user;
+            showMainApp();
+        } else {
+            alert('❌ Erreur de connexion: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Erreur connexion:', error);
+        alert('❌ Erreur de connexion');
+    }
+}
+
+// Gérer l'inscription
+async function handleSignup(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+    const confirmPassword = document.getElementById('signupConfirmPassword').value;
+    
+    if (password !== confirmPassword) {
+        alert('❌ Les mots de passe ne correspondent pas');
+        return;
+    }
+    
+    if (password.length < 6) {
+        alert('❌ Le mot de passe doit contenir au moins 6 caractères');
+        return;
+    }
+    
+    if (!db) {
+        alert('❌ Supabase non configuré');
+        return;
+    }
+    
+    try {
+        const result = await db.signUp(email, password);
+        if (result.success) {
+            alert('✅ Compte créé avec succès ! Vérifiez votre email pour confirmer votre compte.');
+            showLoginForm();
+        } else {
+            alert('❌ Erreur d\'inscription: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Erreur inscription:', error);
+        alert('❌ Erreur d\'inscription');
+    }
+}
+
+// Gérer la réinitialisation de mot de passe
+async function handleReset(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById('resetEmail').value;
+    
+    if (!db) {
+        alert('❌ Supabase non configuré');
+        return;
+    }
+    
+    try {
+        const result = await db.resetPassword(email);
+        if (result.success) {
+            alert('✅ Email de réinitialisation envoyé ! Vérifiez votre boîte mail.');
+            showLoginForm();
+        } else {
+            alert('❌ Erreur: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Erreur réinitialisation:', error);
+        alert('❌ Erreur de réinitialisation');
+    }
+}
+
+// Déconnexion
+async function logout() {
+    if (!db) return;
+    
+    try {
+        await db.signOut();
+        isAuthenticated = false;
+        currentUser = null;
+        projects = [];
+        sites = [];
+        showAuthForm();
+    } catch (error) {
+        console.error('Erreur déconnexion:', error);
     }
 }
 
@@ -3103,12 +3359,20 @@ async function loadData() {
     
     if (isSupabaseConfigured && db) {
         try {
-            // Charger depuis Supabase
-            projects = await db.getProjects();
-            sites = await db.getSites();
-            console.log(`✅ Données chargées depuis Supabase: ${projects.length} projets, ${sites.length} sites`);
+            // Charger les sites publics (toujours disponibles)
+            sites = await db.getPublicSites();
+            console.log(`✅ Sites publics chargés: ${sites.length} sites`);
             
-            // Mettre à jour l'affichage après chargement Supabase
+            // Charger les projets seulement si authentifié
+            if (isAuthenticated) {
+                projects = await db.getProjects();
+                console.log(`✅ Projets chargés: ${projects.length} projets`);
+            } else {
+                projects = [];
+                console.log('⚠️ Utilisateur non authentifié, projets non chargés');
+            }
+            
+            // Mettre à jour l'affichage
             setTimeout(() => {
                 renderProjects();
                 renderSites();
@@ -3120,6 +3384,18 @@ async function loadData() {
             console.error('❌ Erreur chargement Supabase:', error);
             // Fallback vers localStorage
         }
+    }
+    
+    // Si pas authentifié, on ne charge que les sites publics depuis localStorage
+    if (!isAuthenticated) {
+        console.log('⚠️ Utilisateur non authentifié, chargement sites publics uniquement');
+        const savedSites = localStorage.getItem('ninjalinking-sites');
+        if (savedSites) {
+            sites = JSON.parse(savedSites);
+        }
+        projects = [];
+        renderSites();
+        return;
     }
     
     // Chargement depuis localStorage
@@ -3657,10 +3933,13 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Initialiser Supabase en premier
     await initSupabase();
     
-    // Puis charger les données
+    // Configurer les event listeners d'authentification
+    setupAuthEventListeners();
+    
+    // Charger les données (sites publics toujours disponibles)
     await loadData();
     
-    // Enfin, rendre l'interface
+    // Rendre l'interface
     renderProjects();
     updateProjectStats();
     renderSites();
@@ -3671,6 +3950,27 @@ document.addEventListener('DOMContentLoaded', async function() {
         addSupabaseConfigButton();
     }
 });
+
+// Configurer les event listeners d'authentification
+function setupAuthEventListeners() {
+    // Formulaire de connexion
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', handleLogin);
+    }
+    
+    // Formulaire d'inscription
+    const signupForm = document.getElementById('signupForm');
+    if (signupForm) {
+        signupForm.addEventListener('submit', handleSignup);
+    }
+    
+    // Formulaire de réinitialisation
+    const resetForm = document.getElementById('resetForm');
+    if (resetForm) {
+        resetForm.addEventListener('submit', handleReset);
+    }
+}
 
 // Ajouter un bouton pour configurer Supabase
 function addSupabaseConfigButton() {

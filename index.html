@@ -9,13 +9,94 @@
 </head>
 <body>
     <div class="app">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-content">
-                <h1><i class="fas fa-bullseye"></i> Ninja Linking Tool</h1>
-                <p>Outil professionnel de link building</p>
+        <!-- Interface d'authentification -->
+        <div id="auth-container" class="auth-container">
+            <div class="auth-modal">
+                <div class="auth-header">
+                    <h1><i class="fas fa-bullseye"></i> Ninja Linking Tool</h1>
+                    <p>Outil professionnel de link building</p>
+                </div>
+                
+                <!-- Formulaire de connexion -->
+                <div id="login-form" class="auth-form active">
+                    <h2>Connexion</h2>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input type="email" id="loginEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Mot de passe</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Se connecter</button>
+                        <p class="auth-switch">
+                            Pas de compte ? <a href="#" onclick="showSignupForm()">Créer un compte</a>
+                        </p>
+                        <p class="auth-switch">
+                            <a href="#" onclick="showResetForm()">Mot de passe oublié ?</a>
+                        </p>
+                    </form>
+                </div>
+
+                <!-- Formulaire d'inscription -->
+                <div id="signup-form" class="auth-form">
+                    <h2>Créer un compte</h2>
+                    <form id="signupForm">
+                        <div class="form-group">
+                            <label for="signupEmail">Email</label>
+                            <input type="email" id="signupEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupPassword">Mot de passe</label>
+                            <input type="password" id="signupPassword" required minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <label for="signupConfirmPassword">Confirmer le mot de passe</label>
+                            <input type="password" id="signupConfirmPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Créer le compte</button>
+                        <p class="auth-switch">
+                            Déjà un compte ? <a href="#" onclick="showLoginForm()">Se connecter</a>
+                        </p>
+                    </form>
+                </div>
+
+                <!-- Formulaire de réinitialisation -->
+                <div id="reset-form" class="auth-form">
+                    <h2>Mot de passe oublié</h2>
+                    <form id="resetForm">
+                        <div class="form-group">
+                            <label for="resetEmail">Email</label>
+                            <input type="email" id="resetEmail" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Envoyer le lien de réinitialisation</button>
+                        <p class="auth-switch">
+                            <a href="#" onclick="showLoginForm()">Retour à la connexion</a>
+                        </p>
+                    </form>
+                </div>
             </div>
-        </header>
+        </div>
+
+        <!-- Interface principale (masquée par défaut) -->
+        <div id="main-app" class="main-app" style="display: none;">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-content">
+                    <h1><i class="fas fa-bullseye"></i> Ninja Linking Tool</h1>
+                    <p>Outil professionnel de link building</p>
+                    <div class="user-info" id="userInfo">
+                        <span id="userEmail"></span>
+                        <button onclick="logout()" class="btn btn-secondary btn-sm" id="logoutBtn" style="display: none;" title="Déconnexion">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                        <button onclick="showAuthForm()" class="btn btn-primary btn-sm" id="loginBtn">
+                            <i class="fas fa-sign-in-alt"></i> Se connecter
+                        </button>
+                    </div>
+                </div>
+            </header>
 
         <!-- Navigation -->
         <nav class="navigation">
@@ -1260,6 +1341,7 @@
                 </form>
             </div>
         </div>
+        </div> <!-- Fermeture de main-app -->
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
