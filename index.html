@@ -699,21 +699,28 @@
                     <div class="project-spots-section">
                         <div class="project-spots-header">
                             <h2>Spots du projet (<span id="projectSpotsCount">0</span>)</h2>
-                            <button class="btn btn-primary" onclick="openAddSpotModal()">
-                                <i class="fas fa-plus"></i> + Ajouter un spot
-                            </button>
+                            <div class="project-spots-actions">
+                                <button class="btn btn-success" onclick="exportProjectSpotsToExcel()">
+                                    <i class="fas fa-download"></i> Exporter Excel
+                                </button>
+                                <button class="btn btn-primary" onclick="openAddSpotModal()">
+                                    <i class="fas fa-plus"></i> + Ajouter un spot
+                                </button>
+                            </div>
                         </div>
                         
                         <div class="project-spots-table-container">
                             <table class="project-spots-table" id="projectSpotsTable">
                                 <thead>
                                     <tr>
-                                        <th>SITE</th>
-                                        <th>TYPE</th>
-                                        <th>THÉMATIQUE</th>
-                                        <th>TRUST FLOW</th>
-                                        <th>TRAFIC</th>
-                                        <th>STATUT</th>
+                                        <th class="sortable" data-sort="url" onclick="sortSpotsTable('url')">SITE</th>
+                                        <th class="sortable" data-sort="type" onclick="sortSpotsTable('type')">TYPE</th>
+                                        <th class="sortable" data-sort="theme" onclick="sortSpotsTable('theme')">THÉMATIQUE</th>
+                                        <th class="sortable" data-sort="trustFlow" onclick="sortSpotsTable('trustFlow')">TRUST FLOW</th>
+                                        <th class="sortable" data-sort="traffic" onclick="sortSpotsTable('traffic')">TRAFIC</th>
+                                        <th class="sortable" data-sort="ttf" onclick="sortSpotsTable('ttf')">TTF</th>
+                                        <th class="sortable" data-sort="publicationDate" onclick="sortSpotsTable('publicationDate')">DATE PUBLICATION</th>
+                                        <th class="sortable" data-sort="status" onclick="sortSpotsTable('status')">STATUT</th>
                                         <th>ACTIONS</th>
                                     </tr>
                                 </thead>
@@ -985,6 +992,97 @@
                     <div class="form-actions">
                         <button type="button" class="btn btn-secondary" onclick="closeAddSpotModal()">Annuler</button>
                         <button type="submit" class="btn btn-primary">Ajouter le spot</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Modifier Spot -->
+    <div id="editSpotModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Modifier le spot</h3>
+                <button class="modal-close" onclick="closeEditSpotModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editSpotForm">
+                    <div class="form-group">
+                        <label for="editSpotUrl">URL du site *</label>
+                        <input type="url" id="editSpotUrl" required placeholder="https://exemple.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="editSpotType">Type</label>
+                        <select id="editSpotType">
+                            <option value="Forum">Forum</option>
+                            <option value="Blog">Blog</option>
+                            <option value="Annuaire">Annuaire</option>
+                            <option value="Média">Média</option>
+                            <option value="E-commerce">E-commerce</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editSpotTheme">Thématique</label>
+                        <select id="editSpotTheme">
+                            <option value="Actualités & Médias">Actualités & Médias</option>
+                            <option value="Business & Marketing">Business & Marketing</option>
+                            <option value="E-commerce & Affiliation">E-commerce & Affiliation</option>
+                            <option value="Éducation & Formation">Éducation & Formation</option>
+                            <option value="Santé & Bien-être">Santé & Bien-être</option>
+                            <option value="Technologie & Informatique">Technologie & Informatique</option>
+                            <option value="Lifestyle & Loisirs">Lifestyle & Loisirs</option>
+                            <option value="Finance & Crypto">Finance & Crypto</option>
+                            <option value="Immobilier">Immobilier</option>
+                            <option value="Automobile">Automobile</option>
+                            <option value="Cuisine & Alimentation">Cuisine & Alimentation</option>
+                            <option value="Animaux">Animaux</option>
+                            <option value="Développement personnel">Développement personnel</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editSpotTrustFlow">Trust Flow</label>
+                        <input type="number" id="editSpotTrustFlow" min="0" max="100" placeholder="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="editSpotTraffic">Trafic</label>
+                        <input type="number" id="editSpotTraffic" min="0" placeholder="10000">
+                    </div>
+                    <div class="form-group">
+                        <label for="editSpotTTF">TTF</label>
+                        <select id="editSpotTTF">
+                            <option value="Arts">Arts</option>
+                            <option value="Adult">Adult</option>
+                            <option value="Business">Business</option>
+                            <option value="Computers">Computers</option>
+                            <option value="Games">Games</option>
+                            <option value="Health">Health</option>
+                            <option value="Home">Home</option>
+                            <option value="News">News</option>
+                            <option value="Reference">Reference</option>
+                            <option value="Regional">Regional</option>
+                            <option value="Science">Science</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Society">Society</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Recreation">Recreation</option>
+                            <option value="World">World</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editSpotPublicationDate">Date de publication</label>
+                        <input type="date" id="editSpotPublicationDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="editSpotStatus">Statut</label>
+                        <select id="editSpotStatus">
+                            <option value="A publier">A publier</option>
+                            <option value="Publié">Publié</option>
+                            <option value="Rejeté">Rejeté</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeEditSpotModal()">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Sauvegarder</button>
                     </div>
                 </form>
             </div>

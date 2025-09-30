@@ -7,6 +7,7 @@ let editingProjectId = null;
 let db = null;
 let isSupabaseConfigured = false;
 let currentSort = { column: null, direction: 'asc' };
+let currentSpotsSort = { column: null, direction: 'asc' };
 
 // Initialiser Supabase
 async function initSupabase() {
@@ -282,6 +283,12 @@ function initializeApp() {
     const addSpotForm = document.getElementById('addSpotForm');
     if (addSpotForm) {
         addSpotForm.addEventListener('submit', saveNewSpot);
+    }
+
+    // Formulaire d'édition de spot
+    const editSpotForm = document.getElementById('editSpotForm');
+    if (editSpotForm) {
+        editSpotForm.addEventListener('submit', saveEditedSpot);
     }
 
     // Formulaire d'édition du projet
@@ -1662,7 +1669,7 @@ function renderProjectSpots() {
     if (projectSpots.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="7" style="text-align: center; padding: 3rem; color: #64748b;">
+                <td colspan="9" style="text-align: center; padding: 3rem; color: #64748b;">
                     <i class="fas fa-globe" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.5;"></i>
                     <p>Aucun spot associé à ce projet</p>
                 </td>
@@ -1695,18 +1702,17 @@ function renderProjectSpots() {
                     <span class="project-spot-trust-flow-value">${spot.trustFlow}</span>
                 </div>
             </td>
-            <td><span class="project-spot-traffic">${spot.traffic.toLocaleString()}</span></td>
+            <td><span class="project-spot-traffic">${formatNumber(spot.traffic)}</span></td>
+            <td><span class="ttf-tag ttf-${(spot.ttf || 'business').toLowerCase()}">${spot.ttf || 'Business'}</span></td>
+            <td><span class="project-spot-date">${spot.publicationDate ? new Date(spot.publicationDate).toLocaleDateString('fr-FR') : 'Non définie'}</span></td>
             <td>
-                <div class="project-spot-status">
-                    <select class="project-spot-status-select" onchange="updateSpotStatus(${spot.id}, this.value)">
-                        <option value="A publier" ${spot.status === 'A publier' ? 'selected' : ''}>A publier</option>
-                        <option value="Publié" ${spot.status === 'Publié' ? 'selected' : ''}>Publié</option>
-                        <option value="Rejeté" ${spot.status === 'Rejeté' ? 'selected' : ''}>Rejeté</option>
-                    </select>
-                </div>
+                <span class="spot-status-${spot.status.toLowerCase().replace(' ', '-')}">${spot.status}</span>
             </td>
             <td>
                 <div class="project-spot-actions">
+                    <button class="project-spot-action-btn edit" onclick="editProjectSpot(${spot.id})" title="Modifier">
+                        <i class="fas fa-edit"></i>
+                    </button>
                     <button class="project-spot-action-btn delete" onclick="removeSpotFromProject(${spot.id})" title="Supprimer">
                         <i class="fas fa-trash"></i>
                     </button>
@@ -3394,6 +3400,256 @@ function updateSortIndicators() {
             activeTh.classList.add(currentSort.direction === 'asc' ? 'sort-asc' : 'sort-desc');
         }
     }
+}
+
+// Fonctions de tri pour les spots de projet
+function sortSpotsTable(column) {
+    const table = document.getElementById('projectSpotsTable');
+    const tbody = document.getElementById('projectSpotsTableBody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    
+    // Déterminer la direction du tri
+    if (currentSpotsSort.column === column) {
+        currentSpotsSort.direction = currentSpotsSort.direction === 'asc' ? 'desc' : 'asc';
+    } else {
+        currentSpotsSort.column = column;
+        currentSpotsSort.direction = 'asc';
+    }
+    
+    // Mettre à jour les indicateurs visuels
+    updateSpotsSortIndicators();
+    
+    // Trier les lignes
+    rows.sort((a, b) => {
+        const aValue = getSpotCellValue(a, column);
+        const bValue = getSpotCellValue(b, column);
+        
+        let comparison = 0;
+        
+        // Tri numérique pour les colonnes numériques
+        if (column === 'traffic' || column === 'trustFlow') {
+            const aNum = parseFormattedNumber(aValue);
+            const bNum = parseFormattedNumber(bValue);
+            comparison = aNum - bNum;
+        } else if (column === 'publicationDate') {
+            // Tri par date
+            const aDate = new Date(aValue || '1900-01-01');
+            const bDate = new Date(bValue || '1900-01-01');
+            comparison = aDate - bDate;
+        } else {
+            // Tri alphabétique pour les autres colonnes
+            comparison = aValue.localeCompare(bValue, 'fr', { numeric: true });
+        }
+        
+        return currentSpotsSort.direction === 'asc' ? comparison : -comparison;
+    });
+    
+    // Réorganiser les lignes dans le DOM
+    rows.forEach(row => tbody.appendChild(row));
+}
+
+function getSpotCellValue(row, column) {
+    const cellIndex = getSpotColumnIndex(column);
+    const cell = row.children[cellIndex];
+    
+    if (!cell) return '';
+    
+    // Pour les colonnes avec des éléments spéciaux
+    if (column === 'url') {
+        const link = cell.querySelector('a');
+        return link ? link.textContent.trim() : cell.textContent.trim();
+    } else if (column === 'trustFlow') {
+        const valueSpan = cell.querySelector('.trust-flow-value');
+        return valueSpan ? valueSpan.textContent.trim() : cell.textContent.trim();
+    } else if (column === 'ttf') {
+        const badge = cell.querySelector('.ttf-tag');
+        return badge ? badge.textContent.trim() : cell.textContent.trim();
+    } else {
+        return cell.textContent.trim();
+    }
+}
+
+function getSpotColumnIndex(column) {
+    const columnMap = {
+        'url': 0,
+        'type': 1,
+        'theme': 2,
+        'trustFlow': 3,
+        'traffic': 4,
+        'ttf': 5,
+        'publicationDate': 6,
+        'status': 7
+    };
+    return columnMap[column] || 0;
+}
+
+function updateSpotsSortIndicators() {
+    // Supprimer tous les indicateurs existants
+    document.querySelectorAll('.project-spots-table th.sortable').forEach(th => {
+        th.classList.remove('sort-asc', 'sort-desc');
+    });
+    
+    // Ajouter l'indicateur pour la colonne active
+    if (currentSpotsSort.column) {
+        const activeTh = document.querySelector(`.project-spots-table th[data-sort="${currentSpotsSort.column}"]`);
+        if (activeTh) {
+            activeTh.classList.add(currentSpotsSort.direction === 'asc' ? 'sort-asc' : 'sort-desc');
+        }
+    }
+}
+
+// Fonction d'export Excel pour les spots de projet
+function exportProjectSpotsToExcel() {
+    if (!projectSpots || projectSpots.length === 0) {
+        showNotification('Aucun spot à exporter', 'info');
+        return;
+    }
+
+    const project = projects.find(p => p.id === currentProjectId);
+    if (!project) {
+        showNotification('Projet non trouvé', 'error');
+        return;
+    }
+
+    // Créer un nouveau workbook
+    const workbook = XLSX.utils.book_new();
+    
+    // Préparer les données
+    const spotsData = projectSpots.map(spot => ({
+        'Site': spot.url,
+        'Type': spot.type,
+        'Thématique': spot.theme,
+        'Trust Flow': spot.trustFlow || 0,
+        'Trafic': spot.traffic || 0,
+        'TTF': spot.ttf || 'Business',
+        'Date Publication': spot.publicationDate ? new Date(spot.publicationDate).toLocaleDateString('fr-FR') : 'Non définie',
+        'Statut': spot.status || 'A publier'
+    }));
+
+    // Créer la feuille de calcul
+    const worksheet = XLSX.utils.json_to_sheet(spotsData);
+    
+    // Ajuster la largeur des colonnes
+    const columnWidths = [
+        { wch: 30 }, // Site
+        { wch: 12 }, // Type
+        { wch: 15 }, // Thématique
+        { wch: 12 }, // Trust Flow
+        { wch: 12 }, // Trafic
+        { wch: 12 }, // TTF
+        { wch: 15 }, // Date Publication
+        { wch: 12 }  // Statut
+    ];
+    worksheet['!cols'] = columnWidths;
+
+    // Ajouter la feuille au workbook
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Spots_Projet');
+
+    // Générer le nom du fichier
+    const fileName = `Spots_${project.name.replace(/[^a-zA-Z0-9]/g, '_')}_${new Date().toISOString().split('T')[0]}.xlsx`;
+
+    // Télécharger le fichier
+    XLSX.writeFile(workbook, fileName);
+    
+    showNotification(`✅ Export Excel généré : ${fileName}`, 'success');
+}
+
+// Variables pour l'édition des spots
+let editingSpotId = null;
+
+// Fonction pour ouvrir la modal d'édition d'un spot
+function editProjectSpot(spotId) {
+    const spot = projectSpots.find(s => s.id === spotId);
+    if (!spot) {
+        showNotification('Spot non trouvé', 'error');
+        return;
+    }
+
+    editingSpotId = spotId;
+    
+    // Remplir le formulaire avec les données du spot
+    document.getElementById('editSpotUrl').value = spot.url || '';
+    document.getElementById('editSpotType').value = spot.type || 'Forum';
+    document.getElementById('editSpotTheme').value = spot.theme || 'Business & Marketing';
+    document.getElementById('editSpotTrustFlow').value = spot.trustFlow || 0;
+    document.getElementById('editSpotTraffic').value = spot.traffic || 0;
+    document.getElementById('editSpotTTF').value = spot.ttf || 'Business';
+    document.getElementById('editSpotPublicationDate').value = spot.publicationDate || '';
+    document.getElementById('editSpotStatus').value = spot.status || 'A publier';
+    
+    // Afficher la modal
+    document.getElementById('editSpotModal').style.display = 'block';
+}
+
+// Fonction pour fermer la modal d'édition
+function closeEditSpotModal() {
+    document.getElementById('editSpotModal').style.display = 'none';
+    editingSpotId = null;
+}
+
+// Fonction pour sauvegarder les modifications d'un spot
+async function saveEditedSpot(e) {
+    e.preventDefault();
+    
+    if (!editingSpotId) {
+        showNotification('Erreur: ID du spot manquant', 'error');
+        return;
+    }
+
+    const form = e.target;
+    const url = form.editSpotUrl.value.trim();
+    const type = form.editSpotType.value;
+    const theme = form.editSpotTheme.value;
+    const trustFlow = parseInt(form.editSpotTrustFlow.value) || 0;
+    const traffic = parseInt(form.editSpotTraffic.value) || 0;
+    const ttf = form.editSpotTTF.value;
+    const publicationDate = form.editSpotPublicationDate.value;
+    const status = form.editSpotStatus.value;
+
+    if (!url) {
+        showNotification('L\'URL est obligatoire', 'error');
+        return;
+    }
+
+    // Trouver le spot à modifier
+    const spotIndex = projectSpots.findIndex(s => s.id === editingSpotId);
+    if (spotIndex === -1) {
+        showNotification('Spot non trouvé', 'error');
+        return;
+    }
+
+    // Mettre à jour les données du spot
+    projectSpots[spotIndex] = {
+        ...projectSpots[spotIndex],
+        url: url,
+        type: type,
+        theme: theme,
+        trustFlow: trustFlow,
+        traffic: traffic,
+        ttf: ttf,
+        publicationDate: publicationDate,
+        status: status
+    };
+
+    // Mettre à jour le projet dans la liste des projets
+    const project = projects.find(p => p.id === currentProjectId);
+    if (project && project.spots) {
+        const projectSpotIndex = project.spots.findIndex(s => s.id === editingSpotId);
+        if (projectSpotIndex !== -1) {
+            project.spots[projectSpotIndex] = projectSpots[spotIndex];
+        }
+    }
+
+    // Sauvegarder les données
+    await saveData();
+    
+    // Rafraîchir l'affichage
+    renderProjectSpots();
+    
+    // Fermer la modal
+    closeEditSpotModal();
+    
+    showNotification('✅ Spot modifié avec succès', 'success');
 }
 
 // Initialisation

@@ -1512,6 +1512,12 @@ body {
     gap: 20px;
 }
 
+.project-spots-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
 .project-spots-header h2 {
     font-size: 1.5rem;
     font-weight: 600;
@@ -1538,6 +1544,39 @@ body {
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+}
+
+.project-spots-table th.sortable {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    transition: background-color 0.3s ease;
+    padding-right: 2rem;
+}
+
+.project-spots-table th.sortable:hover {
+    background: #e2e8f0;
+}
+
+.project-spots-table th.sortable::after {
+    content: '↕';
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.8rem;
+    color: #9ca3af;
+    transition: color 0.3s ease;
+}
+
+.project-spots-table th.sort-asc::after {
+    content: '↑';
+    color: #3b82f6;
+}
+
+.project-spots-table th.sort-desc::after {
+    content: '↓';
+    color: #3b82f6;
 }
 
 .project-spots-table td {
@@ -1658,6 +1697,40 @@ body {
     border-color: #fecaca;
 }
 
+/* Couleurs de statut pour les spots */
+.spot-status-a-publier {
+    background: #fef3c7;
+    color: #d97706;
+    border: 1px solid #fde68a;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.spot-status-publie {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.spot-status-rejete {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
 .project-spot-actions {
     display: flex;
     gap: 8px;
@@ -1674,6 +1747,16 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 0.9rem;
+}
+
+.project-spot-action-btn.edit {
+    background: #dbeafe;
+    color: #3b82f6;
+}
+
+.project-spot-action-btn.edit:hover {
+    background: #3b82f6;
+    color: white;
 }
 
 .project-spot-action-btn.delete {
