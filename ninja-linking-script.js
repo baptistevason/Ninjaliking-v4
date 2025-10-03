@@ -3606,7 +3606,17 @@ async function saveData() {
     if (isSupabaseConfigured && db) {
         try {
             console.log('💾 Sauvegarde automatique dans Supabase...');
-            // Note: Les données sont sauvegardées directement lors des opérations CRUD
+            
+            // Mettre à jour tous les projets modifiés dans Supabase
+            for (const project of projects) {
+                try {
+                    await db.updateProject(project.id, project);
+                    console.log(`✅ Projet ${project.name} mis à jour dans Supabase`);
+                } catch (error) {
+                    console.error(`❌ Erreur mise à jour projet ${project.name}:`, error);
+                }
+            }
+            
             return true;
         } catch (error) {
             console.error('❌ Erreur sauvegarde Supabase:', error);
