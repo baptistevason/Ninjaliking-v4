@@ -2121,6 +2121,11 @@ function renderProjectSpots() {
     
     if (!tbody) return;
 
+    console.log('🎨 Rendu des spots...', {
+        projectSpotsLength: projectSpots.length,
+        spots: projectSpots.map(s => ({ id: s.id, url: s.url }))
+    });
+
     spotsCount.textContent = projectSpots.length;
     if (kpiSpotsCount) kpiSpotsCount.textContent = projectSpots.length;
 
@@ -2270,11 +2275,19 @@ async function saveNewSpot(e) {
 
     // Ajouter le spot aux données du projet
     const project = projects.find(p => p.id === currentProjectId);
+    console.log('💾 Ajout du spot...', {
+        projectId: currentProjectId,
+        project: project ? project.name : 'non trouvé',
+        spotsAvant: project?.spots?.length || 0,
+        newSpot: newSpot.url
+    });
+    
     if (project) {
         if (!project.spots) {
             project.spots = [];
         }
         project.spots.push(newSpot);
+        console.log('✅ Spot ajouté au projet, spots maintenant:', project.spots.length);
         await saveData();
     }
     
@@ -2653,10 +2666,19 @@ function getDomainName(url) {
 // Fonction utilitaire pour synchroniser projectSpots avec les données du projet
 function syncProjectSpots() {
     const project = projects.find(p => p.id === currentProjectId);
+    console.log('🔄 Synchronisation des spots...', {
+        currentProjectId,
+        project: project ? project.name : 'non trouvé',
+        projectSpotsCount: projectSpots.length,
+        projectSpotsInData: project?.spots?.length || 0
+    });
+    
     if (project && project.spots) {
         projectSpots = [...project.spots]; // Créer une copie pour éviter les références
+        console.log('✅ Spots synchronisés:', projectSpots.length);
     } else {
         projectSpots = [];
+        console.log('⚠️ Aucun spot trouvé dans le projet');
     }
 }
 
