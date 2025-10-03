@@ -1,0 +1,500 @@
+/* ============ THÈME AUTOMNE - ÉLÉMENTS SUPPLÉMENTAIRES ============ */
+
+/* Application du thème automne sur tout le body */
+body.autumn-theme {
+    background: var(--autumn-gradient-bg);
+    color: var(--autumn-brown);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+/* Conteneur principal avec thème automne */
+body.autumn-theme .app {
+    background: var(--autumn-gradient-bg);
+    min-height: 100vh;
+}
+
+/* Header avec thème automne complet */
+body.autumn-theme .header {
+    background: var(--autumn-gradient-1);
+    color: white;
+    padding: 2rem 0;
+    text-align: center;
+    box-shadow: var(--autumn-shadow);
+    position: relative;
+    width: 100%;
+}
+
+/* Navigation avec thème automne */
+body.autumn-theme .navigation {
+    background: var(--autumn-bg-primary);
+    border-bottom: 2px solid var(--autumn-accent);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+}
+
+/* Contenu principal avec thème automne */
+body.autumn-theme .main-content {
+    background: var(--autumn-gradient-bg);
+    min-height: calc(100vh - 200px);
+    padding: 2rem;
+    width: 100%;
+}
+
+/* Pages avec thème automne */
+body.autumn-theme .page {
+    background: var(--autumn-bg-primary);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--autumn-shadow);
+    border: 2px solid var(--autumn-accent);
+    margin-bottom: 2rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Sections avec thème automne */
+body.autumn-theme .search-section,
+body.autumn-theme .categories-grid,
+body.autumn-theme .footprints-section,
+body.autumn-theme .projects-dashboard,
+body.autumn-theme .catalog-content {
+    background: var(--autumn-bg-primary);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--autumn-shadow);
+    border: 1px solid var(--autumn-accent);
+}
+
+/* Tableaux avec thème automne */
+body.autumn-theme .catalog-table,
+body.autumn-theme .project-spots-table {
+    background: var(--autumn-bg-primary);
+    border: 2px solid var(--autumn-accent);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--autumn-shadow);
+}
+
+body.autumn-theme .catalog-table th,
+body.autumn-theme .project-spots-table th {
+    background: var(--autumn-gradient-1);
+    color: white;
+    border-bottom: 2px solid var(--autumn-accent);
+    padding: 1rem;
+    font-weight: 600;
+}
+
+body.autumn-theme .catalog-table td,
+body.autumn-theme .project-spots-table td {
+    border-bottom: 1px solid var(--autumn-accent);
+    color: var(--autumn-brown);
+    padding: 1rem;
+    background: var(--autumn-bg-primary);
+}
+
+body.autumn-theme .catalog-table tr:hover,
+body.autumn-theme .project-spots-table tr:hover {
+    background: var(--autumn-bg-accent);
+}
+
+/* Modales avec thème automne */
+body.autumn-theme .modal-content {
+    background: var(--autumn-bg-primary);
+    border: 3px solid var(--autumn-accent);
+    box-shadow: var(--autumn-shadow-lg);
+    border-radius: 12px;
+}
+
+body.autumn-theme .modal-header {
+    background: var(--autumn-gradient-1);
+    color: white;
+    border-bottom: 2px solid var(--autumn-accent);
+    border-radius: 12px 12px 0 0;
+}
+
+body.autumn-theme .modal-body {
+    background: var(--autumn-bg-primary);
+    color: var(--autumn-brown);
+    border-radius: 0 0 12px 12px;
+}
+
+/* Formulaires avec thème automne */
+body.autumn-theme .form-group input,
+body.autumn-theme .form-group select,
+body.autumn-theme .form-group textarea {
+    background: var(--autumn-bg-primary);
+    border: 2px solid var(--autumn-accent);
+    color: var(--autumn-brown);
+    border-radius: 6px;
+}
+
+body.autumn-theme .form-group input:focus,
+body.autumn-theme .form-group select:focus,
+body.autumn-theme .form-group textarea:focus {
+    border-color: var(--autumn-primary);
+    box-shadow: 0 0 0 3px rgba(210, 105, 30, 0.1);
+    background: var(--autumn-bg-primary);
+}
+
+/* Statistiques avec thème automne */
+body.autumn-theme .projects-stats,
+body.autumn-theme .project-kpis {
+    background: var(--autumn-bg-primary);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: var(--autumn-shadow);
+    border: 2px solid var(--autumn-accent);
+}
+
+body.autumn-theme .stat-card,
+body.autumn-theme .kpi-card {
+    background: var(--autumn-bg-primary);
+    border: 2px solid var(--autumn-accent);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: var(--autumn-shadow);
+}
+
+/* Filtres et recherche avec thème automne */
+body.autumn-theme .projects-filters,
+body.autumn-theme .catalog-filters {
+    background: var(--autumn-bg-primary);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: var(--autumn-shadow);
+    border: 2px solid var(--autumn-accent);
+    margin-bottom: 1rem;
+}
+
+body.autumn-theme .search-bar input {
+    background: var(--autumn-bg-primary);
+    border: 2px solid var(--autumn-accent);
+    color: var(--autumn-brown);
+    border-radius: 6px;
+}
+
+body.autumn-theme .filter-group select {
+    background: var(--autumn-bg-primary);
+    border: 2px solid var(--autumn-accent);
+    color: var(--autumn-brown);
+    border-radius: 6px;
+}
+
+/* Actions en masse avec thème automne */
+body.autumn-theme .bulk-actions {
+    background: var(--autumn-bg-accent);
+    border: 2px solid var(--autumn-accent);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: var(--autumn-shadow);
+}
+
+/* Grilles de projets avec thème automne */
+body.autumn-theme .projects-grid {
+    background: var(--autumn-bg-primary);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: var(--autumn-shadow);
+    border: 2px solid var(--autumn-accent);
+}
+
+body.autumn-theme .project-card {
+    background: var(--autumn-bg-primary);
+    border: 2px solid var(--autumn-accent);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: var(--autumn-shadow);
+    transition: all 0.3s ease;
+}
+
+body.autumn-theme .project-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--autumn-shadow-hover);
+    border-color: var(--autumn-primary);
+}
+
+/* Détail projet avec thème automne */
+body.autumn-theme .project-detail-container {
+    background: var(--autumn-bg-primary);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--autumn-shadow);
+    border: 2px solid var(--autumn-accent);
+}
+
+body.autumn-theme .project-detail-header {
+    background: var(--autumn-bg-accent);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: var(--autumn-shadow);
+    border: 2px solid var(--autumn-accent);
+    margin-bottom: 2rem;
+}
+
+body.autumn-theme .project-spots-section {
+    background: var(--autumn-bg-primary);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: var(--autumn-shadow);
+    border: 2px solid var(--autumn-accent);
+}
+
+/* Header de la section spots avec thème automne */
+body.autumn-theme .project-spots-header {
+    background: var(--autumn-bg-accent);
+    border-bottom: 2px solid var(--autumn-accent);
+    color: var(--autumn-brown);
+}
+
+body.autumn-theme .project-spots-header h2 {
+    color: var(--autumn-brown);
+    font-weight: 600;
+}
+
+/* Conteneur du tableau des spots */
+body.autumn-theme .project-spots-table-container {
+    background: var(--autumn-bg-primary);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Sélecteur de thème avec thème automne */
+body.autumn-theme .theme-selector {
+    background: var(--autumn-bg-primary);
+    border: 2px solid var(--autumn-accent);
+    border-radius: 8px;
+    box-shadow: var(--autumn-shadow);
+}
+
+body.autumn-theme .theme-option.theme-autumn.active {
+    background: var(--autumn-gradient-1);
+    color: white;
+    border: 2px solid var(--autumn-accent);
+    box-shadow: var(--autumn-shadow);
+}
+
+/* Boutons spéciaux automne */
+.btn-success {
+    background: var(--autumn-gradient-3);
+    color: white;
+    border: 1px solid var(--autumn-gold);
+    box-shadow: var(--autumn-shadow);
+}
+
+.btn-success:hover {
+    background: var(--autumn-gradient-2);
+    box-shadow: var(--autumn-shadow-hover);
+}
+
+.btn-info {
+    background: var(--autumn-copper);
+    color: white;
+    border: 1px solid var(--autumn-brown);
+}
+
+.btn-info:hover {
+    background: var(--autumn-brown);
+    box-shadow: var(--autumn-shadow);
+}
+
+.btn-warning {
+    background: var(--autumn-orange);
+    color: white;
+    border: 1px solid var(--autumn-red);
+}
+
+.btn-warning:hover {
+    background: var(--autumn-red);
+    box-shadow: var(--autumn-shadow);
+}
+
+.btn-danger {
+    background: var(--autumn-red);
+    color: white;
+    border: 1px solid var(--autumn-brown);
+}
+
+.btn-danger:hover {
+    background: var(--autumn-brown);
+    box-shadow: var(--autumn-shadow);
+}
+
+/* Formulaires automne */
+.form-group input,
+.form-group select,
+.form-group textarea {
+    border: 2px solid var(--autumn-accent);
+    background: var(--autumn-bg-primary);
+    color: var(--autumn-brown);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--autumn-primary);
+    box-shadow: 0 0 0 3px rgba(210, 105, 30, 0.1);
+}
+
+.form-group label {
+    color: var(--autumn-brown);
+    font-weight: 600;
+}
+
+/* Cartes automne */
+.card {
+    background: var(--autumn-bg-primary);
+    border: 2px solid var(--autumn-accent);
+    box-shadow: var(--autumn-shadow);
+}
+
+.card:hover {
+    box-shadow: var(--autumn-shadow-hover);
+    transform: translateY(-2px);
+}
+
+/* Statistiques automne */
+.stats-card {
+    background: var(--autumn-bg-primary);
+    border: 2px solid var(--autumn-accent);
+    box-shadow: var(--autumn-shadow);
+}
+
+.stats-card .stat-value {
+    color: var(--autumn-primary);
+}
+
+.stats-card .stat-label {
+    color: var(--autumn-copper);
+}
+
+/* Tableaux automne */
+.table {
+    background: var(--autumn-bg-primary);
+    border: 2px solid var(--autumn-accent);
+}
+
+.table th {
+    background: var(--autumn-gradient-1);
+    color: white;
+    border-bottom: 2px solid var(--autumn-accent);
+}
+
+.table td {
+    border-bottom: 1px solid var(--autumn-accent);
+    color: var(--autumn-brown);
+}
+
+.table tr:hover {
+    background: var(--autumn-bg-accent);
+}
+
+/* Modales automne */
+.modal {
+    background: var(--autumn-bg-primary);
+    border: 3px solid var(--autumn-accent);
+    box-shadow: var(--autumn-shadow-lg);
+}
+
+.modal-header {
+    background: var(--autumn-gradient-1);
+    color: white;
+    border-bottom: 2px solid var(--autumn-accent);
+}
+
+.modal-body {
+    background: var(--autumn-bg-primary);
+    color: var(--autumn-brown);
+}
+
+/* Badges automne */
+.badge {
+    background: var(--autumn-gradient-1);
+    color: white;
+    border: 1px solid var(--autumn-accent);
+}
+
+.badge-success {
+    background: var(--autumn-gradient-3);
+}
+
+.badge-warning {
+    background: var(--autumn-orange);
+}
+
+.badge-danger {
+    background: var(--autumn-red);
+}
+
+/* Animations automne */
+@keyframes autumn-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.autumn-fade-in {
+    animation: autumn-fade-in 0.6s ease-out;
+}
+
+/* Effets de survol automne */
+.autumn-hover {
+    transition: all 0.3s ease;
+}
+
+.autumn-hover:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--autumn-shadow-hover);
+}
+
+/* Icônes automne */
+.fas.fa-bullseye {
+    color: var(--autumn-gold);
+    text-shadow: 1px 1px 2px rgba(139, 69, 19, 0.3);
+}
+
+/* Texte automne */
+.autumn-text-primary {
+    color: var(--autumn-primary);
+}
+
+.autumn-text-secondary {
+    color: var(--autumn-copper);
+}
+
+.autumn-text-accent {
+    color: var(--autumn-accent);
+}
+
+/* Bordures automne */
+.autumn-border {
+    border: 2px solid var(--autumn-accent);
+}
+
+.autumn-border-thick {
+    border: 3px solid var(--autumn-primary);
+}
+
+/* Ombres automne */
+.autumn-shadow {
+    box-shadow: var(--autumn-shadow);
+}
+
+.autumn-shadow-lg {
+    box-shadow: var(--autumn-shadow-lg);
+}
+
+.autumn-shadow-hover {
+    box-shadow: var(--autumn-shadow-hover);
+}

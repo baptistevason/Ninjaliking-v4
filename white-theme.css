@@ -1,0 +1,223 @@
+/* ============ THÈME BLANC/CLAIR ============ */
+:root {
+    /* Couleurs blanc/clair - Palette propre */
+    --white-primary: #ffffff;        /* Blanc pur */
+    --white-secondary: #f8fafc;      /* Gris très clair */
+    --white-accent: #e2e8f0;         /* Gris clair */
+    --white-text: #1a202c;            /* Noir doux */
+    --white-text-secondary: #4a5568;  /* Gris foncé */
+    --white-border: #e2e8f0;         /* Bordure grise */
+    --white-hover: #f1f5f9;          /* Hover gris clair */
+    
+    /* Couleurs d'accent */
+    --white-blue: #3b82f6;           /* Bleu */
+    --white-green: #10b981;          /* Vert */
+    --white-red: #ef4444;            /* Rouge */
+    --white-yellow: #f59e0b;         /* Jaune */
+    
+    /* Dégradés blanc */
+    --white-gradient-1: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #e2e8f0 100%);
+    --white-gradient-2: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
+    --white-gradient-3: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #1e40af 100%);
+    
+    /* Ombres blanc */
+    --white-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    --white-shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.15);
+    --white-shadow-hover: 0 6px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Application du thème blanc - Thème de base original */
+body.white-theme {
+    background: #f8fafc;
+    color: #1a202c;
+}
+
+.white-theme .auth-container {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.white-theme .auth-modal {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    margin: 1rem;
+}
+
+.white-theme .auth-header h1 {
+    color: #1a202c;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.white-theme .auth-header p {
+    color: #4a5568;
+    font-size: 0.9rem;
+}
+
+.white-theme .header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.white-theme .navigation {
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.white-theme .nav-btn {
+    background: none;
+    border: none;
+    padding: 1rem 2rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #64748b;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 3px solid transparent;
+    position: relative;
+}
+
+.white-theme .nav-btn:hover {
+    color: #3b82f6;
+    background: #f1f5f9;
+}
+
+.white-theme .nav-btn.active {
+    color: #3b82f6;
+    border-bottom-color: #3b82f6;
+    background: #f8fafc;
+}
+
+.white-theme .main-content {
+    flex: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    width: 100%;
+    background: #f8fafc;
+}
+
+.white-theme .btn-primary {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+}
+
+.white-theme .btn-primary:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.white-theme .btn-secondary {
+    background: #64748b;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+}
+
+.white-theme .btn-secondary:hover {
+    background: #475569;
+}
+
+.white-theme .card {
+    background: var(--white-primary);
+    border: 2px solid var(--white-border);
+    box-shadow: var(--white-shadow);
+}
+
+.white-theme .card:hover {
+    box-shadow: var(--white-shadow-hover);
+}
+
+.white-theme .card-icon {
+    background: var(--white-gradient-3);
+}
+
+.white-theme .form-group input,
+.white-theme .form-group select,
+.white-theme .form-group textarea {
+    border: 2px solid var(--white-border);
+    background: var(--white-primary);
+    color: var(--white-text);
+}
+
+.white-theme .form-group input:focus,
+.white-theme .form-group select:focus,
+.white-theme .form-group textarea:focus {
+    border-color: var(--white-blue);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.white-theme .form-group label {
+    color: var(--white-text);
+    font-weight: 600;
+}
+
+.white-theme .table {
+    background: var(--white-primary);
+    border: 2px solid var(--white-border);
+}
+
+.white-theme .table th {
+    background: var(--white-gradient-3);
+    color: white;
+    border-bottom: 2px solid var(--white-border);
+}
+
+.white-theme .table td {
+    border-bottom: 1px solid var(--white-border);
+    color: var(--white-text);
+}
+
+.white-theme .table tr:hover {
+    background: var(--white-hover);
+}
+
+.white-theme .modal {
+    background: var(--white-primary);
+    border: 3px solid var(--white-border);
+    box-shadow: var(--white-shadow-lg);
+}
+
+.white-theme .modal-header {
+    background: var(--white-gradient-3);
+    color: white;
+    border-bottom: 2px solid var(--white-border);
+}
+
+.white-theme .modal-body {
+    background: var(--white-primary);
+    color: var(--white-text);
+}
