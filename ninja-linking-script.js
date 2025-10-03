@@ -2104,17 +2104,13 @@ function loadProjectSpots(projectId) {
         return;
     }
 
-    // Charger les spots spécifiques du projet
-    if (project.spots && Array.isArray(project.spots)) {
-        projectSpots = project.spots;
-    } else {
-        // Si le projet n'a pas encore de spots, créer un tableau vide
-        projectSpots = [];
-        if (!project.spots) {
-            project.spots = [];
-        }
+    // Initialiser les spots si nécessaire
+    if (!project.spots) {
+        project.spots = [];
     }
 
+    // Synchroniser projectSpots avec les données du projet
+    syncProjectSpots();
     renderProjectSpots();
 }
 
@@ -2282,8 +2278,8 @@ async function saveNewSpot(e) {
         await saveData();
     }
     
-    // Mettre à jour la variable projectSpots pour l'affichage
-    projectSpots.push(newSpot);
+    // Synchroniser projectSpots avec les données du projet
+    syncProjectSpots();
     
     renderProjectSpots();
     closeAddSpotModal();
@@ -2654,6 +2650,16 @@ function getDomainName(url) {
     }
 }
 
+// Fonction utilitaire pour synchroniser projectSpots avec les données du projet
+function syncProjectSpots() {
+    const project = projects.find(p => p.id === currentProjectId);
+    if (project && project.spots) {
+        projectSpots = [...project.spots]; // Créer une copie pour éviter les références
+    } else {
+        projectSpots = [];
+    }
+}
+
 function getFilteredSites() {
     const searchTerm = document.getElementById('catalogSearch')?.value.toLowerCase() || '';
     const typeFilter = document.getElementById('typeFilter')?.value || '';
@@ -2924,7 +2930,8 @@ async function addSitesToProject() {
     
     // Mettre à jour l'affichage si on est sur la page de détail du projet
     if (typeof currentProjectId !== 'undefined' && currentProjectId === projectId) {
-        loadProjectSpots(projectId);
+        syncProjectSpots();
+        renderProjectSpots();
     }
     
     alert(`${addedCount} site(s) ajouté(s) au projet "${project.name}" avec succès.`);
