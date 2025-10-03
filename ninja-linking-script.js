@@ -2153,7 +2153,6 @@ function renderProjectSpots() {
                     <a href="${spot.url}" target="_blank" class="project-spot-url">
                         ${spot.url} <i class="fas fa-external-link-alt"></i>
                     </a>
-                    <div class="project-spot-domain">${spot.url}</div>
                 </div>
             </td>
             <td><span class="project-spot-type">${spot.type}</span></td>
