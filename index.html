@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="theme-selector.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="autumn-theme">
     <!-- Sélecteur de thème -->
     <div class="theme-selector" id="themeSelector">
         <div class="theme-option theme-autumn active" data-theme="autumn" title="Thème Automne">
@@ -1426,7 +1426,9 @@
             body.classList.remove('autumn-theme', 'white-theme');
             
             // Ajouter la classe du thème sélectionné
-            if (theme !== 'autumn') {
+            if (theme === 'autumn') {
+                body.classList.add('autumn-theme');
+            } else {
                 body.classList.add(theme + '-theme');
             }
             

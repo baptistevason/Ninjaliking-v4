@@ -2151,7 +2151,7 @@ function renderProjectSpots() {
             <td>
                 <div>
                     <a href="${spot.url}" target="_blank" class="project-spot-url">
-                        ${spot.url} <i class="fas fa-external-link-alt"></i>
+                        ${getDomainName(spot.url)} <i class="fas fa-external-link-alt"></i>
                     </a>
                 </div>
             </td>
@@ -2248,6 +2248,13 @@ async function saveNewSpot(e) {
 
     if (!url) {
         alert('Veuillez saisir une URL');
+        return;
+    }
+
+    // Vérifier si le spot existe déjà (éviter les doublons)
+    const existingSpot = projectSpots.find(spot => spot.url.toLowerCase() === url.toLowerCase());
+    if (existingSpot) {
+        alert('Ce spot existe déjà dans le projet');
         return;
     }
 
@@ -2590,7 +2597,7 @@ function renderSites() {
             <td><input type="checkbox" class="site-checkbox" data-site-id="${site.id}" onchange="handleSiteSelection()"></td>
             <td>
                 <a href="${site.url}" target="_blank" class="site-url">
-                    ${site.url} <i class="fas fa-external-link-alt"></i>
+                    ${getDomainName(site.url)} <i class="fas fa-external-link-alt"></i>
                 </a>
             </td>
             <td><span class="type-tag">${site.type}</span></td>
@@ -2631,6 +2638,17 @@ function getTrustFlowClass(trustFlow) {
     if (trustFlow >= 70) return 'high';
     if (trustFlow >= 40) return 'medium';
     return 'low';
+}
+
+// Fonction utilitaire pour extraire le nom du domaine d'une URL
+function getDomainName(url) {
+    try {
+        const urlObj = new URL(url);
+        return urlObj.hostname.replace('www.', '');
+    } catch (e) {
+        // Si l'URL n'est pas valide, retourner l'URL telle quelle
+        return url;
+    }
 }
 
 function getFilteredSites() {
@@ -2871,6 +2889,13 @@ async function addSitesToProject() {
     }
     
     selectedSitesData.forEach(site => {
+        // Vérifier si le spot existe déjà (éviter les doublons)
+        const existingSpot = project.spots.find(spot => spot.url.toLowerCase() === site.url.toLowerCase());
+        if (existingSpot) {
+            console.log(`Spot déjà existant ignoré: ${site.url}`);
+            return; // Passer au site suivant
+        }
+
         const spot = {
             id: Date.now() + Math.random() + addedCount,
             projectId: projectId,
