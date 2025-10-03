@@ -2244,6 +2244,7 @@ async function saveNewSpot(e) {
     const theme = document.getElementById('spotTheme').value;
     const trustFlow = parseInt(document.getElementById('spotTrustFlow').value) || 0;
     const traffic = parseInt(document.getElementById('spotTraffic').value) || 0;
+    const publicationDate = document.getElementById('spotPublicationDate').value;
     const status = document.getElementById('spotStatus').value;
 
     if (!url) {
@@ -2267,12 +2268,11 @@ async function saveNewSpot(e) {
         theme: theme,
         traffic: traffic,
         trustFlow: trustFlow,
+        publicationDate: publicationDate || null,
         status: status
     };
 
-    projectSpots.push(newSpot);
-    
-    // Sauvegarder les spots dans les données du projet
+    // Ajouter le spot aux données du projet
     const project = projects.find(p => p.id === currentProjectId);
     if (project) {
         if (!project.spots) {
@@ -2281,6 +2281,9 @@ async function saveNewSpot(e) {
         project.spots.push(newSpot);
         await saveData();
     }
+    
+    // Mettre à jour la variable projectSpots pour l'affichage
+    projectSpots.push(newSpot);
     
     renderProjectSpots();
     closeAddSpotModal();

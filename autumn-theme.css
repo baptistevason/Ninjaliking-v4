@@ -246,6 +246,25 @@ body.autumn-theme .project-spots-section {
     border: 2px solid var(--autumn-accent);
 }
 
+/* Header de la section spots avec thème automne */
+body.autumn-theme .project-spots-header {
+    background: var(--autumn-bg-accent);
+    border-bottom: 2px solid var(--autumn-accent);
+    color: var(--autumn-brown);
+}
+
+body.autumn-theme .project-spots-header h2 {
+    color: var(--autumn-brown);
+    font-weight: 600;
+}
+
+/* Conteneur du tableau des spots */
+body.autumn-theme .project-spots-table-container {
+    background: var(--autumn-bg-primary);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
 /* Sélecteur de thème avec thème automne */
 body.autumn-theme .theme-selector {
     background: var(--autumn-bg-primary);
