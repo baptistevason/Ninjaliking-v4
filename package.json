@@ -1,7 +1,7 @@
 {
-  "name": "ninja-linking-saas",
+  "name": "reputalink-saas",
   "version": "1.0.0",
-  "description": "Outil professionnel de ninja linking et gestion de projets SEO avec Supabase",
+  "description": "Outil professionnel de link building et gestion de projets SEO avec Supabase",
   "main": "index.html",
   "scripts": {
     "dev": "npx serve .",
@@ -16,16 +16,17 @@
   },
   "keywords": [
     "seo",
-    "ninja-linking",
+    "link-building",
+    "reputation",
     "supabase",
     "database",
     "saas"
   ],
   "author": "Baptiste",
   "license": "MIT",
-  "homepage": "https://ninja-linking-saas.netlify.app",
+  "homepage": "https://reputalink.netlify.app",
   "repository": {
     "type": "git",
-    "url": "https://github.com/votre-username/ninja-linking-saas.git"
+    "url": "https://github.com/votre-username/reputalink-saas.git"
   }
 }

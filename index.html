@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ninja Linking Tool - Outil de Link Building</title>
+    <title>RéputaLink - Outil de Link Building</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="ninja-linking-styles.css">
     <link rel="stylesheet" href="autumn-theme.css">
     <link rel="stylesheet" href="white-theme.css">
@@ -24,11 +25,132 @@
     </div>
     
     <div class="app">
+        <!-- Page d'accueil -->
+        <div id="homepage-container" class="homepage-container">
+            <div class="homepage-hero">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        RéputaLink
+                        <span class="stars-inline">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </span>
+                    </h1>
+                    <p class="hero-subtitle">Outil professionnel de link building et gestion de projets SEO</p>
+                    <div class="hero-features">
+                        <div class="feature">
+                            <i class="fas fa-search"></i>
+                            <span>Recherche de footprints</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Analyse SERP</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>E-Réputation</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-robot"></i>
+                            <span>IA & Prompts</span>
+                        </div>
+                    </div>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary btn-large" onclick="showAuthForm()">
+                            <i class="fas fa-sign-in-alt"></i> Commencer
+                        </button>
+                        <button class="btn btn-secondary btn-large" onclick="showDemo()">
+                            <i class="fas fa-play"></i> Voir la démo
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="hero-graphic">
+                        <div class="graphic-element element-1">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <div class="graphic-element element-2">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="graphic-element element-3">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div class="graphic-element element-4">
+                            <i class="fas fa-database"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section des fonctionnalités -->
+            <div class="homepage-features">
+                <div class="features-container">
+                    <h2>Fonctionnalités principales</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h3>Ninja Linking</h3>
+                            <p>Recherche d'opportunités de liens avec des footprints personnalisés pour maximiser votre référencement.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h3>Exploration SERP</h3>
+                            <p>Opérateurs avancés Google/Bing pour analyser la concurrence et découvrir de nouvelles opportunités.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h3>E-Réputation</h3>
+                            <p>Analysez votre réputation en ligne et identifiez les mentions de votre marque sur le web.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <h3>IA & Prompts</h3>
+                            <p>Prompts ChatGPT optimisés pour analyser et améliorer votre présence digitale.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-folder-open"></i>
+                            </div>
+                            <h3>Gestion de Projets</h3>
+                            <p>Suivez vos projets SEO avec des KPIs détaillés et une gestion complète des spots.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <h3>Catalogue de Sites</h3>
+                            <p>Base de données complète de sites partenaires avec import/export et gestion en masse.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section CTA -->
+            <div class="homepage-cta">
+                <div class="cta-content">
+                    <h2>Prêt à optimiser votre référencement ?</h2>
+                    <p>Rejoignez des centaines de professionnels qui utilisent RéputaLink pour améliorer leur visibilité en ligne.</p>
+                    <button class="btn btn-primary btn-large" onclick="showAuthForm()">
+                        <i class="fas fa-rocket"></i> Commencer maintenant
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- Interface d'authentification -->
-        <div id="auth-container" class="auth-container">
+        <div id="auth-container" class="auth-container" style="display: none;">
             <div class="auth-modal">
                 <div class="auth-header">
-                    <h1><i class="fas fa-bullseye"></i> Ninja Linking Tool</h1>
+                    <h1><i class="fas fa-star"></i> RéputaLink</h1>
                     <p>Outil professionnel de link building</p>
                 </div>
                 
@@ -99,8 +221,15 @@
             <!-- Header -->
             <header class="header">
                 <div class="header-content">
-                    <h1><i class="fas fa-bullseye"></i> Ninja Linking Tool</h1>
-                    <p>Outil professionnel de link building</p>
+                    <div class="header-left">
+                        <button onclick="showHomepage()" class="btn btn-secondary btn-sm" title="Retour à l'accueil">
+                            <i class="fas fa-home"></i> Accueil
+                        </button>
+                    </div>
+                    <div class="header-center">
+                        <h1><i class="fas fa-star"></i> RéputaLink</h1>
+                        <p>Outil professionnel de link building</p>
+                    </div>
                     <div class="user-info" id="userInfo">
                         <span id="userEmail"></span>
                         <button onclick="logout()" class="btn btn-secondary btn-sm" id="logoutBtn" style="display: none;" title="Déconnexion">
@@ -855,9 +984,6 @@
             <button class="btn btn-primary admin-only" onclick="openSiteModal()" style="display: none;">
                 <i class="fas fa-plus"></i> Ajouter
             </button>
-            <button class="btn btn-warning" onclick="configureEmailRedirect()" title="Configurer l'URL de redirection pour l'email de confirmation">
-                <i class="fas fa-link"></i> URL Email
-            </button>
         </div>
                 </div>
 
@@ -1385,7 +1511,7 @@
             
             if (!currentRedirectUrl) {
                 // Configuration automatique avec l'URL de production
-                const productionUrl = 'https://ninjalinkingbv.netlify.app';
+                const productionUrl = 'https://reputalink.netlify.app';
                 localStorage.setItem('email-redirect-url', productionUrl);
                 console.log('🔗 URL de redirection configurée automatiquement:', productionUrl);
             } else {
@@ -1394,7 +1520,30 @@
             
             // Initialiser le sélecteur de thème
             initThemeSelector();
+            
+            // Afficher la page d'accueil par défaut
+            showHomepage();
         });
+        
+        // Fonction pour afficher la page d'accueil
+        function showHomepage() {
+            document.getElementById('homepage-container').style.display = 'block';
+            document.getElementById('auth-container').style.display = 'none';
+            document.getElementById('main-app').style.display = 'none';
+        }
+        
+        // Fonction pour afficher le formulaire d'authentification
+        function showAuthForm() {
+            document.getElementById('homepage-container').style.display = 'none';
+            document.getElementById('auth-container').style.display = 'flex';
+            document.getElementById('main-app').style.display = 'none';
+        }
+        
+        // Fonction pour afficher la démo (optionnel)
+        function showDemo() {
+            // Pour l'instant, rediriger vers l'authentification
+            showAuthForm();
+        }
         
         // Gestionnaire du sélecteur de thème
         function initThemeSelector() {

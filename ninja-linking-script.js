@@ -56,33 +56,39 @@ async function checkAuthentication() {
         if (user) {
             isAuthenticated = true;
             currentUser = user;
-            showMainApp();
+            // Ne plus afficher automatiquement l'interface principale
+            // L'utilisateur doit cliquer sur "Commencer" depuis la page d'accueil
             return true;
         } else {
             isAuthenticated = false;
             currentUser = null;
-            // Permettre l'accès au catalogue public
-            showLimitedApp();
             return false;
         }
     } catch (error) {
         console.error('Erreur vérification authentification:', error);
         isAuthenticated = false;
         currentUser = null;
-        // Permettre l'accès au catalogue public même en cas d'erreur
-        showLimitedApp();
         return false;
     }
 }
 
+// Afficher la page d'accueil
+function showHomepage() {
+    document.getElementById('homepage-container').style.display = 'block';
+    document.getElementById('auth-container').style.display = 'none';
+    document.getElementById('main-app').style.display = 'none';
+}
+
 // Afficher le formulaire d'authentification
 function showAuthForm() {
+    document.getElementById('homepage-container').style.display = 'none';
     document.getElementById('auth-container').style.display = 'flex';
     document.getElementById('main-app').style.display = 'none';
 }
 
 // Afficher l'application principale
 function showMainApp() {
+    document.getElementById('homepage-container').style.display = 'none';
     document.getElementById('auth-container').style.display = 'none';
     document.getElementById('main-app').style.display = 'block';
     

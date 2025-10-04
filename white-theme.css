@@ -221,3 +221,294 @@ body.white-theme {
     background: var(--white-primary);
     color: var(--white-text);
 }
+
+/* ============ BOUTONS DU CATALOGUE - THÈME BLANC ============ */
+.white-theme .catalog-actions .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.white-theme .catalog-actions .btn-primary {
+    background: var(--white-blue);
+    color: white;
+    border-color: var(--white-blue);
+}
+
+.white-theme .catalog-actions .btn-primary:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.white-theme .catalog-actions .btn-secondary {
+    background: var(--white-text-secondary);
+    color: white;
+    border-color: var(--white-text-secondary);
+}
+
+.white-theme .catalog-actions .btn-secondary:hover {
+    background: #374151;
+    border-color: #374151;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(75, 85, 99, 0.3);
+}
+
+.white-theme .catalog-actions .btn-success {
+    background: var(--white-green);
+    color: white;
+    border-color: var(--white-green);
+}
+
+.white-theme .catalog-actions .btn-success:hover {
+    background: #059669;
+    border-color: #059669;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.white-theme .catalog-actions .btn-info {
+    background: var(--white-blue);
+    color: white;
+    border-color: var(--white-blue);
+}
+
+.white-theme .catalog-actions .btn-info:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.white-theme .catalog-actions .btn-warning {
+    background: var(--white-yellow);
+    color: white;
+    border-color: var(--white-yellow);
+}
+
+.white-theme .catalog-actions .btn-warning:hover {
+    background: #d97706;
+    border-color: #d97706;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.white-theme .catalog-actions .btn-danger {
+    background: var(--white-red);
+    color: white;
+    border-color: var(--white-red);
+}
+
+.white-theme .catalog-actions .btn-danger:hover {
+    background: #dc2626;
+    border-color: #dc2626;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.white-theme .catalog-actions .btn-outline {
+    background: transparent;
+    color: var(--white-text);
+    border-color: var(--white-border);
+}
+
+.white-theme .catalog-actions .btn-outline:hover {
+    background: var(--white-hover);
+    border-color: var(--white-text-secondary);
+    color: var(--white-text);
+}
+
+/* ============ BOUTONS EN MASSE - THÈME BLANC ============ */
+.white-theme .bulk-actions {
+    background: var(--white-primary);
+    border: 2px solid var(--white-border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.white-theme .bulk-actions-info {
+    color: var(--white-text);
+    font-weight: 500;
+}
+
+.white-theme .bulk-actions-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.white-theme .bulk-actions .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border: 2px solid transparent;
+}
+
+/* ============ BOUTONS DE PROJET - THÈME BLANC ============ */
+.white-theme .projects-actions .btn,
+.white-theme .project-spots-actions .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.white-theme .projects-actions .btn-primary,
+.white-theme .project-spots-actions .btn-primary {
+    background: var(--white-blue);
+    color: white;
+    border-color: var(--white-blue);
+}
+
+.white-theme .projects-actions .btn-primary:hover,
+.white-theme .project-spots-actions .btn-primary:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.white-theme .projects-actions .btn-secondary,
+.white-theme .project-spots-actions .btn-secondary {
+    background: var(--white-text-secondary);
+    color: white;
+    border-color: var(--white-text-secondary);
+}
+
+.white-theme .projects-actions .btn-secondary:hover,
+.white-theme .project-spots-actions .btn-secondary:hover {
+    background: #374151;
+    border-color: #374151;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(75, 85, 99, 0.3);
+}
+
+.white-theme .projects-actions .btn-success,
+.white-theme .project-spots-actions .btn-success {
+    background: var(--white-green);
+    color: white;
+    border-color: var(--white-green);
+}
+
+.white-theme .projects-actions .btn-success:hover,
+.white-theme .project-spots-actions .btn-success:hover {
+    background: #059669;
+    border-color: #059669;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* ============ BOUTONS D'ACTION DES SPOTS - THÈME BLANC ============ */
+.white-theme .project-spot-action-btn {
+    width: 32px;
+    height: 32px;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.white-theme .project-spot-action-btn.edit {
+    background: #dbeafe;
+    color: #3b82f6;
+    border-color: #dbeafe;
+}
+
+.white-theme .project-spot-action-btn.edit:hover {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.white-theme .project-spot-action-btn.delete {
+    background: #fef2f2;
+    color: #ef4444;
+    border-color: #fef2f2;
+}
+
+.white-theme .project-spot-action-btn.delete:hover {
+    background: #ef4444;
+    color: white;
+    border-color: #ef4444;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* ============ BOUTONS DE FORMULAIRE - THÈME BLANC ============ */
+.white-theme .form-actions .btn,
+.white-theme .edit-form-actions .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.white-theme .form-actions .btn-primary,
+.white-theme .edit-form-actions .btn-primary {
+    background: var(--white-blue);
+    color: white;
+    border-color: var(--white-blue);
+}
+
+.white-theme .form-actions .btn-primary:hover,
+.white-theme .edit-form-actions .btn-primary:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.white-theme .form-actions .btn-secondary,
+.white-theme .edit-form-actions .btn-secondary {
+    background: var(--white-text-secondary);
+    color: white;
+    border-color: var(--white-text-secondary);
+}
+
+.white-theme .form-actions .btn-secondary:hover,
+.white-theme .edit-form-actions .btn-secondary:hover {
+    background: #374151;
+    border-color: #374151;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(75, 85, 99, 0.3);
+}
+
+/* ============ BOUTONS DE NAVIGATION - THÈME BLANC ============ */
+.white-theme .project-detail-back .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.white-theme .project-detail-back .btn-secondary {
+    background: var(--white-text-secondary);
+    color: white;
+    border-color: var(--white-text-secondary);
+}
+
+.white-theme .project-detail-back .btn-secondary:hover {
+    background: #374151;
+    border-color: #374151;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(75, 85, 99, 0.3);
+}
+
+/* Étoiles inline - Thème blanc */
+.white-theme .stars-inline i {
+    color: #3b82f6;
+    text-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+}
