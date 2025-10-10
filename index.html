@@ -12,17 +12,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="autumn-theme">
-    <!-- Sélecteur de thème -->
-    <div class="theme-selector" id="themeSelector">
-        <div class="theme-option theme-autumn active" data-theme="autumn" title="Thème Automne">
-            <i class="fas fa-leaf theme-icon"></i>
-            <div class="theme-tooltip">Automne</div>
-        </div>
-        <div class="theme-option theme-white" data-theme="white" title="Thème Blanc">
-            <i class="fas fa-sun theme-icon"></i>
-            <div class="theme-tooltip">Blanc</div>
-        </div>
-    </div>
     
     <div class="app">
         <!-- Page d'accueil -->
@@ -150,7 +139,7 @@
         <div id="auth-container" class="auth-container" style="display: none;">
             <div class="auth-modal">
                 <div class="auth-header">
-                    <h1><i class="fas fa-star"></i> RéputaLink</h1>
+                    <h1>RéputaLink</h1>
                     <p>Outil professionnel de link building</p>
                 </div>
                 
@@ -227,11 +216,13 @@
                         </button>
                     </div>
                     <div class="header-center">
-                        <h1><i class="fas fa-star"></i> RéputaLink</h1>
+                        <h1>RéputaLink</h1>
                         <p>Outil professionnel de link building</p>
                     </div>
                     <div class="user-info" id="userInfo">
-                        <span id="userEmail"></span>
+                        <div class="user-email-container" id="userEmailContainer" style="display: none;">
+                            <span id="userEmail" class="user-email"></span>
+                        </div>
                         <button onclick="logout()" class="btn btn-secondary btn-sm" id="logoutBtn" style="display: none;" title="Déconnexion">
                             <i class="fas fa-sign-out-alt"></i>
                         </button>
@@ -245,30 +236,43 @@
         <!-- Navigation -->
         <nav class="navigation">
             <div class="nav-container">
-                <button class="nav-btn active" data-page="ninjalinking">
-                    <i class="fas fa-search"></i>
-                    <span>Ninjalinking</span>
-                </button>
-                <button class="nav-btn" data-page="serp">
-                    <i class="fas fa-search-plus"></i>
-                    <span>Exploration SERP</span>
-                </button>
-                <button class="nav-btn" data-page="ereputation">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>E-Réputation</span>
-                </button>
-                <button class="nav-btn" data-page="ia">
-                    <i class="fas fa-robot"></i>
-                    <span>IA</span>
-                </button>
-                <button class="nav-btn" data-page="projects">
-                    <i class="fas fa-folder-open"></i>
-                    <span>Projets</span>
-                </button>
-                <button class="nav-btn" data-page="catalog">
-                    <i class="fas fa-database"></i>
-                    <span>Catalogue</span>
-                </button>
+                <div class="nav-buttons">
+                    <button class="nav-btn active" data-page="ninjalinking">
+                        <i class="fas fa-search"></i>
+                        <span>Ninjalinking</span>
+                    </button>
+                    <button class="nav-btn" data-page="serp">
+                        <i class="fas fa-search-plus"></i>
+                        <span>Exploration SERP</span>
+                    </button>
+                    <button class="nav-btn" data-page="ereputation">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>E-Réputation</span>
+                    </button>
+                    <button class="nav-btn" data-page="ia">
+                        <i class="fas fa-robot"></i>
+                        <span>IA</span>
+                    </button>
+                    <button class="nav-btn" data-page="projects">
+                        <i class="fas fa-folder-open"></i>
+                        <span>Projets</span>
+                    </button>
+                    <button class="nav-btn" data-page="catalog">
+                        <i class="fas fa-database"></i>
+                        <span>Catalogue</span>
+                    </button>
+                </div>
+                <!-- Sélecteur de thème intégré -->
+                <div class="theme-selector" id="themeSelector">
+                    <div class="theme-option theme-autumn active" data-theme="autumn" title="Thème Automne">
+                        <i class="fas fa-leaf theme-icon"></i>
+                        <div class="theme-tooltip">Automne</div>
+                    </div>
+                    <div class="theme-option theme-white" data-theme="white" title="Thème Blanc">
+                        <i class="fas fa-sun theme-icon"></i>
+                        <div class="theme-tooltip">Blanc</div>
+                    </div>
+                </div>
             </div>
         </nav>
 

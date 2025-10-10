@@ -73,6 +73,48 @@ body.white-theme {
     position: sticky;
     top: 0;
     z-index: 100;
+    width: 100%;
+}
+
+/* Sélecteur de thème dans la navigation */
+.white-theme .theme-selector {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.white-theme .theme-option {
+    background: white;
+    border: 1px solid #e2e8f0;
+    color: #1a202c;
+}
+
+.white-theme .theme-option:hover {
+    background: #3b82f6;
+    color: white;
+    transform: scale(1.05);
+}
+
+.white-theme .theme-option.active {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+/* Email utilisateur avec thème blanc */
+.white-theme .user-email {
+    background: #3b82f6;
+    color: white;
+    border: 1px solid #2563eb;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.white-theme .user-email:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .white-theme .nav-btn {

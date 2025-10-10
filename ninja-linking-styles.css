@@ -304,15 +304,27 @@ body {
     justify-content: space-between;
     gap: 2rem;
     position: relative;
+    height: 100%;
+    min-height: 80px;
 }
 
 .header-left {
     flex: 0 0 auto;
+    display: flex;
+    align-items: center;
 }
 
 .header-center {
     flex: 1;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
 }
 
 .user-info {
@@ -320,6 +332,25 @@ body {
     display: flex;
     align-items: center;
     gap: 1rem;
+}
+
+.user-email-container {
+    display: flex;
+    align-items: center;
+}
+
+.user-email {
+    background: var(--autumn-primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid var(--autumn-accent);
+    box-shadow: var(--autumn-shadow);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .header-content h1 {
@@ -331,11 +362,15 @@ body {
     justify-content: center;
     gap: 1rem;
     text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.5);
+    text-align: center;
+    width: 100%;
 }
 
 .header-content p {
     font-size: 1.1rem;
     opacity: 0.9;
+    margin: 0;
+    text-align: center;
 }
 
 /* Navigation */
@@ -349,11 +384,19 @@ body {
 }
 
 .nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    gap: 2rem;
+}
+
+.nav-buttons {
     display: flex;
     justify-content: center;
     gap: 0;
+    flex: 1;
 }
 
 .nav-btn {
@@ -3063,6 +3106,12 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .hero-subtitle {

@@ -18,8 +18,8 @@ body.autumn-theme .app {
 
 /* Header avec thème automne complet */
 body.autumn-theme .header {
-    background: var(--autumn-gradient-1);
-    color: white;
+    background: var(--autumn-bg-primary);
+    color: var(--autumn-brown);
     padding: 2rem 0;
     text-align: center;
     box-shadow: var(--autumn-shadow);
@@ -29,13 +29,281 @@ body.autumn-theme .header {
 
 /* Navigation avec thème automne */
 body.autumn-theme .navigation {
-    background: var(--autumn-bg-primary);
+    background: var(--autumn-primary);
     border-bottom: 2px solid var(--autumn-accent);
     padding: 0;
     position: sticky;
     top: 0;
     z-index: 100;
     width: 100%;
+}
+
+/* Boutons de navigation avec thème automne */
+body.autumn-theme .nav-btn {
+    background: none;
+    border: none;
+    padding: 1rem 2rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    color: white;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+body.autumn-theme .nav-btn:hover {
+    background: var(--autumn-accent);
+    color: white;
+    transform: translateY(-1px);
+}
+
+body.autumn-theme .nav-btn.active {
+    background: var(--autumn-accent);
+    color: white;
+    box-shadow: inset 0 -3px 0 var(--autumn-gold);
+}
+
+/* Sélecteur de thème dans la navigation */
+body.autumn-theme .theme-selector {
+    background: rgba(210, 105, 30, 0.1);
+    border: 1px solid var(--autumn-accent);
+    border-radius: 8px;
+    padding: 4px;
+}
+
+body.autumn-theme .theme-option {
+    background: var(--autumn-bg-primary);
+    border: 1px solid var(--autumn-accent);
+    color: var(--autumn-brown);
+}
+
+body.autumn-theme .theme-option:hover {
+    background: var(--autumn-accent);
+    color: white;
+    transform: scale(1.05);
+}
+
+body.autumn-theme .theme-option.active {
+    background: var(--autumn-primary);
+    color: white;
+    border-color: var(--autumn-accent);
+    box-shadow: 0 0 0 2px rgba(210, 105, 30, 0.3);
+}
+
+/* Email utilisateur avec thème automne */
+body.autumn-theme .user-email {
+    background: var(--autumn-primary);
+    color: white;
+    border: 1px solid var(--autumn-accent);
+    box-shadow: var(--autumn-shadow);
+}
+
+body.autumn-theme .user-email:hover {
+    background: var(--autumn-accent);
+    transform: translateY(-1px);
+    box-shadow: var(--autumn-shadow-hover);
+}
+
+/* Headers de pages avec thème automne */
+body.autumn-theme .projects-header {
+    background: #fdf6e3 !important;
+    border: 2px solid var(--autumn-accent) !important;
+    border-radius: 8px !important;
+    padding: 1.5rem !important;
+    margin-bottom: 2rem !important;
+    box-shadow: var(--autumn-shadow) !important;
+}
+
+body.autumn-theme .catalog-header {
+    background: #fdf6e3 !important;
+    border: 2px solid var(--autumn-accent) !important;
+    border-radius: 8px !important;
+    padding: 1.5rem !important;
+    margin-bottom: 2rem !important;
+    box-shadow: var(--autumn-shadow) !important;
+}
+
+body.autumn-theme .projects-title h2,
+body.autumn-theme .catalog-title h2 {
+    color: var(--autumn-brown) !important;
+    font-size: 2rem !important;
+    margin-bottom: 0.5rem !important;
+    font-weight: 700 !important;
+}
+
+body.autumn-theme .projects-title p,
+body.autumn-theme .catalog-title p {
+    color: var(--autumn-brown) !important;
+    font-size: 1rem !important;
+    margin: 0 !important;
+}
+
+/* Sections de contenu avec thème automne */
+body.autumn-theme .projects-dashboard {
+    background: #fdf6e3 !important;
+    border: 2px solid var(--autumn-accent) !important;
+    border-radius: 8px !important;
+    padding: 1.5rem !important;
+    margin-bottom: 2rem !important;
+    box-shadow: var(--autumn-shadow) !important;
+}
+
+body.autumn-theme .catalog-dashboard {
+    background: #fdf6e3 !important;
+    border: 2px solid var(--autumn-accent) !important;
+    border-radius: 8px !important;
+    padding: 1.5rem !important;
+    margin-bottom: 2rem !important;
+    box-shadow: var(--autumn-shadow) !important;
+}
+
+/* Titres de sections avec thème automne */
+body.autumn-theme .section-title {
+    background: #fdf6e3 !important;
+    color: var(--autumn-brown) !important;
+    border: 2px solid var(--autumn-accent) !important;
+    border-radius: 8px !important;
+    padding: 1rem 1.5rem !important;
+    margin-bottom: 1rem !important;
+    box-shadow: var(--autumn-shadow) !important;
+}
+
+/* Éléments spécifiques avec thème automne */
+body.autumn-theme .projects-list,
+body.autumn-theme .catalog-list,
+body.autumn-theme .spots-list {
+    background: #fdf6e3 !important;
+    border: 2px solid var(--autumn-accent) !important;
+    border-radius: 8px !important;
+    padding: 1.5rem !important;
+    margin-bottom: 1rem !important;
+    box-shadow: var(--autumn-shadow) !important;
+}
+
+/* Titres de sections spécifiques */
+body.autumn-theme h3,
+body.autumn-theme .section-header,
+body.autumn-theme .content-header {
+    background: #fdf6e3 !important;
+    color: var(--autumn-brown) !important;
+    border: 2px solid var(--autumn-accent) !important;
+    border-radius: 8px !important;
+    padding: 1rem 1.5rem !important;
+    margin-bottom: 1rem !important;
+    box-shadow: var(--autumn-shadow) !important;
+}
+
+/* Supprimer les rectangles pour les sections Spots */
+body.autumn-theme .spots-section,
+body.autumn-theme .spots-container,
+body.autumn-theme .spots-header {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Titres de sections Spots sans rectangle */
+body.autumn-theme .spots-section h3,
+body.autumn-theme .spots-section .section-title,
+body.autumn-theme .spots-section .content-header {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0.5rem 0 !important;
+    margin-bottom: 1rem !important;
+    color: var(--autumn-brown) !important;
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+}
+
+/* Forcer la couleur #fdf6e3 sur les éléments spécifiques qui doivent être visibles */
+body.autumn-theme .projects-header,
+body.autumn-theme .catalog-header,
+body.autumn-theme .projects-dashboard,
+body.autumn-theme .catalog-dashboard,
+body.autumn-theme .section-title,
+body.autumn-theme .projects-list,
+body.autumn-theme .catalog-list,
+body.autumn-theme .spots-list,
+body.autumn-theme h3,
+body.autumn-theme .section-header,
+body.autumn-theme .content-header {
+    background-color: #fdf6e3 !important;
+}
+
+/* Exceptions pour les éléments qui doivent rester transparents */
+body.autumn-theme .main-content,
+body.autumn-theme .page,
+body.autumn-theme .spots-section,
+body.autumn-theme .spots-container,
+body.autumn-theme .spots-header,
+body.autumn-theme .spots-section h3,
+body.autumn-theme .spots-section .section-title,
+body.autumn-theme .spots-section .content-header {
+    background-color: transparent !important;
+}
+
+/* Footprints et choix de catégories */
+body.autumn-theme .footprint-option,
+body.autumn-theme .category-option,
+body.autumn-theme .choice-option {
+    background: #fdf6e3 !important;
+    border: 2px solid var(--autumn-accent) !important;
+    color: var(--autumn-brown) !important;
+}
+
+body.autumn-theme .footprint-option:hover,
+body.autumn-theme .category-option:hover,
+body.autumn-theme .choice-option:hover {
+    background: var(--autumn-accent) !important;
+    color: white !important;
+}
+
+/* Styles spécifiques pour les modales et choix */
+body.autumn-theme .modal-content,
+body.autumn-theme .modal-body,
+body.autumn-theme .modal-header {
+    background: #fdf6e3 !important;
+    border: 2px solid var(--autumn-accent) !important;
+    color: var(--autumn-brown) !important;
+}
+
+body.autumn-theme .form-group,
+body.autumn-theme .input-group,
+body.autumn-theme .form-control {
+    background: #fdf6e3 !important;
+    border: 2px solid var(--autumn-accent) !important;
+    color: var(--autumn-brown) !important;
+}
+
+/* Cartes et conteneurs */
+body.autumn-theme .card,
+body.autumn-theme .card-body,
+body.autumn-theme .card-header {
+    background: #fdf6e3 !important;
+    border: 2px solid var(--autumn-accent) !important;
+    color: var(--autumn-brown) !important;
+}
+
+/* Boutons et options de choix */
+body.autumn-theme .btn-option,
+body.autumn-theme .option-button,
+body.autumn-theme .choice-button {
+    background: #fdf6e3 !important;
+    border: 2px solid var(--autumn-accent) !important;
+    color: var(--autumn-brown) !important;
+}
+
+body.autumn-theme .btn-option:hover,
+body.autumn-theme .option-button:hover,
+body.autumn-theme .choice-button:hover {
+    background: var(--autumn-accent) !important;
+    color: white !important;
 }
 
 /* Contenu principal avec thème automne */
@@ -75,7 +343,7 @@ body.autumn-theme .catalog-content {
 /* Tableaux avec thème automne */
 body.autumn-theme .catalog-table,
 body.autumn-theme .project-spots-table {
-    background: var(--autumn-bg-primary);
+    background: #fef3c7;
     border: 2px solid var(--autumn-accent);
     border-radius: 8px;
     overflow: hidden;
@@ -84,7 +352,7 @@ body.autumn-theme .project-spots-table {
 
 body.autumn-theme .catalog-table th,
 body.autumn-theme .project-spots-table th {
-    background: var(--autumn-gradient-1);
+    background: var(--autumn-primary);
     color: white;
     border-bottom: 2px solid var(--autumn-accent);
     padding: 1rem;
@@ -96,12 +364,12 @@ body.autumn-theme .project-spots-table td {
     border-bottom: 1px solid var(--autumn-accent);
     color: var(--autumn-brown);
     padding: 1rem;
-    background: var(--autumn-bg-primary);
+    background: #fef3c7;
 }
 
 body.autumn-theme .catalog-table tr:hover,
 body.autumn-theme .project-spots-table tr:hover {
-    background: var(--autumn-bg-accent);
+    background: #fde68a;
 }
 
 /* Modales avec thème automne */
@@ -267,16 +535,74 @@ body.autumn-theme .project-spots-table-container {
 
 /* Sélecteur de thème avec thème automne */
 body.autumn-theme .theme-selector {
-    background: var(--autumn-bg-primary);
+    background: rgba(253, 246, 227, 0.95);
     border: 2px solid var(--autumn-accent);
     border-radius: 8px;
     box-shadow: var(--autumn-shadow);
+    backdrop-filter: blur(10px);
 }
 
 body.autumn-theme .theme-option.theme-autumn.active {
     background: var(--autumn-gradient-1);
     color: white;
     border: 2px solid var(--autumn-accent);
+    box-shadow: var(--autumn-shadow);
+}
+
+/* Boutons avec thème automne */
+body.autumn-theme .btn-primary {
+    background: var(--autumn-primary);
+    color: white;
+    border: 1px solid var(--autumn-accent);
+    box-shadow: var(--autumn-shadow);
+}
+
+body.autumn-theme .btn-primary:hover {
+    background: var(--autumn-accent);
+    transform: translateY(-1px);
+    box-shadow: var(--autumn-shadow-hover);
+}
+
+body.autumn-theme .btn-secondary {
+    background: var(--autumn-brown);
+    color: white;
+    border: 1px solid var(--autumn-copper);
+}
+
+body.autumn-theme .btn-secondary:hover {
+    background: var(--autumn-copper);
+    box-shadow: var(--autumn-shadow);
+}
+
+/* Boutons outline avec thème automne */
+body.autumn-theme .btn-outline {
+    background: transparent;
+    color: var(--autumn-primary);
+    border: 2px solid var(--autumn-primary);
+}
+
+body.autumn-theme .btn-outline:hover {
+    background: var(--autumn-primary);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: var(--autumn-shadow);
+}
+
+/* Boutons de navigation */
+body.autumn-theme .nav-btn {
+    background: var(--autumn-brown);
+    color: white;
+    border: 1px solid var(--autumn-copper);
+}
+
+body.autumn-theme .nav-btn:hover {
+    background: var(--autumn-copper);
+    box-shadow: var(--autumn-shadow);
+}
+
+body.autumn-theme .nav-btn.active {
+    background: var(--autumn-primary);
+    color: white;
     box-shadow: var(--autumn-shadow);
 }
 
@@ -324,6 +650,31 @@ body.autumn-theme .theme-option.theme-autumn.active {
 .btn-danger:hover {
     background: var(--autumn-brown);
     box-shadow: var(--autumn-shadow);
+}
+
+/* Liens avec thème automne */
+body.autumn-theme a {
+    color: var(--autumn-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+body.autumn-theme a:hover {
+    color: var(--autumn-accent);
+    text-decoration: underline;
+    transform: translateY(-1px);
+}
+
+body.autumn-theme .auth-switch a {
+    color: var(--autumn-primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+body.autumn-theme .auth-switch a:hover {
+    color: var(--autumn-accent);
+    text-decoration: underline;
 }
 
 /* Formulaires automne */

@@ -129,13 +129,14 @@ function showLimitedApp() {
 // Mettre à jour l'interface utilisateur selon l'état d'authentification
 function updateUserInterface() {
     const userEmail = document.getElementById('userEmail');
+    const userEmailContainer = document.getElementById('userEmailContainer');
     const logoutBtn = document.getElementById('logoutBtn');
     const loginBtn = document.getElementById('loginBtn');
     
     if (isAuthenticated && currentUser) {
         // Utilisateur connecté
         userEmail.textContent = currentUser.email;
-        userEmail.style.display = 'inline';
+        userEmailContainer.style.display = 'flex';
         logoutBtn.style.display = 'inline-block';
         loginBtn.style.display = 'none';
         
@@ -146,7 +147,7 @@ function updateUserInterface() {
         updateAdminFeatures();
     } else {
         // Utilisateur non connecté
-        userEmail.style.display = 'none';
+        userEmailContainer.style.display = 'none';
         logoutBtn.style.display = 'none';
         loginBtn.style.display = 'inline-block';
         isAdmin = false;
