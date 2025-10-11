@@ -6,12 +6,11 @@
     <title>RéputaLink - Outil de Link Building</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="ninja-linking-styles.css">
-    <link rel="stylesheet" href="autumn-theme.css">
     <link rel="stylesheet" href="white-theme.css">
     <link rel="stylesheet" href="theme-selector.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="autumn-theme">
+<body class="white-theme">
     
     <div class="app">
         <!-- Page d'accueil -->
@@ -155,6 +154,13 @@
                             <label for="loginPassword">Mot de passe</label>
                             <input type="password" id="loginPassword" required>
                         </div>
+                        <div class="form-group remember-me">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="rememberMe">
+                                <span class="checkmark"></span>
+                                <span class="checkbox-text">Se souvenir de moi</span>
+                            </label>
+                        </div>
                         <button type="submit" class="btn btn-primary">Se connecter</button>
                         <p class="auth-switch">
                             Pas de compte ? <a href="#" onclick="showSignupForm()">Créer un compte</a>
@@ -264,11 +270,7 @@
                 </div>
                 <!-- Sélecteur de thème intégré -->
                 <div class="theme-selector" id="themeSelector">
-                    <div class="theme-option theme-autumn active" data-theme="autumn" title="Thème Automne">
-                        <i class="fas fa-leaf theme-icon"></i>
-                        <div class="theme-tooltip">Automne</div>
-                    </div>
-                    <div class="theme-option theme-white" data-theme="white" title="Thème Blanc">
+                    <div class="theme-option theme-white active" data-theme="white" title="Thème Blanc">
                         <i class="fas fa-sun theme-icon"></i>
                         <div class="theme-tooltip">Blanc</div>
                     </div>
@@ -875,12 +877,17 @@
                                         <option value="Society">Society</option>
                                         <option value="Sports">Sports</option>
                                         <option value="Recreation">Recreation</option>
+                                        <option value="Vitrine">Vitrine</option>
                                         <option value="World">World</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="editProjectReferringDomains">Domaines référents</label>
                                     <input type="number" id="editProjectReferringDomains" min="0" placeholder="0">
+                                </div>
+                                <div class="form-group">
+                                    <label for="editProjectPublicationGoal">Objectif de publication</label>
+                                    <input type="number" id="editProjectPublicationGoal" min="0" placeholder="Nombre de liens à obtenir">
                                 </div>
                                 <div class="form-group full-width">
                                     <label for="editProjectKeywords">Mots-clés à travailler</label>
@@ -924,6 +931,89 @@
                         </div>
                     </div>
 
+                    <!-- Jauge de progression de l'objectif de publication -->
+                    <div class="project-progress-section" id="projectProgressSection" style="display: none;">
+                        <div class="progress-card">
+                            <div class="progress-header">
+                                <div class="progress-title">
+                                    <div class="progress-icon">
+                                        <i class="fas fa-bullseye"></i>
+                                    </div>
+                                    <div class="progress-title-content">
+                                        <h3>Objectif de publication</h3>
+                                        <p class="progress-subtitle" id="progressSubtitle">Définissez un objectif pour suivre vos progrès</p>
+                                    </div>
+                                </div>
+                                <div class="progress-actions">
+                                    <button class="btn-edit-goal" onclick="editPublicationGoal()" title="Modifier l'objectif">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="progress-content">
+                                <div class="progress-stats-grid">
+                                    <div class="stat-item current">
+                                        <div class="stat-value" id="progressCurrent">0</div>
+                                        <div class="stat-label">Publiés</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="stat-separator">
+                                        <div class="separator-line"></div>
+                                        <div class="separator-text">sur</div>
+                                    </div>
+                                    
+                                    <div class="stat-item goal">
+                                        <div class="stat-value" id="progressGoal">0</div>
+                                        <div class="stat-label">Objectif</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-flag"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="progress-visual">
+                                    <div class="progress-bar-container">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" id="progressFill"></div>
+                                            <div class="progress-milestones" id="progressMilestones"></div>
+                                        </div>
+                                        <div class="progress-labels">
+                                            <span class="progress-start">0</span>
+                                            <span class="progress-end" id="progressEndLabel">0</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="progress-info">
+                                        <div class="progress-percentage-container">
+                                            <div class="progress-percentage" id="progressPercentage">0%</div>
+                                            <div class="progress-percentage-label">complété</div>
+                                        </div>
+                                        <div class="progress-status" id="progressStatus"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="progress-details" id="progressDetails" style="display: none;">
+                                    <div class="progress-detail-item">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span>Dernière mise à jour : <span id="lastUpdate">Aujourd'hui</span></span>
+                                    </div>
+                                    <div class="progress-detail-item">
+                                        <i class="fas fa-trending-up"></i>
+                                        <span>Vitesse : <span id="progressSpeed">0</span> liens/semaine</span>
+                                    </div>
+                                    <div class="progress-detail-item">
+                                        <i class="fas fa-clock"></i>
+                                        <span>Estimation : <span id="progressETA">-</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Section des spots -->
                     <div class="project-spots-section">
                         <div class="project-spots-header">
@@ -945,10 +1035,10 @@
                                         <th class="sortable" data-sort="url" onclick="sortSpotsTable('url')">SITE</th>
                                         <th class="sortable" data-sort="type" onclick="sortSpotsTable('type')">TYPE</th>
                                         <th class="sortable" data-sort="theme" onclick="sortSpotsTable('theme')">THÉMATIQUE</th>
-                                        <th class="sortable" data-sort="trustFlow" onclick="sortSpotsTable('trustFlow')">TRUST FLOW</th>
+                                        <th class="sortable" data-sort="trustFlow" onclick="sortSpotsTable('trustFlow')">TF</th>
                                         <th class="sortable" data-sort="traffic" onclick="sortSpotsTable('traffic')">TRAFIC</th>
                                         <th class="sortable" data-sort="ttf" onclick="sortSpotsTable('ttf')">TTF</th>
-                                        <th class="sortable" data-sort="publicationDate" onclick="sortSpotsTable('publicationDate')">DATE PUBLICATION</th>
+                                        <th class="sortable" data-sort="publicationDate" onclick="sortSpotsTable('publicationDate')">DATE</th>
                                         <th class="sortable" data-sort="status" onclick="sortSpotsTable('status')">STATUT</th>
                                         <th>ACTIONS</th>
                                     </tr>
@@ -970,9 +1060,6 @@
                         <p>Gérez votre base de données de sites</p>
                     </div>
         <div class="catalog-actions">
-            <button class="btn btn-info" onclick="refreshSitesFromSupabase()">
-                <i class="fas fa-sync-alt"></i> Actualiser
-            </button>
             <button class="btn btn-success admin-only" onclick="openImportModal()" style="display: none;">
                 <i class="fas fa-upload"></i> Importer
             </button>
@@ -1069,6 +1156,7 @@
                                     <th class="sortable" data-sort="trustFlow" onclick="sortTable('trustFlow')">TRUST FLOW</th>
                                     <th class="sortable" data-sort="ttf" onclick="sortTable('ttf')">TOPICAL TRUST FLOW (TTF)</th>
                                     <th class="sortable" data-sort="follow" onclick="sortTable('follow')">FOLLOW</th>
+                                    <th>NOTES</th>
                                     <th>ACTIONS</th>
                                 </tr>
                             </thead>
@@ -1133,12 +1221,17 @@
                             <option value="Society">Society</option>
                             <option value="Sports">Sports</option>
                             <option value="Recreation">Recreation</option>
+                            <option value="Vitrine">Vitrine</option>
                             <option value="World">World</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="projectReferringDomains">Domaines référents</label>
                         <input type="number" id="projectReferringDomains" min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="projectPublicationGoal">Objectif de publication</label>
+                        <input type="number" id="projectPublicationGoal" min="0" placeholder="Nombre de liens à obtenir">
                     </div>
                     <div class="form-group">
                         <label for="projectKeywords">Mots-clés à travailler</label>
@@ -1185,6 +1278,7 @@
                             <option value="Média">Média</option>
                             <option value="E-commerce">E-commerce</option>
                             <option value="Réseau social">Réseau social</option>
+                            <option value="Vitrine">Vitrine</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -1215,13 +1309,37 @@
                         <input type="number" id="spotTraffic" min="0" placeholder="10000">
                     </div>
                     <div class="form-group">
-                        <label for="spotPublicationDate">Date de publication</label>
+                        <label for="spotTTF">TTF</label>
+                        <select id="spotTTF">
+                            <option value="Arts">Arts</option>
+                            <option value="Adult">Adult</option>
+                            <option value="Business">Business</option>
+                            <option value="Computers">Computers</option>
+                            <option value="Games">Games</option>
+                            <option value="Health">Health</option>
+                            <option value="Home">Home</option>
+                            <option value="News">News</option>
+                            <option value="Reference">Reference</option>
+                            <option value="Regional">Regional</option>
+                            <option value="Science">Science</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Society">Society</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Recreation">Recreation</option>
+                            <option value="Vitrine">Vitrine</option>
+                            <option value="World">World</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="spotPublicationDate">Date</label>
                         <input type="date" id="spotPublicationDate">
                     </div>
                     <div class="form-group">
                         <label for="spotStatus">Statut</label>
                         <select id="spotStatus">
                             <option value="A publier">A publier</option>
+                            <option value="En attente">En attente</option>
+                            <option value="A vérifier">A vérifier</option>
                             <option value="Publié">Publié</option>
                             <option value="Rejeté">Rejeté</option>
                         </select>
@@ -1257,6 +1375,7 @@
                             <option value="Média">Média</option>
                             <option value="E-commerce">E-commerce</option>
                             <option value="Réseau social">Réseau social</option>
+                            <option value="Vitrine">Vitrine</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -1308,13 +1427,15 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="editSpotPublicationDate">Date de publication</label>
+                        <label for="editSpotPublicationDate">Date</label>
                         <input type="date" id="editSpotPublicationDate">
                     </div>
                     <div class="form-group">
                         <label for="editSpotStatus">Statut</label>
                         <select id="editSpotStatus">
                             <option value="A publier">A publier</option>
+                            <option value="En attente">En attente</option>
+                            <option value="A vérifier">A vérifier</option>
                             <option value="Publié">Publié</option>
                             <option value="Rejeté">Rejeté</option>
                         </select>
@@ -1415,6 +1536,81 @@
         </div>
     </div>
 
+    <!-- Modal Notes du Site -->
+    <div id="siteNotesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Notes du site</h3>
+                <button class="modal-close" onclick="closeSiteNotesModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="site-info">
+                    <h4 id="siteNotesUrl"></h4>
+                    <p id="siteNotesType"></p>
+                </div>
+                <div class="form-group">
+                    <label for="siteNotesContent">Instructions et notes</label>
+                    <div class="wysiwyg-container">
+                        <div class="wysiwyg-toolbar">
+                            <button type="button" class="toolbar-btn" data-command="bold" title="Gras">
+                                <i class="fas fa-bold"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="italic" title="Italique">
+                                <i class="fas fa-italic"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="underline" title="Souligné">
+                                <i class="fas fa-underline"></i>
+                            </button>
+                            <div class="toolbar-separator"></div>
+                            <button type="button" class="toolbar-btn" data-command="formatBlock" data-value="h1" title="Titre 1">
+                                <span style="font-weight: bold; font-size: 1.2em;">H1</span>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="formatBlock" data-value="h2" title="Titre 2">
+                                <span style="font-weight: bold; font-size: 1.1em;">H2</span>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="formatBlock" data-value="h3" title="Titre 3">
+                                <span style="font-weight: bold;">H3</span>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="formatBlock" data-value="h4" title="Titre 4">
+                                <span style="font-weight: bold; font-size: 0.9em;">H4</span>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="formatBlock" data-value="h5" title="Titre 5">
+                                <span style="font-weight: bold; font-size: 0.8em;">H5</span>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="formatBlock" data-value="h6" title="Titre 6">
+                                <span style="font-weight: bold; font-size: 0.7em;">H6</span>
+                            </button>
+                            <div class="toolbar-separator"></div>
+                            <button type="button" class="toolbar-btn" data-command="insertUnorderedList" title="Liste à puces">
+                                <i class="fas fa-list-ul"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="insertOrderedList" title="Liste numérotée">
+                                <i class="fas fa-list-ol"></i>
+                            </button>
+                            <div class="toolbar-separator"></div>
+                            <button type="button" class="toolbar-btn" data-command="createLink" title="Lien">
+                                <i class="fas fa-link"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="removeFormat" title="Supprimer le formatage">
+                                <i class="fas fa-remove-format"></i>
+                            </button>
+                        </div>
+                        <div id="siteNotesContent" class="wysiwyg-editor" contenteditable="true" data-placeholder="Ajoutez des instructions spécifiques pour ce site..."></div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeSiteNotesModal()">Fermer</button>
+                    <button type="button" class="btn btn-primary" onclick="saveSiteNotes()" id="saveNotesBtn" style="display: none;">
+                        <i class="fas fa-save"></i> Sauvegarder
+                    </button>
+                    <button type="button" class="btn btn-warning" onclick="forceAdminMode()" id="forceAdminBtn" style="display: none;">
+                        <i class="fas fa-crown"></i> Mode Admin
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Site -->
     <div id="siteModal" class="modal">
         <div class="modal-content">
@@ -1437,6 +1633,7 @@
                             <option value="Média">Média</option>
                             <option value="E-commerce">E-commerce</option>
                             <option value="Réseau social">Réseau social</option>
+                            <option value="Vitrine">Vitrine</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -1484,6 +1681,7 @@
                             <option value="Society">Society</option>
                             <option value="Sports">Sports</option>
                             <option value="Recreation">Recreation</option>
+                            <option value="Vitrine">Vitrine</option>
                             <option value="World">World</option>
                         </select>
                     </div>
@@ -1525,9 +1723,58 @@
             // Initialiser le sélecteur de thème
             initThemeSelector();
             
-            // Afficher la page d'accueil par défaut
-            showHomepage();
+            // Vérifier l'état d'authentification et afficher la page appropriée
+            checkAuthState();
         });
+        
+        // Fonction pour vérifier l'état d'authentification
+        function checkAuthState() {
+            const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+            const rememberMe = localStorage.getItem('rememberMe') === 'true';
+            const savedUser = localStorage.getItem('currentUser');
+            
+            console.log('🔍 Vérification de l\'état d\'authentification:', {
+                isAuthenticated,
+                rememberMe,
+                savedUser: savedUser ? 'présent' : 'absent'
+            });
+            
+            if (isAuthenticated && savedUser) {
+                // Utilisateur connecté, afficher l'app principale
+                console.log('✅ Utilisateur authentifié, affichage de l\'app principale');
+                document.getElementById('homepage-container').style.display = 'none';
+                document.getElementById('auth-container').style.display = 'none';
+                document.getElementById('main-app').style.display = 'block';
+                
+                // Restaurer les variables globales
+                window.isAuthenticated = true;
+                window.currentUser = JSON.parse(savedUser);
+                
+                // Charger les données
+                if (typeof loadData === 'function') {
+                    loadData();
+                }
+            } else if (rememberMe && savedUser) {
+                // "Se souvenir de moi" activé, afficher l'app principale
+                console.log('✅ Se souvenir de moi activé, affichage de l\'app principale');
+                document.getElementById('homepage-container').style.display = 'none';
+                document.getElementById('auth-container').style.display = 'none';
+                document.getElementById('main-app').style.display = 'block';
+                
+                // Restaurer les variables globales
+                window.isAuthenticated = true;
+                window.currentUser = JSON.parse(savedUser);
+                
+                // Charger les données
+                if (typeof loadData === 'function') {
+                    loadData();
+                }
+            } else {
+                // Utilisateur non connecté, afficher la page d'accueil
+                console.log('❌ Utilisateur non connecté, affichage de la page d\'accueil');
+                showHomepage();
+            }
+        }
         
         // Fonction pour afficher la page d'accueil
         function showHomepage() {
@@ -1555,8 +1802,8 @@
             const themeOptions = themeSelector.querySelectorAll('.theme-option');
             const body = document.body;
             
-            // Récupérer le thème sauvegardé ou utiliser automne par défaut
-            const savedTheme = localStorage.getItem('selected-theme') || 'autumn';
+            // Récupérer le thème sauvegardé ou utiliser blanc par défaut
+            const savedTheme = localStorage.getItem('selected-theme') || 'white';
             applyTheme(savedTheme);
             
             // Ajouter les événements de clic
@@ -1583,11 +1830,7 @@
             body.classList.remove('autumn-theme', 'white-theme');
             
             // Ajouter la classe du thème sélectionné
-            if (theme === 'autumn') {
-                body.classList.add('autumn-theme');
-            } else {
-                body.classList.add(theme + '-theme');
-            }
+            body.classList.add(theme + '-theme');
             
             console.log('🎨 Thème appliqué:', theme);
         }

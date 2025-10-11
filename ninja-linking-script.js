@@ -211,6 +211,12 @@ function hidePrivateSections() {
         projectsTab.style.display = 'none';
     }
     
+    // Masquer l'onglet Catalogue pour les utilisateurs non connectés
+    const catalogTab = document.querySelector('[data-page="catalog"]');
+    if (catalogTab) {
+        catalogTab.style.display = 'none';
+    }
+    
     // L'onglet IA reste visible pour tous les utilisateurs
     const iaTab = document.querySelector('[data-page="ia"]');
     if (iaTab) {
@@ -233,6 +239,12 @@ function showPrivateSections() {
     const projectsTab = document.querySelector('[data-page="projects"]');
     if (projectsTab) {
         projectsTab.style.display = 'inline-block';
+    }
+    
+    // Afficher l'onglet Catalogue pour les utilisateurs connectés
+    const catalogTab = document.querySelector('[data-page="catalog"]');
+    if (catalogTab) {
+        catalogTab.style.display = 'inline-block';
     }
     
     // L'onglet IA est toujours visible pour tous les utilisateurs
@@ -388,6 +400,7 @@ async function handleLogin(event) {
     
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
+    const rememberMe = document.getElementById('rememberMe').checked;
     
     if (!db) {
         alert('❌ Supabase non configuré');
@@ -399,6 +412,20 @@ async function handleLogin(event) {
         if (result.success) {
             isAuthenticated = true;
             currentUser = result.user;
+            
+            // Sauvegarder l'état d'authentification
+            localStorage.setItem('isAuthenticated', 'true');
+            localStorage.setItem('currentUser', JSON.stringify(result.user));
+            
+            // Gérer "Se souvenir de moi"
+            if (rememberMe) {
+                localStorage.setItem('rememberMe', 'true');
+                localStorage.setItem('savedEmail', email);
+            } else {
+                localStorage.removeItem('rememberMe');
+                localStorage.removeItem('savedEmail');
+            }
+            
             showMainApp();
         } else {
             alert('❌ Erreur de connexion: ' + result.error);
@@ -481,11 +508,20 @@ async function logout() {
         currentUser = null;
         projects = [];
         sites = [];
+        
+        // Nettoyer le localStorage
+        localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('rememberMe');
+        localStorage.removeItem('savedEmail');
+        localStorage.removeItem('currentPage');
+        
         showAuthForm();
     } catch (error) {
         console.error('Erreur déconnexion:', error);
     }
 }
+
 
 // Configurer Supabase avec les credentials utilisateur
 async function configureSupabase() {
@@ -560,6 +596,43 @@ function closeSupabaseModal() {
     if (modal) {
         modal.remove();
     }
+}
+
+// Ajouter un bouton de configuration Supabase
+function addSupabaseConfigButton() {
+    // Vérifier si le bouton existe déjà
+    if (document.getElementById('supabaseConfigBtn')) return;
+    
+    const button = document.createElement('button');
+    button.id = 'supabaseConfigBtn';
+    button.innerHTML = '🔧 Configurer Supabase';
+    button.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        font-size: 0.9rem;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        z-index: 1000;
+        transition: all 0.2s ease;
+    `;
+    
+    button.addEventListener('click', configureSupabase);
+    button.addEventListener('mouseenter', () => {
+        button.style.background = '#2563eb';
+        button.style.transform = 'translateY(-2px)';
+    });
+    button.addEventListener('mouseleave', () => {
+        button.style.background = '#3b82f6';
+        button.style.transform = 'translateY(0)';
+    });
+    
+    document.body.appendChild(button);
 }
 
 // Configurer l'URL de redirection pour l'email de confirmation
@@ -655,18 +728,117 @@ const footprintsData = {
 };
 
 // Initialisation
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('🚀 Initialisation de l\'application...');
+    
+    // Initialiser Supabase en premier
+    await initSupabase();
+    
+    // Initialiser l'application (navigation, événements, etc.)
     initializeApp();
-    loadData();
-    // Afficher la page Ninjalinking par défaut
-    switchPage('ninjalinking');
+    
+    // Configurer les event listeners d'authentification
+    setupAuthEventListeners();
+    
+    // Pré-remplir l'email si "Se souvenir de moi" était activé
+    const savedEmail = localStorage.getItem('savedEmail');
+    if (savedEmail) {
+        const emailInput = document.getElementById('loginEmail');
+        if (emailInput) {
+            emailInput.value = savedEmail;
+            // Cocher automatiquement "Se souvenir de moi"
+            const rememberMeCheckbox = document.getElementById('rememberMe');
+            if (rememberMeCheckbox) {
+                rememberMeCheckbox.checked = true;
+            }
+        }
+    }
+    
+    // Vérifier l'état d'authentification d'abord
+    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+    const rememberMe = localStorage.getItem('rememberMe') === 'true';
+    const savedUser = localStorage.getItem('currentUser');
+    
+    if (isAuthenticated && savedUser) {
+        // Utilisateur connecté, restaurer les variables globales
+        window.isAuthenticated = true;
+        window.currentUser = JSON.parse(savedUser);
+        
+        // Charger les données
+        await loadData();
+        
+        // Restaurer la page précédente ou afficher la page par défaut
+        const savedPage = localStorage.getItem('currentPage');
+        if (savedPage && document.getElementById(`${savedPage}-page`)) {
+            switchPage(savedPage);
+            
+            // Si on est sur la page de détail du projet, restaurer le projet
+            if (savedPage === 'project-detail') {
+                const savedProjectId = localStorage.getItem('currentProjectId');
+                if (savedProjectId) {
+                    currentProjectId = parseInt(savedProjectId);
+                    // Attendre que les données soient chargées avant de charger le projet
+                    setTimeout(() => {
+                        loadProjectDetail(currentProjectId);
+                    }, 100);
+                }
+            }
+        } else {
+            switchPage('ninjalinking');
+        }
+    } else if (rememberMe && savedUser) {
+        // "Se souvenir de moi" activé, restaurer les variables globales
+        window.isAuthenticated = true;
+        window.currentUser = JSON.parse(savedUser);
+        
+        // Charger les données
+        await loadData();
+        
+        // Restaurer la page précédente ou afficher la page par défaut
+        const savedPage = localStorage.getItem('currentPage');
+        if (savedPage && document.getElementById(`${savedPage}-page`)) {
+            switchPage(savedPage);
+            
+            // Si on est sur la page de détail du projet, restaurer le projet
+            if (savedPage === 'project-detail') {
+                const savedProjectId = localStorage.getItem('currentProjectId');
+                if (savedProjectId) {
+                    currentProjectId = parseInt(savedProjectId);
+                    // Attendre que les données soient chargées avant de charger le projet
+                    setTimeout(() => {
+                        loadProjectDetail(currentProjectId);
+                    }, 100);
+                }
+            }
+        } else {
+            switchPage('ninjalinking');
+        }
+    } else {
+        // Utilisateur non connecté, afficher la page d'accueil
+        console.log('❌ Utilisateur non connecté, affichage de la page d\'accueil');
+        showHomepage();
+    }
+    
+    // Ajouter un bouton de configuration Supabase si pas configuré
+    if (!isSupabaseConfigured) {
+        addSupabaseConfigButton();
+    }
 });
 
 function initializeApp() {
+    console.log('🔧 Initialisation de l\'application...');
+    
     // Navigation
     const navButtons = document.querySelectorAll('.nav-btn');
-    navButtons.forEach(btn => {
-        btn.addEventListener('click', () => switchPage(btn.dataset.page));
+    console.log(`📱 Boutons de navigation trouvés: ${navButtons.length}`);
+    
+    navButtons.forEach((btn, index) => {
+        console.log(`🔗 Bouton ${index + 1}:`, btn.dataset.page, btn.textContent);
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('🖱️ Clic sur le bouton:', btn.dataset.page);
+            switchPage(btn.dataset.page);
+        });
     });
 
     // Catégories de footprints
@@ -781,15 +953,31 @@ function initializeApp() {
 }
 
 async function switchPage(pageId) {
-    console.log('Changement de page vers:', pageId);
+    console.log('🔄 Changement de page vers:', pageId);
+    
+    // Vérifier l'authentification pour les pages privées
+    const privatePages = ['catalog', 'projects', 'project-detail'];
+    if (privatePages.includes(pageId) && !isAuthenticated) {
+        console.log('🔒 Accès refusé - utilisateur non connecté');
+        alert('Vous devez être connecté pour accéder à cette section.');
+        showHomepage();
+        return;
+    }
+    
+    // Sauvegarder la page actuelle dans le localStorage
+    localStorage.setItem('currentPage', pageId);
     
     // Désactiver tous les boutons de navigation
-    document.querySelectorAll('.nav-btn').forEach(btn => {
+    const allNavButtons = document.querySelectorAll('.nav-btn');
+    console.log(`🔘 Désactivation de ${allNavButtons.length} boutons de navigation`);
+    allNavButtons.forEach(btn => {
         btn.classList.remove('active');
     });
 
     // Masquer toutes les pages
-    document.querySelectorAll('.page').forEach(page => {
+    const allPages = document.querySelectorAll('.page');
+    console.log(`📄 Masquage de ${allPages.length} pages`);
+    allPages.forEach(page => {
         page.classList.remove('active');
     });
 
@@ -797,28 +985,39 @@ async function switchPage(pageId) {
     const activeBtn = document.querySelector(`[data-page="${pageId}"]`);
     if (activeBtn) {
         activeBtn.classList.add('active');
-        console.log('Bouton activé:', activeBtn);
+        console.log('✅ Bouton activé:', activeBtn.textContent, activeBtn);
     } else {
-        console.error('Bouton non trouvé pour:', pageId);
+        console.error('❌ Bouton non trouvé pour:', pageId);
+        console.log('Boutons disponibles:', document.querySelectorAll('.nav-btn'));
     }
 
     const activePage = document.getElementById(`${pageId}-page`);
     if (activePage) {
         activePage.classList.add('active');
-        console.log('Page activée:', activePage);
+        console.log('✅ Page activée:', activePage.id, activePage);
     } else {
-        console.error('Page non trouvée pour:', `${pageId}-page`);
+        console.error('❌ Page non trouvée pour:', `${pageId}-page`);
+        console.log('Pages disponibles:', document.querySelectorAll('.page'));
     }
 
     // Charger les données de la page
     if (pageId === 'projects') {
+        console.log('📊 Chargement des projets...');
         renderProjects();
     } else if (pageId === 'catalog') {
+        console.log('📚 Chargement du catalogue...');
         renderSites();
     } else if (pageId === 'serp') {
-        // Initialiser la page SERP si nécessaire
-        console.log('Page SERP chargée');
+        console.log('🔍 Page SERP chargée');
+    } else if (pageId === 'ninjalinking') {
+        console.log('🤖 Page Ninja Linking chargée');
+    } else if (pageId === 'ereputation') {
+        console.log('⭐ Page E-Réputation chargée');
+    } else if (pageId === 'ia') {
+        console.log('🧠 Page IA chargée');
     }
+    
+    console.log('✅ Changement de page terminé');
 }
 
 function toggleCategory(category) {
@@ -1709,6 +1908,7 @@ function openProjectModal(projectId = null) {
             document.getElementById('projectTrustFlow').value = project.trustFlow || '';
             document.getElementById('projectTTF').value = project.ttf || '';
             document.getElementById('projectReferringDomains').value = project.referringDomains || '';
+            document.getElementById('projectPublicationGoal').value = project.publicationGoal || '';
             
             // Charger les mots-clés
             currentKeywords = project.keywords || [];
@@ -1804,6 +2004,7 @@ async function saveProject(e) {
     const trustFlow = parseInt(document.getElementById('projectTrustFlow').value) || 0;
     const ttf = document.getElementById('projectTTF').value;
     const referringDomains = parseInt(document.getElementById('projectReferringDomains').value) || 0;
+    const publicationGoal = parseInt(document.getElementById('projectPublicationGoal').value) || 0;
 
     console.log('Données du projet:', { name, url, objective, traffic, trustFlow, ttf, referringDomains });
 
@@ -1820,6 +2021,7 @@ async function saveProject(e) {
         trustFlow,
         ttf,
         referringDomains,
+        publicationGoal,
         keywords: currentKeywords,
         updatedAt: new Date().toISOString()
     };
@@ -1954,7 +2156,7 @@ function renderProjects() {
                     <span class="project-detail-value">${(project.traffic || 0).toLocaleString()}</span>
                 </div>
                 <div class="project-detail">
-                    <span class="project-detail-label">Trust Flow</span>
+                    <span class="project-detail-label">TF</span>
                     <div class="project-trust-flow">
                         <div class="project-trust-flow-bar">
                             <div class="project-trust-flow-fill ${trustFlowClass}" style="width: ${trustFlowWidth}%"></div>
@@ -2043,6 +2245,8 @@ function updateProjectStats() {
 
 function viewProjectSpots(projectId) {
     currentProjectId = projectId;
+    // Sauvegarder l'ID du projet actuel
+    localStorage.setItem('currentProjectId', projectId);
     loadProjectDetail(projectId);
     switchPage('project-detail');
 }
@@ -2050,7 +2254,12 @@ function viewProjectSpots(projectId) {
 // Gestion de la page de détail du projet
 function loadProjectDetail(projectId) {
     const project = projects.find(p => p.id === projectId);
-    if (!project) return;
+    if (!project) {
+        console.error('❌ Projet non trouvé:', projectId);
+        // Rediriger vers la page des projets si le projet n'existe pas
+        switchPage('projects');
+        return;
+    }
 
     // Mettre à jour le header
     document.getElementById('projectDetailTitle').textContent = project.name;
@@ -2099,8 +2308,136 @@ function loadProjectDetail(projectId) {
     document.getElementById('projectDetailTrustFlow').textContent = project.trustFlow || 0;
     document.getElementById('projectDetailReferringDomains').textContent = project.referringDomains || 0;
     
+    // Afficher la jauge de progression
+    const progressSection = document.getElementById('projectProgressSection');
+    if (project.publicationGoal && project.publicationGoal > 0) {
+        progressSection.style.display = 'block';
+        updateProgressGauge(project);
+    } else {
+        // Afficher la jauge même sans objectif défini, avec un message informatif
+        progressSection.style.display = 'block';
+        updateProgressGaugeWithoutGoal(project);
+    }
+    
     // Charger les spots du projet
     loadProjectSpots(projectId);
+}
+
+// Mettre à jour la jauge de progression
+function updateProgressGauge(project) {
+    const goal = project.publicationGoal || 0;
+    // Compter uniquement les spots du projet actuel avec le statut "Publié"
+    const current = project.spots ? project.spots.filter(spot => spot.status === 'Publié').length : 0;
+    const percentage = goal > 0 ? Math.min((current / goal) * 100, 100) : 0;
+    
+    // Mettre à jour les éléments de la jauge
+    document.getElementById('progressCurrent').textContent = current;
+    document.getElementById('progressGoal').textContent = goal;
+    document.getElementById('progressEndLabel').textContent = goal;
+    document.getElementById('progressPercentage').textContent = Math.round(percentage) + '%';
+    
+    // Mettre à jour la barre de progression
+    const progressFill = document.getElementById('progressFill');
+    progressFill.style.width = percentage + '%';
+    
+    // Définir le statut et la couleur selon le pourcentage
+    const progressStatus = document.getElementById('progressStatus');
+    let statusClass = '';
+    let statusText = '';
+    
+    if (percentage >= 100) {
+        progressFill.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+        statusClass = 'excellent';
+        statusText = '🎉 Atteint';
+    } else if (percentage >= 75) {
+        progressFill.style.background = 'linear-gradient(135deg, #3b82f6, #1d4ed8)';
+        statusClass = 'good';
+        statusText = '🚀 Excellent';
+    } else if (percentage >= 50) {
+        progressFill.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+        statusClass = 'warning';
+        statusText = '⚡ Bon';
+    } else {
+        progressFill.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+        statusClass = 'danger';
+        statusText = '🔥 À faire';
+    }
+    
+    // Mettre à jour le statut
+    progressStatus.className = `progress-status ${statusClass}`;
+    progressStatus.textContent = statusText;
+    
+    // Mettre à jour le sous-titre
+    const progressSubtitle = document.getElementById('progressSubtitle');
+    progressSubtitle.textContent = `Objectif de ${goal} publication${goal > 1 ? 's' : ''}`;
+}
+
+// Mettre à jour la jauge sans objectif défini
+function updateProgressGaugeWithoutGoal(project) {
+    // Compter uniquement les spots du projet actuel avec le statut "Publié"
+    const current = project.spots ? project.spots.filter(spot => spot.status === 'Publié').length : 0;
+    
+    // Mettre à jour les éléments de la jauge
+    document.getElementById('progressCurrent').textContent = current;
+    document.getElementById('progressGoal').textContent = '?';
+    document.getElementById('progressEndLabel').textContent = '?';
+    document.getElementById('progressPercentage').textContent = '';
+    
+    // Afficher une barre de progression neutre
+    const progressFill = document.getElementById('progressFill');
+    progressFill.style.width = '100%';
+    progressFill.style.background = 'linear-gradient(135deg, #6b7280, #9ca3af)';
+    
+    // Mettre à jour le statut
+    const progressStatus = document.getElementById('progressStatus');
+    progressStatus.className = 'progress-status neutral';
+    progressStatus.textContent = '📊 Pas d\'objectif';
+    
+    // Mettre à jour le sous-titre
+    const progressSubtitle = document.getElementById('progressSubtitle');
+    progressSubtitle.textContent = 'Définissez un objectif pour suivre vos progrès';
+}
+
+// Fonction pour éditer l'objectif de publication
+function editPublicationGoal() {
+    const currentGoal = document.getElementById('editProjectPublicationGoal').value || 0;
+    const newGoal = prompt('Nouvel objectif de publication:', currentGoal);
+    
+    if (newGoal !== null && newGoal !== '') {
+        const goal = parseInt(newGoal);
+        if (!isNaN(goal) && goal >= 0) {
+            // Mettre à jour le champ dans le formulaire d'édition
+            document.getElementById('editProjectPublicationGoal').value = goal;
+            
+            // Sauvegarder le projet
+            const project = projects.find(p => p.id === currentProjectId);
+            if (project) {
+                project.publicationGoal = goal;
+                
+                // Sauvegarder en base
+                if (db && isAuthenticated) {
+                    db.updateProject(currentProjectId, project).then(() => {
+                        console.log('✅ Objectif mis à jour en base');
+                    }).catch(error => {
+                        console.error('❌ Erreur sauvegarde objectif:', error);
+                    });
+                } else {
+                    saveData();
+                }
+                
+                // Mettre à jour l'affichage
+                if (goal > 0) {
+                    updateProgressGauge(project);
+                } else {
+                    updateProgressGaugeWithoutGoal(project);
+                }
+                
+                showNotification('✅ Objectif de publication mis à jour', 'success');
+            }
+        } else {
+            alert('Veuillez entrer un nombre valide');
+        }
+    }
 }
 
 function loadProjectSpots(projectId) {
@@ -2177,7 +2514,7 @@ function renderProjectSpots() {
             <td><span class="ttf-tag ttf-${(spot.ttf || 'business').toLowerCase()}">${spot.ttf || 'Business'}</span></td>
             <td><span class="project-spot-date">${spot.publicationDate ? new Date(spot.publicationDate).toLocaleDateString('fr-FR') : 'Non définie'}</span></td>
             <td>
-                <span class="spot-status-${spot.status.toLowerCase().replace(' ', '-')}">${spot.status}</span>
+                <span class="spot-status-${spot.status.toLowerCase().replace(' ', '-').replace('é', 'e')}">${spot.status}</span>
             </td>
             <td>
                 <div class="project-spot-actions">
@@ -2192,6 +2529,16 @@ function renderProjectSpots() {
         `;
         tbody.appendChild(row);
     });
+    
+    // Mettre à jour la jauge de progression après le rendu des spots
+    const currentProject = projects.find(p => p.id === currentProjectId);
+    if (currentProject) {
+        if (currentProject.publicationGoal && currentProject.publicationGoal > 0) {
+            updateProgressGauge(currentProject);
+        } else {
+            updateProgressGaugeWithoutGoal(currentProject);
+        }
+    }
 }
 
 async function updateSpotStatus(spotId, newStatus) {
@@ -2225,6 +2572,13 @@ async function removeSpotFromProject(spotId) {
         }
         
         renderProjectSpots();
+        
+        // Mettre à jour la jauge de progression si nécessaire
+        const currentProject = projects.find(p => p.id === currentProjectId);
+        if (currentProject && currentProject.publicationGoal > 0) {
+            updateProgressGauge(currentProject);
+        }
+        
         console.log(`Spot ${spotId} supprimé du projet`);
     }
 }
@@ -2252,6 +2606,7 @@ async function saveNewSpot(e) {
     const theme = document.getElementById('spotTheme').value;
     const trustFlow = parseInt(document.getElementById('spotTrustFlow').value) || 0;
     const traffic = parseInt(document.getElementById('spotTraffic').value) || 0;
+    const ttf = document.getElementById('spotTTF').value;
     const publicationDate = document.getElementById('spotPublicationDate').value;
     const status = document.getElementById('spotStatus').value;
 
@@ -2276,6 +2631,7 @@ async function saveNewSpot(e) {
         theme: theme,
         traffic: traffic,
         trustFlow: trustFlow,
+        ttf: ttf,
         publicationDate: publicationDate || null,
         status: status
     };
@@ -2302,6 +2658,17 @@ async function saveNewSpot(e) {
     syncProjectSpots();
     
     renderProjectSpots();
+    
+    // Mettre à jour la jauge de progression si nécessaire
+    const currentProject = projects.find(p => p.id === currentProjectId);
+    if (currentProject) {
+        if (currentProject.publicationGoal && currentProject.publicationGoal > 0) {
+            updateProgressGauge(currentProject);
+        } else {
+            updateProgressGaugeWithoutGoal(currentProject);
+        }
+    }
+    
     closeAddSpotModal();
     
     console.log(`Nouveau spot ajouté au projet: ${url}`);
@@ -2402,7 +2769,7 @@ function renderEditKeywords() {
     });
 }
 
-function saveProjectFromDetail(e) {
+async function saveProjectFromDetail(e) {
     e.preventDefault();
 
     const name = document.getElementById('editProjectName').value.trim();
@@ -2412,6 +2779,7 @@ function saveProjectFromDetail(e) {
     const trustFlow = parseInt(document.getElementById('editProjectTrustFlow').value) || 0;
     const ttf = document.getElementById('editProjectTTF').value;
     const referringDomains = parseInt(document.getElementById('editProjectReferringDomains').value) || 0;
+    const publicationGoal = parseInt(document.getElementById('editProjectPublicationGoal').value) || 0;
 
     if (!name || !url || !objective) {
         alert('Veuillez remplir tous les champs obligatoires');
@@ -2426,6 +2794,7 @@ function saveProjectFromDetail(e) {
         trustFlow,
         ttf,
         referringDomains,
+        publicationGoal,
         keywords: editKeywords,
         updatedAt: new Date().toISOString()
     };
@@ -2433,7 +2802,7 @@ function saveProjectFromDetail(e) {
     const projectIndex = projects.findIndex(p => p.id === currentProjectId);
     if (projectIndex !== -1) {
         projects[projectIndex] = { ...projects[projectIndex], ...projectData };
-        saveData();
+        await saveData();
         
         // Recharger l'affichage du projet
         loadProjectDetail(currentProjectId);
@@ -2467,6 +2836,7 @@ function openSiteModal(siteId = null) {
             document.getElementById('siteTrustFlow').value = site.trustFlow || '';
             document.getElementById('siteTTF').value = site.ttf || '';
             document.getElementById('siteFollow').value = site.follow || 'Oui';
+            // Les notes ne sont pas modifiables dans le modal principal, elles ont leur propre modal
         }
     } else {
         title.textContent = 'Nouveau Site';
@@ -2486,6 +2856,210 @@ function closeSiteModal() {
     editingSiteId = null;
 }
 
+// Gestion des notes des sites
+let currentNotesSiteId = null;
+
+function toggleSiteNotes(siteId) {
+    const site = sites.find(s => s.id === siteId);
+    if (!site) return;
+    
+    currentNotesSiteId = siteId;
+    const modal = document.getElementById('siteNotesModal');
+    const urlElement = document.getElementById('siteNotesUrl');
+    const typeElement = document.getElementById('siteNotesType');
+    const contentElement = document.getElementById('siteNotesContent');
+    const saveBtn = document.getElementById('saveNotesBtn');
+    
+    // Afficher les informations du site
+    urlElement.textContent = getDomainName(site.url);
+    typeElement.textContent = `${site.type} - ${site.theme}`;
+    
+    // Charger les notes existantes
+    contentElement.innerHTML = site.notes || '';
+    
+    // Vérifier les permissions d'édition
+    const isAdmin = currentUser && (
+        currentUser.role === 'admin' || 
+        currentUser.user_metadata?.role === 'admin' || 
+        currentUser.app_metadata?.role === 'admin' ||
+        (db && db.isAdmin()) ||
+        window.isAdmin === true
+    );
+    
+    // Debug des permissions
+    console.log('🔍 Debug permissions notes:', {
+        currentUser: currentUser,
+        role: currentUser?.role,
+        user_metadata: currentUser?.user_metadata,
+        app_metadata: currentUser?.app_metadata,
+        db_isAdmin: db ? db.isAdmin() : 'db not available',
+        isAdmin: isAdmin
+    });
+    
+    contentElement.contentEditable = isAdmin;
+    saveBtn.style.display = isAdmin ? 'inline-block' : 'none';
+    
+    // Afficher le bouton de forçage admin si pas admin
+    const forceAdminBtn = document.getElementById('forceAdminBtn');
+    if (forceAdminBtn) {
+        forceAdminBtn.style.display = !isAdmin ? 'inline-block' : 'none';
+    }
+    
+    // Initialiser la barre d'outils
+    if (isAdmin) {
+        initializeWysiwygToolbar();
+    }
+    
+    modal.style.display = 'block';
+}
+
+function closeSiteNotesModal() {
+    document.getElementById('siteNotesModal').style.display = 'none';
+    currentNotesSiteId = null;
+}
+
+async function saveSiteNotes() {
+    if (!currentNotesSiteId) return;
+    
+    const contentElement = document.getElementById('siteNotesContent');
+    const content = contentElement.innerHTML;
+    const site = sites.find(s => s.id === currentNotesSiteId);
+    
+    if (!site) return;
+    
+    try {
+        // Mettre à jour les notes
+        site.notes = content;
+        
+        // Sauvegarder
+        if (db && isAuthenticated) {
+            // Mettre à jour le site avec les notes
+            const updatedSite = await db.saveSite({ 
+                id: currentNotesSiteId, 
+                ...site, 
+                notes: content 
+            });
+            
+            // Mettre à jour le site local
+            const siteIndex = sites.findIndex(s => s.id === currentNotesSiteId);
+            if (siteIndex !== -1) {
+                sites[siteIndex] = updatedSite;
+            }
+            
+            console.log('📝 Notes sauvegardées sur Supabase');
+        } else {
+            await saveData();
+            console.log('📝 Notes sauvegardées en localStorage');
+        }
+        
+        // Rafraîchir l'affichage
+        renderSites();
+        closeSiteNotesModal();
+        
+    } catch (error) {
+        console.error('❌ Erreur sauvegarde notes:', error);
+        alert('Erreur lors de la sauvegarde des notes: ' + error.message);
+    }
+}
+
+// Initialiser la barre d'outils WYSIWYG
+function initializeWysiwygToolbar() {
+    const toolbar = document.querySelector('.wysiwyg-toolbar');
+    const editor = document.getElementById('siteNotesContent');
+    
+    if (!toolbar || !editor) return;
+    
+    // Ajouter les événements aux boutons de la barre d'outils
+    toolbar.addEventListener('click', function(e) {
+        if (e.target.closest('.toolbar-btn')) {
+            e.preventDefault();
+            const button = e.target.closest('.toolbar-btn');
+            const command = button.dataset.command;
+            
+            if (command === 'createLink') {
+                const url = prompt('Entrez l\'URL du lien:');
+                if (url) {
+                    document.execCommand('createLink', false, url);
+                }
+            } else if (command === 'formatBlock') {
+                const value = button.dataset.value;
+                document.execCommand('formatBlock', false, value);
+            } else {
+                document.execCommand(command, false, null);
+            }
+            
+            // Mettre à jour l'état des boutons
+            updateToolbarState();
+        }
+    });
+    
+    
+    // Mettre à jour l'état de la barre d'outils lors de la sélection
+    editor.addEventListener('keyup', updateToolbarState);
+    editor.addEventListener('mouseup', updateToolbarState);
+    editor.addEventListener('focus', updateToolbarState);
+}
+
+// Mettre à jour l'état des boutons de la barre d'outils
+function updateToolbarState() {
+    const toolbar = document.querySelector('.wysiwyg-toolbar');
+    if (!toolbar) return;
+    
+    const buttons = toolbar.querySelectorAll('.toolbar-btn');
+    buttons.forEach(button => {
+        const command = button.dataset.command;
+        let isActive = false;
+        
+        switch (command) {
+            case 'bold':
+                isActive = document.queryCommandState('bold');
+                break;
+            case 'italic':
+                isActive = document.queryCommandState('italic');
+                break;
+            case 'underline':
+                isActive = document.queryCommandState('underline');
+                break;
+            case 'insertUnorderedList':
+                isActive = document.queryCommandState('insertUnorderedList');
+                break;
+            case 'insertOrderedList':
+                isActive = document.queryCommandState('insertOrderedList');
+                break;
+            case 'formatBlock':
+                const currentBlock = document.queryCommandValue('formatBlock');
+                const expectedValue = button.dataset.value;
+                isActive = currentBlock === expectedValue;
+                break;
+        }
+        
+        button.classList.toggle('active', isActive);
+    });
+    
+}
+
+// Forcer le mode admin temporairement
+function forceAdminMode() {
+    console.log('🔧 Activation du mode admin forcé');
+    
+    // Activer l'édition
+    const contentElement = document.getElementById('siteNotesContent');
+    const saveBtn = document.getElementById('saveNotesBtn');
+    const forceAdminBtn = document.getElementById('forceAdminBtn');
+    
+    contentElement.contentEditable = true;
+    saveBtn.style.display = 'inline-block';
+    forceAdminBtn.style.display = 'none';
+    
+    // Initialiser la barre d'outils
+    initializeWysiwygToolbar();
+    
+    // Focus sur l'éditeur
+    contentElement.focus();
+    
+    console.log('✅ Mode admin activé - vous pouvez maintenant éditer les notes');
+}
+
 async function saveSite(e) {
     e.preventDefault();
 
@@ -2502,6 +3076,9 @@ async function saveSite(e) {
         return;
     }
 
+    // Préserver les notes existantes lors de la modification
+    const existingSite = editingSiteId ? sites.find(s => s.id === editingSiteId) : null;
+    
     const siteData = {
         url,
         type,
@@ -2509,7 +3086,8 @@ async function saveSite(e) {
         traffic,
         trustFlow,
         ttf,
-        follow
+        follow,
+        notes: existingSite ? existingSite.notes || '' : '' // Préserver les notes existantes
     };
 
     try {
@@ -2589,6 +3167,23 @@ function renderSites() {
     const sitesCount = document.getElementById('sitesCount');
     if (!tbody) return;
 
+    // Vérifier l'authentification
+    if (!isAuthenticated) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="10" style="text-align: center; padding: 3rem; color: #64748b;">
+                    <i class="fas fa-lock" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                    <p>Accès restreint - Connexion requise</p>
+                    <button class="btn btn-primary" onclick="switchPage('homepage')" style="margin-top: 1rem;">
+                        <i class="fas fa-sign-in-alt"></i> Se connecter
+                    </button>
+                </td>
+            </tr>
+        `;
+        sitesCount.textContent = '0';
+        return;
+    }
+
     const filteredSites = getFilteredSites();
     sitesCount.textContent = filteredSites.length;
 
@@ -2597,7 +3192,7 @@ function renderSites() {
     if (filteredSites.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="9" style="text-align: center; padding: 3rem; color: #64748b;">
+                <td colspan="10" style="text-align: center; padding: 3rem; color: #64748b;">
                     <i class="fas fa-database" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.5;"></i>
                     <p>Aucun site dans le catalogue</p>
                 </td>
@@ -2633,6 +3228,12 @@ function renderSites() {
             <td><span class="ttf-tag ttf-${site.ttf.toLowerCase()}">${site.ttf}</span></td>
             <td>${site.follow}</td>
             <td>
+                <button class="notes-btn" onclick="toggleSiteNotes(${site.id})" title="Voir les notes">
+                    <i class="fas fa-sticky-note"></i>
+                    ${site.notes ? '<i class="fas fa-eye notes-indicator"></i>' : ''}
+                </button>
+            </td>
+            <td>
                 <div class="table-actions">
                     <button class="action-btn edit" onclick="editSite(${site.id})" title="Modifier">
                         <i class="fas fa-edit"></i>
@@ -2645,12 +3246,6 @@ function renderSites() {
         `;
         tbody.appendChild(row);
     });
-    
-    // Afficher le message d'accès restreint si l'utilisateur n'est pas connecté
-    if (!isAuthenticated) {
-        showCatalogRestricted();
-    }
-    // Si l'utilisateur est connecté, le contenu normal du catalogue s'affiche automatiquement
 }
 
 function getTrustFlowClass(trustFlow) {
@@ -3629,10 +4224,12 @@ async function saveData() {
             console.error('❌ Erreur sauvegarde Supabase:', error);
             // Fallback vers localStorage
             saveDataToLocalStorage();
+            return false;
         }
     } else {
         // Mode localStorage
         saveDataToLocalStorage();
+        return true;
     }
 }
 
@@ -3673,15 +4270,13 @@ async function loadData() {
         }
     }
     
-    // Si pas authentifié, on ne charge que les sites publics depuis localStorage
+    // Si pas authentifié, ne pas charger de données
     if (!isAuthenticated) {
-        console.log('⚠️ Utilisateur non authentifié, chargement sites publics uniquement');
-        const savedSites = localStorage.getItem('ninjalinking-sites');
-        if (savedSites) {
-            sites = JSON.parse(savedSites);
-        }
+        console.log('⚠️ Utilisateur non authentifié, pas de chargement de données');
+        sites = [];
         projects = [];
         renderSites();
+        renderProjects();
         return;
     }
     
@@ -3716,6 +4311,13 @@ async function loadData() {
     } else {
         sites = [];
     }
+    
+    // Mettre à jour l'affichage
+    setTimeout(() => {
+        renderProjects();
+        renderSites();
+        updateProjectStats();
+    }, 100);
 }
 
 // Fermer les modals en cliquant à l'extérieur
@@ -4209,34 +4811,22 @@ async function saveEditedSpot(e) {
     // Rafraîchir l'affichage
     renderProjectSpots();
     
+    // Mettre à jour la jauge de progression si nécessaire
+    const currentProject = projects.find(p => p.id === currentProjectId);
+    if (currentProject) {
+        if (currentProject.publicationGoal && currentProject.publicationGoal > 0) {
+            updateProgressGauge(currentProject);
+        } else {
+            updateProgressGaugeWithoutGoal(currentProject);
+        }
+    }
+    
     // Fermer la modal
     closeEditSpotModal();
     
     showNotification('✅ Spot modifié avec succès', 'success');
 }
 
-// Initialisation
-document.addEventListener('DOMContentLoaded', async function() {
-    // Initialiser Supabase en premier
-    await initSupabase();
-    
-    // Configurer les event listeners d'authentification
-    setupAuthEventListeners();
-    
-    // Charger les données (sites publics toujours disponibles)
-    await loadData();
-    
-    // Rendre l'interface
-    renderProjects();
-    updateProjectStats();
-    renderSites();
-    setupCheckboxListeners();
-    
-    // Ajouter un bouton de configuration Supabase si pas configuré
-    if (!isSupabaseConfigured) {
-        addSupabaseConfigButton();
-    }
-});
 
 // Configurer les event listeners d'authentification
 function setupAuthEventListeners() {
@@ -4269,40 +4859,5 @@ function addSupabaseConfigButton() {
         configBtn.style.marginLeft = 'auto';
         configBtn.onclick = configureSupabase;
         header.appendChild(configBtn);
-    }
-}
-
-// Fonction pour actualiser les sites depuis Supabase
-async function refreshSitesFromSupabase() {
-    if (!isSupabaseConfigured || !db) {
-        alert('⚠️ Supabase non configuré. Utilisation des données locales.');
-        return;
-    }
-
-    try {
-        console.log('🔄 Actualisation des sites depuis Supabase...');
-        
-        // Charger depuis Supabase
-        sites = await db.getSites();
-        console.log(`✅ ${sites.length} sites chargés depuis Supabase`);
-        
-        // Mettre à jour l'affichage
-        renderSites();
-        setupCheckboxListeners();
-        
-        // Notification visuelle
-        const btn = event.target.closest('button');
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<i class="fas fa-check"></i> Actualisé';
-        btn.style.background = '#28a745';
-        
-        setTimeout(() => {
-            btn.innerHTML = originalText;
-            btn.style.background = '';
-        }, 2000);
-        
-    } catch (error) {
-        console.error('❌ Erreur actualisation sites:', error);
-        alert('Erreur lors de l\'actualisation: ' + error.message);
     }
 }

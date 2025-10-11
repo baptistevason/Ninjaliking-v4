@@ -213,6 +213,7 @@ class SupabaseService {
                 trust_flow: project.trustFlow || 0,
                 ttf: project.ttf || 'Généraliste',
                 referring_domains: project.referringDomains || 0,
+                publication_goal: project.publicationGoal || 0,
                 keywords: project.keywords || [],
                 spots: project.spots || []
             };
@@ -230,6 +231,7 @@ class SupabaseService {
                 ...data,
                 trustFlow: data.trust_flow,
                 referringDomains: data.referring_domains,
+                publicationGoal: data.publication_goal || 0,
                 createdAt: data.created_at,
                 updatedAt: data.updated_at
             };
@@ -260,6 +262,7 @@ class SupabaseService {
                 ...project,
                 trustFlow: project.trust_flow,
                 referringDomains: project.referring_domains,
+                publicationGoal: project.publication_goal || 0,
                 createdAt: project.created_at,
                 updatedAt: project.updated_at,
                 keywords: project.keywords || [],
@@ -287,6 +290,7 @@ class SupabaseService {
                 trust_flow: project.trustFlow || 0,
                 ttf: project.ttf || 'Généraliste',
                 referring_domains: project.referringDomains || 0,
+                publication_goal: project.publicationGoal || 0,
                 keywords: project.keywords || [],
                 spots: project.spots || [],
                 updated_at: new Date().toISOString()
@@ -306,6 +310,7 @@ class SupabaseService {
                 ...data,
                 trustFlow: data.trust_flow,
                 referringDomains: data.referring_domains,
+                publicationGoal: data.publication_goal || 0,
                 createdAt: data.created_at,
                 updatedAt: data.updated_at
             };
@@ -376,6 +381,7 @@ class SupabaseService {
                 trust_flow: site.trustFlow || 0,
                 ttf: site.ttf || 'Généraliste',
                 follow: site.follow || 'Oui',
+                notes: site.notes || '',
                 created_by: this.currentUser.id
             };
 
@@ -391,6 +397,7 @@ class SupabaseService {
             return {
                 ...data,
                 trustFlow: data.trust_flow,
+                notes: data.notes || '',
                 createdAt: data.created_at
             };
         } catch (error) {
@@ -428,6 +435,7 @@ class SupabaseService {
             return data.map(site => ({
                 ...site,
                 trustFlow: site.trust_flow,
+                notes: site.notes || '',
                 createdAt: site.created_at
             }));
         } catch (error) {
@@ -451,6 +459,7 @@ class SupabaseService {
             return data.map(site => ({
                 ...site,
                 trustFlow: site.trust_flow,
+                notes: site.notes || '',
                 createdAt: site.created_at
             }));
         } catch (error) {
@@ -467,12 +476,11 @@ class SupabaseService {
         }
         
         try {
-            // Seul le créateur peut supprimer un site
+            // Les sites du catalogue sont publics, tout utilisateur authentifié peut les supprimer
             const { error } = await this.supabase
                 .from('sites')
                 .delete()
-                .eq('id', id)
-                .eq('created_by', this.currentUser.id);
+                .eq('id', id);
 
             if (error) throw error;
             return true;
@@ -490,12 +498,11 @@ class SupabaseService {
         }
         
         try {
-            // Seul le créateur peut supprimer des sites
+            // Les sites du catalogue sont publics, tout utilisateur authentifié peut les supprimer
             const { error } = await this.supabase
                 .from('sites')
                 .delete()
-                .in('id', ids)
-                .eq('created_by', this.currentUser.id);
+                .in('id', ids);
 
             if (error) throw error;
             return true;
@@ -522,6 +529,7 @@ class SupabaseService {
             return data.map(site => ({
                 ...site,
                 trustFlow: site.trust_flow,
+                notes: site.notes || '',
                 createdAt: site.created_at
             }));
         } catch (error) {

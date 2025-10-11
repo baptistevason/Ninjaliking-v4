@@ -12,6 +12,7 @@ CREATE TABLE projects (
     trust_flow INTEGER DEFAULT 0 CHECK (trust_flow >= 0 AND trust_flow <= 100),
     ttf VARCHAR(100) DEFAULT 'Généraliste',
     referring_domains INTEGER DEFAULT 0,
+    publication_goal INTEGER DEFAULT 0,
     keywords JSONB DEFAULT '[]'::jsonb,
     spots JSONB DEFAULT '[]'::jsonb,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
@@ -28,6 +29,7 @@ CREATE TABLE sites (
     trust_flow INTEGER DEFAULT 0 CHECK (trust_flow >= 0 AND trust_flow <= 100),
     ttf VARCHAR(100) DEFAULT 'Généraliste',
     follow VARCHAR(10) DEFAULT 'Oui' CHECK (follow IN ('Oui', 'Non')),
+    notes TEXT DEFAULT '',
     created_by UUID REFERENCES auth.users(id) ON DELETE SET NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
@@ -36,10 +38,12 @@ CREATE TABLE sites (
 CREATE INDEX idx_projects_user_id ON projects(user_id);
 CREATE INDEX idx_projects_created_at ON projects(created_at);
 CREATE INDEX idx_projects_objective ON projects(objective);
+CREATE INDEX idx_projects_publication_goal ON projects(publication_goal) WHERE publication_goal > 0;
 CREATE INDEX idx_sites_type ON sites(type);
 CREATE INDEX idx_sites_theme ON sites(theme);
 CREATE INDEX idx_sites_url ON sites(url);
 CREATE INDEX idx_sites_created_by ON sites(created_by);
+CREATE INDEX idx_sites_notes ON sites(notes) WHERE notes IS NOT NULL AND notes != '';
 
 -- 4. RLS (Row Level Security) - Sécurité par utilisateur
 -- Projets : privés par utilisateur

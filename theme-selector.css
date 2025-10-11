@@ -41,15 +41,6 @@
     transform: scale(1.05);
 }
 
-/* Thème automne */
-.theme-autumn {
-    background: linear-gradient(135deg, #d2691e 0%, #cd853f 50%, #daa520 100%);
-    color: white;
-}
-
-.theme-autumn:hover {
-    background: linear-gradient(135deg, #b8860b 0%, #d2691e 50%, #ff8c00 100%);
-}
 
 /* Thème blanc */
 .theme-white {
@@ -142,12 +133,3 @@
     background: rgba(0, 0, 0, 0.9);
 }
 
-/* Thème automne pour le sélecteur */
-.autumn-theme .theme-selector {
-    background: rgba(210, 105, 30, 0.95);
-    border: 1px solid rgba(184, 134, 11, 0.3);
-}
-
-.autumn-theme .theme-tooltip {
-    background: rgba(139, 69, 19, 0.9);
-}

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Navigation</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f8fafc;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .nav-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0.75rem 1.5rem;
+            margin: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .nav-btn:hover {
+            background: #2563eb;
+        }
+        .nav-btn.active {
+            background: #1d4ed8;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+        }
+        .page {
+            display: none;
+            padding: 2rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .page.active {
+            display: block;
+        }
+        .status {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .success { background: #d1fae5; color: #065f46; }
+        .error { background: #fee2e2; color: #991b1b; }
+        .info { background: #dbeafe; color: #1e40af; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test Navigation</h1>
+        
+        <div>
+            <h3>Boutons de Navigation :</h3>
+            <button class="nav-btn" data-page="ninjalinking">Ninja Linking</button>
+            <button class="nav-btn" data-page="projects">Projets</button>
+            <button class="nav-btn" data-page="catalog">Catalogue</button>
+            <button class="nav-btn" data-page="serp">SERP</button>
+            <button class="nav-btn" data-page="ereputation">E-Réputation</button>
+            <button class="nav-btn" data-page="ia">IA</button>
+        </div>
+        
+        <div>
+            <h3>Pages :</h3>
+            <div id="ninjalinking-page" class="page active">
+                <h4>🤖 Page Ninja Linking</h4>
+                <p>Contenu de la page Ninja Linking...</p>
+            </div>
+            
+            <div id="projects-page" class="page">
+                <h4>📊 Page Projets</h4>
+                <p>Contenu de la page Projets...</p>
+            </div>
+            
+            <div id="catalog-page" class="page">
+                <h4>📚 Page Catalogue</h4>
+                <p>Contenu de la page Catalogue...</p>
+            </div>
+            
+            <div id="serp-page" class="page">
+                <h4>🔍 Page SERP</h4>
+                <p>Contenu de la page SERP...</p>
+            </div>
+            
+            <div id="ereputation-page" class="page">
+                <h4>⭐ Page E-Réputation</h4>
+                <p>Contenu de la page E-Réputation...</p>
+            </div>
+            
+            <div id="ia-page" class="page">
+                <h4>🧠 Page IA</h4>
+                <p>Contenu de la page IA...</p>
+            </div>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        // Variables globales
+        let isAuthenticated = false;
+        
+        // Fonction de changement de page
+        async function switchPage(pageId) {
+            console.log('🔄 Changement de page vers:', pageId);
+            showResult(`🔄 Changement de page vers: ${pageId}`, 'info');
+            
+            // Vérifier l'accès au catalogue pour les utilisateurs non connectés
+            if (pageId === 'catalog' && !isAuthenticated) {
+                console.log('🔒 Accès au catalogue refusé - utilisateur non connecté');
+                showResult('🔒 Accès au catalogue refusé - utilisateur non connecté', 'error');
+                alert('Vous devez être connecté pour accéder au catalogue.');
+                return;
+            }
+            
+            // Sauvegarder la page actuelle dans le localStorage
+            localStorage.setItem('currentPage', pageId);
+            
+            // Désactiver tous les boutons de navigation
+            const allNavButtons = document.querySelectorAll('.nav-btn');
+            console.log(`🔘 Désactivation de ${allNavButtons.length} boutons de navigation`);
+            allNavButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Masquer toutes les pages
+            const allPages = document.querySelectorAll('.page');
+            console.log(`📄 Masquage de ${allPages.length} pages`);
+            allPages.forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Activer le bouton et la page correspondants
+            const activeBtn = document.querySelector(`[data-page="${pageId}"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+                console.log('✅ Bouton activé:', activeBtn.textContent, activeBtn);
+                showResult(`✅ Bouton activé: ${activeBtn.textContent}`, 'success');
+            } else {
+                console.error('❌ Bouton non trouvé pour:', pageId);
+                showResult(`❌ Bouton non trouvé pour: ${pageId}`, 'error');
+            }
+
+            const activePage = document.getElementById(`${pageId}-page`);
+            if (activePage) {
+                activePage.classList.add('active');
+                console.log('✅ Page activée:', activePage.id, activePage);
+                showResult(`✅ Page activée: ${activePage.id}`, 'success');
+            } else {
+                console.error('❌ Page non trouvée pour:', `${pageId}-page`);
+                showResult(`❌ Page non trouvée pour: ${pageId}-page`, 'error');
+            }
+            
+            console.log('✅ Changement de page terminé');
+            showResult('✅ Changement de page terminé', 'success');
+        }
+        
+        // Fonction pour afficher les résultats
+        function showResult(message, type) {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.textContent = message;
+            results.appendChild(div);
+            
+            // Garder seulement les 10 derniers résultats
+            const statuses = results.querySelectorAll('.status');
+            if (statuses.length > 10) {
+                statuses[0].remove();
+            }
+        }
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Initialisation du test de navigation...');
+            
+            // Navigation
+            const navButtons = document.querySelectorAll('.nav-btn');
+            console.log(`📱 Boutons de navigation trouvés: ${navButtons.length}`);
+            showResult(`📱 Boutons de navigation trouvés: ${navButtons.length}`, 'info');
+            
+            navButtons.forEach((btn, index) => {
+                console.log(`🔗 Bouton ${index + 1}:`, btn.dataset.page, btn.textContent);
+                showResult(`🔗 Bouton ${index + 1}: ${btn.dataset.page} - ${btn.textContent}`, 'info');
+                
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('🖱️ Clic sur le bouton:', btn.dataset.page);
+                    showResult(`🖱️ Clic sur le bouton: ${btn.dataset.page}`, 'info');
+                    switchPage(btn.dataset.page);
+                });
+            });
+            
+            // Bouton pour tester l'authentification
+            const authBtn = document.createElement('button');
+            authBtn.textContent = '🔐 Toggle Auth';
+            authBtn.style.cssText = `
+                background: #f59e0b;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                padding: 0.75rem 1.5rem;
+                margin: 0.5rem;
+                cursor: pointer;
+            `;
+            authBtn.addEventListener('click', () => {
+                isAuthenticated = !isAuthenticated;
+                showResult(`🔐 Authentification: ${isAuthenticated ? 'Connecté' : 'Déconnecté'}`, isAuthenticated ? 'success' : 'error');
+            });
+            document.querySelector('.container').appendChild(authBtn);
+            
+            console.log('✅ Test de navigation initialisé');
+            showResult('✅ Test de navigation initialisé', 'success');
+        });
+    </script>
+</body>
+</html>

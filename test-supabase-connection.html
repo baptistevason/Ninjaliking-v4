@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Connexion Supabase</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f8fafc;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .status {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+        .error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+        .info { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+        button:hover { background: #2563eb; }
+        input, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            margin: 0.5rem 0;
+        }
+        .credentials {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Test Connexion Supabase</h1>
+        
+        <div class="credentials">
+            <h3>Credentials par défaut :</h3>
+            <p><strong>URL :</strong> https://kckdjgedbjjuhmcqcmpe.supabase.co</p>
+            <p><strong>Clé :</strong> eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtja2RqZ2VkYmpqdWhtY3FjbXBlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxMjQzMzMsImV4cCI6MjA3MzcwMDMzM30.-TUGbwjk_8OUGZKJdnU5CqyJHI8wm4o1j1LdzRnSKhg</p>
+        </div>
+        
+        <div>
+            <label for="supabaseUrl">URL Supabase :</label>
+            <input type="url" id="supabaseUrl" value="https://kckdjgedbjjuhmcqcmpe.supabase.co">
+            
+            <label for="supabaseKey">Clé publique (anon key) :</label>
+            <textarea id="supabaseKey" rows="3">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtja2RqZ2VkYmpqdWhtY3FjbXBlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxMjQzMzMsImV4cCI6MjA3MzcwMDMzM30.-TUGbwjk_8OUGZKJdnU5CqyJHI8wm4o1j1LdzRnSKhg</textarea>
+            
+            <button onclick="testConnection()">🧪 Tester la connexion</button>
+            <button onclick="testTables()">📊 Tester les tables</button>
+            <button onclick="clearStorage()">🗑️ Nettoyer le localStorage</button>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        let supabase = null;
+        
+        async function testConnection() {
+            const url = document.getElementById('supabaseUrl').value.trim();
+            const key = document.getElementById('supabaseKey').value.trim();
+            const results = document.getElementById('results');
+            
+            if (!url || !key) {
+                showResult('❌ Veuillez remplir tous les champs', 'error');
+                return;
+            }
+            
+            try {
+                showResult('🔄 Test de connexion en cours...', 'info');
+                
+                // Créer l'instance Supabase
+                supabase = window.supabase.createClient(url, key);
+                
+                // Test de connexion basique
+                const { data, error } = await supabase
+                    .from('projects')
+                    .select('id')
+                    .limit(1);
+                
+                if (error) {
+                    showResult(`❌ Erreur de connexion : ${error.message}`, 'error');
+                    console.error('Erreur Supabase:', error);
+                } else {
+                    showResult('✅ Connexion Supabase réussie !', 'success');
+                    
+                    // Sauvegarder les credentials
+                    localStorage.setItem('supabase-url', url);
+                    localStorage.setItem('supabase-anon-key', key);
+                    showResult('💾 Credentials sauvegardés dans localStorage', 'info');
+                }
+                
+            } catch (error) {
+                showResult(`❌ Erreur : ${error.message}`, 'error');
+                console.error('Erreur:', error);
+            }
+        }
+        
+        async function testTables() {
+            if (!supabase) {
+                showResult('❌ Veuillez d\'abord tester la connexion', 'error');
+                return;
+            }
+            
+            try {
+                showResult('🔄 Test des tables en cours...', 'info');
+                
+                // Test table projects
+                const { data: projects, error: projectsError } = await supabase
+                    .from('projects')
+                    .select('*')
+                    .limit(1);
+                
+                if (projectsError) {
+                    showResult(`❌ Erreur table projects : ${projectsError.message}`, 'error');
+                } else {
+                    showResult('✅ Table projects accessible', 'success');
+                }
+                
+                // Test table sites
+                const { data: sites, error: sitesError } = await supabase
+                    .from('sites')
+                    .select('*')
+                    .limit(1);
+                
+                if (sitesError) {
+                    showResult(`❌ Erreur table sites : ${sitesError.message}`, 'error');
+                } else {
+                    showResult('✅ Table sites accessible', 'success');
+                }
+                
+            } catch (error) {
+                showResult(`❌ Erreur : ${error.message}`, 'error');
+            }
+        }
+        
+        function clearStorage() {
+            localStorage.removeItem('supabase-url');
+            localStorage.removeItem('supabase-anon-key');
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('currentUser');
+            showResult('🗑️ localStorage nettoyé', 'info');
+        }
+        
+        function showResult(message, type) {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.textContent = message;
+            results.appendChild(div);
+        }
+        
+        // Charger les credentials sauvegardés
+        window.addEventListener('load', () => {
+            const savedUrl = localStorage.getItem('supabase-url');
+            const savedKey = localStorage.getItem('supabase-anon-key');
+            
+            if (savedUrl) {
+                document.getElementById('supabaseUrl').value = savedUrl;
+            }
+            if (savedKey) {
+                document.getElementById('supabaseKey').value = savedKey;
+            }
+        });
+    </script>
+</body>
+</html>
