@@ -196,3 +196,4 @@ console.log('- fixSupabaseConnection() : Réparation complète');
 console.log('- diagnoseSupabase() : Diagnostic de la connexion');
 console.log('- cleanSupabaseCache() : Nettoyage du cache');
 console.log('- testSupabaseConnection() : Test de connexion');
+

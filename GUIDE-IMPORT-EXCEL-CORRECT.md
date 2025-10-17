@@ -87,3 +87,4 @@ Le système valide automatiquement :
 - `exemple-catalogue-import.csv` : Modèle pour le catalogue
 - `exemple-spots-projet-import.csv` : Modèle pour les spots de projet
 - `GUIDE-IMPORT-EXCEL-CORRECT.md` : Ce guide
+

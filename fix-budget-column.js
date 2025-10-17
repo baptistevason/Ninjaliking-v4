@@ -210,3 +210,4 @@ console.log('✅ Script de correction chargé');
 console.log('💡 Fonctions disponibles:');
 console.log('- fixBudgetColumn() : Correction complète');
 console.log('- diagnoseBudgetIssue() : Diagnostic du problème');
+

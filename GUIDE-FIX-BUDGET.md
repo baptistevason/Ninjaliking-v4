@@ -103,3 +103,4 @@ Après la correction :
 - ✅ Les budgets sont sauvegardés dans Supabase
 - ✅ Les budgets persistent après rechargement
 - ✅ L'interface affiche correctement les budgets
+

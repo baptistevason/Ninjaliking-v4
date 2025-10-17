@@ -256,3 +256,4 @@ console.log('💡 Fonctions disponibles:');
 console.log('- debugBudgetIssue() : Diagnostic complet');
 console.log('- testServiceSaveProject() : Test du service');
 console.log('- checkLocalStorageData() : Vérifier localStorage');
+
