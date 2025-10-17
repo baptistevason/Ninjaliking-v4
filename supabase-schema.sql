@@ -13,6 +13,7 @@ CREATE TABLE projects (
     ttf VARCHAR(100) DEFAULT 'Généraliste',
     referring_domains INTEGER DEFAULT 0,
     publication_goal INTEGER DEFAULT 0,
+    budget DECIMAL(10,2) DEFAULT 0.00,
     keywords JSONB DEFAULT '[]'::jsonb,
     spots JSONB DEFAULT '[]'::jsonb,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
@@ -39,6 +40,7 @@ CREATE INDEX idx_projects_user_id ON projects(user_id);
 CREATE INDEX idx_projects_created_at ON projects(created_at);
 CREATE INDEX idx_projects_objective ON projects(objective);
 CREATE INDEX idx_projects_publication_goal ON projects(publication_goal) WHERE publication_goal > 0;
+CREATE INDEX idx_projects_budget ON projects(budget) WHERE budget > 0;
 CREATE INDEX idx_sites_type ON sites(type);
 CREATE INDEX idx_sites_theme ON sites(theme);
 CREATE INDEX idx_sites_url ON sites(url);

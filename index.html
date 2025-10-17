@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RéputaLink - Outil de Link Building</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="stylesheet" href="ninja-linking-styles.css?v=20241230">
-    <link rel="stylesheet" href="white-theme.css?v=20241230">
-    <link rel="stylesheet" href="autumn-theme.css?v=20241230">
-    <link rel="stylesheet" href="theme-selector.css?v=20241230">
+    <link rel="stylesheet" href="ninja-linking-styles.css">
+    <link rel="stylesheet" href="white-theme.css">
+    <link rel="stylesheet" href="autumn-theme.css">
+    <link rel="stylesheet" href="theme-selector.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="white-theme">
@@ -1285,7 +1285,7 @@
                         <label for="projectKeywords">Mots-clés à travailler</label>
                         <div class="keywords-container">
                             <div class="keywords-input-container">
-                                <input type="text" id="keywordInput" placeholder="Ajouter un mot-clé...">
+                                <input type="text" id="projectKeywordInput" placeholder="Ajouter un mot-clé...">
                                 <button type="button" class="btn btn-sm btn-primary" onclick="addKeyword()">
                                     <i class="fas fa-plus"></i>
                                 </button>
@@ -1808,8 +1808,8 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="supabase-service.js?v=20241230"></script>
-    <script src="ninja-linking-script.js?v=20241230"></script>
+    <script src="supabase-service.js"></script>
+    <script src="ninja-linking-script.js"></script>
     <script>
         // Configuration automatique de l'URL de redirection au chargement
         document.addEventListener('DOMContentLoaded', function() {
@@ -1824,126 +1824,7 @@
             } else {
                 console.log('🔗 URL de redirection actuelle:', currentRedirectUrl);
             }
-            
-            // Initialiser le sélecteur de thème
-            initThemeSelector();
-            
-            // Vérifier l'état d'authentification et afficher la page appropriée
-            checkAuthState();
         });
-        
-        // Fonction pour vérifier l'état d'authentification
-        function checkAuthState() {
-            const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-            const rememberMe = localStorage.getItem('rememberMe') === 'true';
-            const savedUser = localStorage.getItem('currentUser');
-            
-            console.log('🔍 Vérification de l\'état d\'authentification:', {
-                isAuthenticated,
-                rememberMe,
-                savedUser: savedUser ? 'présent' : 'absent'
-            });
-            
-            if (isAuthenticated && savedUser) {
-                // Utilisateur connecté, afficher l'app principale
-                console.log('✅ Utilisateur authentifié, affichage de l\'app principale');
-                document.getElementById('homepage-container').style.display = 'none';
-                document.getElementById('auth-container').style.display = 'none';
-                document.getElementById('main-app').style.display = 'block';
-                
-                // Restaurer les variables globales
-                window.isAuthenticated = true;
-                window.currentUser = JSON.parse(savedUser);
-                
-                // Charger les données
-                if (typeof loadData === 'function') {
-                    loadData();
-                }
-            } else if (rememberMe && savedUser) {
-                // "Se souvenir de moi" activé, afficher l'app principale
-                console.log('✅ Se souvenir de moi activé, affichage de l\'app principale');
-                document.getElementById('homepage-container').style.display = 'none';
-                document.getElementById('auth-container').style.display = 'none';
-                document.getElementById('main-app').style.display = 'block';
-                
-                // Restaurer les variables globales
-                window.isAuthenticated = true;
-                window.currentUser = JSON.parse(savedUser);
-                
-                // Charger les données
-                if (typeof loadData === 'function') {
-                    loadData();
-                }
-            } else {
-                // Utilisateur non connecté, afficher la page d'accueil
-                console.log('❌ Utilisateur non connecté, affichage de la page d\'accueil');
-                showHomepage();
-            }
-        }
-        
-        // Fonction pour afficher la page d'accueil
-        function showHomepage() {
-            document.getElementById('homepage-container').style.display = 'block';
-            document.getElementById('auth-container').style.display = 'none';
-            document.getElementById('main-app').style.display = 'none';
-        }
-        
-        // Fonction pour afficher le formulaire d'authentification
-        function showAuthForm() {
-            document.getElementById('homepage-container').style.display = 'none';
-            document.getElementById('auth-container').style.display = 'flex';
-            document.getElementById('main-app').style.display = 'none';
-        }
-        
-        // Fonction pour afficher la démo (optionnel)
-        function showDemo() {
-            // Pour l'instant, rediriger vers l'authentification
-            showAuthForm();
-        }
-        
-        // Gestionnaire du sélecteur de thème
-        function initThemeSelector() {
-            const themeSelector = document.getElementById('themeSelector');
-            const themeOptions = themeSelector.querySelectorAll('.theme-option');
-            const body = document.body;
-            
-            // Récupérer le thème sauvegardé ou utiliser blanc par défaut
-            const savedTheme = localStorage.getItem('selected-theme') || 'white';
-            applyTheme(savedTheme);
-            
-            // Ajouter les événements de clic
-            themeOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    const theme = this.getAttribute('data-theme');
-                    applyTheme(theme);
-                    
-                    // Sauvegarder le thème
-                    localStorage.setItem('selected-theme', theme);
-                    
-                    // Mettre à jour l'état actif
-                    themeOptions.forEach(opt => opt.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
-        }
-        
-        // Appliquer un thème
-        function applyTheme(theme) {
-            const body = document.body;
-            
-            // Supprimer toutes les classes de thème
-            body.classList.remove('autumn-theme', 'white-theme');
-            
-            // Ajouter la classe du thème sélectionné
-            body.classList.add(theme + '-theme');
-            
-            console.log('🎨 Thème appliqué:', theme);
-        }
     </script>
-    
-    <!-- SheetJS pour la lecture des fichiers Excel -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="supabase-service.js"></script>
-    <script src="ninja-linking-script.js"></script>
 </body>
 </html>

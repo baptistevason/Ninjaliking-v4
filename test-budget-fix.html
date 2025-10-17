@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 Test Correction Budget</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .status { padding: 15px; margin: 15px 0; border-radius: 5px; font-weight: bold; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        button { background: #007bff; color: white; border: none; padding: 15px 30px; border-radius: 5px; cursor: pointer; margin: 10px; font-size: 16px; }
+        button:hover { background: #0056b3; }
+        button.success { background: #28a745; }
+        button.success:hover { background: #218838; }
+        .data-item { margin: 10px 0; padding: 10px; background: #f8f9fa; border-radius: 3px; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test Correction Budget</h1>
+        
+        <div id="status" class="status info">
+            Test de la correction du problème de budget...
+        </div>
+        
+        <div class="data-item">
+            <h3>🔧 Corrections Apportées</h3>
+            <ul>
+                <li>✅ Ajout du champ <code>budget</code> dans <code>getProjects()</code></li>
+                <li>✅ Ajout du champ <code>budget</code> dans <code>updateProject()</code></li>
+                <li>✅ Le champ <code>budget</code> était déjà présent dans <code>saveProject()</code></li>
+            </ul>
+        </div>
+        
+        <button onclick="testBudgetSave()" class="success">🧪 Tester Sauvegarde Budget</button>
+        <button onclick="testBudgetLoad()">📥 Tester Chargement Budget</button>
+        <button onclick="testBudgetUpdate()">🔄 Tester Mise à Jour Budget</button>
+        <button onclick="testFullWorkflow()">🔄 Test Workflow Complet</button>
+        
+        <div id="results" style="margin-top: 20px;"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-service.js"></script>
+    
+    <script>
+        let db = null;
+        
+        function log(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+        
+        function addResult(message) {
+            const div = document.getElementById('results');
+            const item = document.createElement('div');
+            item.className = 'data-item';
+            item.innerHTML = message;
+            div.appendChild(item);
+        }
+        
+        async function initSupabase() {
+            try {
+                const defaultUrl = 'https://kckdjgedbjjuhmcqcmpe.supabase.co';
+                const defaultKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtja2RqZ2VkYmpqdWhtY3FjbXBlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxMjQzMzMsImV4cCI6MjA3MzcwMDMzM30.-TUGbwjk_8OUGZKJdnU5CqyJHI8wm4o1j1LdzRnSKhg';
+                
+                const supabaseUrl = localStorage.getItem('supabase-url') || defaultUrl;
+                const supabaseKey = localStorage.getItem('supabase-anon-key') || defaultKey;
+                
+                db = new SupabaseService();
+                await db.initialize(supabaseUrl, supabaseKey);
+                
+                log('✅ Supabase initialisé', 'success');
+                return true;
+            } catch (error) {
+                log('❌ Erreur initialisation Supabase: ' + error.message, 'error');
+                return false;
+            }
+        }
+        
+        async function testBudgetSave() {
+            log('🧪 Test de sauvegarde avec budget...', 'info');
+            
+            try {
+                if (!db) {
+                    await initSupabase();
+                }
+                
+                const testProject = {
+                    name: 'Test Budget Save ' + Date.now(),
+                    url: 'https://test-budget-save-' + Date.now() + '.com',
+                    objective: 'SEO',
+                    traffic: 1000,
+                    trustFlow: 50,
+                    ttf: 'Business',
+                    referringDomains: 10,
+                    publicationGoal: 5,
+                    budget: 3000.25,
+                    keywords: ['test', 'save'],
+                    spots: []
+                };
+                
+                addResult('<h4>🧪 Projet de test:</h4>');
+                addResult(`<pre>${JSON.stringify(testProject, null, 2)}</pre>`);
+                
+                const result = await db.saveProject(testProject);
+                
+                if (result) {
+                    addResult('✅ Projet sauvegardé avec succès !');
+                    addResult(`📊 ID: ${result.id}`);
+                    addResult(`💰 Budget sauvegardé: ${result.budget} €`);
+                    log('✅ Test de sauvegarde réussi', 'success');
+                    
+                    // Stocker l'ID pour les tests suivants
+                    window.testProjectId = result.id;
+                } else {
+                    addResult('❌ Échec de la sauvegarde');
+                    log('❌ Test de sauvegarde échoué', 'error');
+                }
+                
+            } catch (error) {
+                addResult(`❌ Erreur: ${error.message}`);
+                log('❌ Erreur test sauvegarde', 'error');
+            }
+        }
+        
+        async function testBudgetLoad() {
+            log('📥 Test de chargement avec budget...', 'info');
+            
+            try {
+                if (!db) {
+                    await initSupabase();
+                }
+                
+                const projects = await db.getProjects();
+                
+                addResult(`<h4>📥 Projets chargés (${projects.length}):</h4>`);
+                
+                if (projects && projects.length > 0) {
+                    projects.forEach(project => {
+                        const budgetDisplay = project.budget !== undefined ? `${project.budget} €` : 'Non défini';
+                        const style = project.budget !== undefined ? 'background: #d4edda;' : 'background: #fff3cd;';
+                        addResult(
+                            `<div style="${style} padding: 10px; margin: 5px 0; border-radius: 3px;">
+                                <strong>${project.name}</strong> (ID: ${project.id})<br>
+                                💰 Budget: ${budgetDisplay}
+                            </div>`
+                        );
+                    });
+                    log('✅ Test de chargement réussi', 'success');
+                } else {
+                    addResult('⚠️ Aucun projet trouvé');
+                    log('⚠️ Aucun projet trouvé', 'warning');
+                }
+                
+            } catch (error) {
+                addResult(`❌ Erreur: ${error.message}`);
+                log('❌ Erreur test chargement', 'error');
+            }
+        }
+        
+        async function testBudgetUpdate() {
+            log('🔄 Test de mise à jour avec budget...', 'info');
+            
+            try {
+                if (!db) {
+                    await initSupabase();
+                }
+                
+                if (!window.testProjectId) {
+                    addResult('❌ Aucun projet de test disponible. Exécutez d\'abord le test de sauvegarde.');
+                    return;
+                }
+                
+                const updatedProject = {
+                    name: 'Test Budget Updated ' + Date.now(),
+                    url: 'https://test-budget-updated-' + Date.now() + '.com',
+                    objective: 'E-Réputation',
+                    traffic: 2000,
+                    trustFlow: 75,
+                    ttf: 'Marketing',
+                    referringDomains: 20,
+                    publicationGoal: 10,
+                    budget: 5000.50,
+                    keywords: ['test', 'updated'],
+                    spots: []
+                };
+                
+                addResult('<h4>🔄 Projet de mise à jour:</h4>');
+                addResult(`<pre>${JSON.stringify(updatedProject, null, 2)}</pre>`);
+                
+                const result = await db.updateProject(window.testProjectId, updatedProject);
+                
+                if (result) {
+                    addResult('✅ Projet mis à jour avec succès !');
+                    addResult(`📊 ID: ${result.id}`);
+                    addResult(`💰 Budget mis à jour: ${result.budget} €`);
+                    log('✅ Test de mise à jour réussi', 'success');
+                } else {
+                    addResult('❌ Échec de la mise à jour');
+                    log('❌ Test de mise à jour échoué', 'error');
+                }
+                
+            } catch (error) {
+                addResult(`❌ Erreur: ${error.message}`);
+                log('❌ Erreur test mise à jour', 'error');
+            }
+        }
+        
+        async function testFullWorkflow() {
+            log('🔄 Test du workflow complet...', 'info');
+            
+            try {
+                if (!db) {
+                    await initSupabase();
+                }
+                
+                addResult('<h4>🔄 Workflow complet:</h4>');
+                
+                // 1. Créer un projet avec budget
+                addResult('1️⃣ Création d\'un projet avec budget...');
+                const testProject = {
+                    name: 'Test Workflow ' + Date.now(),
+                    url: 'https://test-workflow-' + Date.now() + '.com',
+                    objective: 'SEO',
+                    traffic: 1500,
+                    trustFlow: 60,
+                    ttf: 'Business',
+                    referringDomains: 15,
+                    publicationGoal: 8,
+                    budget: 4000.00,
+                    keywords: ['test', 'workflow'],
+                    spots: []
+                };
+                
+                const savedProject = await db.saveProject(testProject);
+                if (!savedProject) {
+                    addResult('❌ Échec de la création');
+                    return;
+                }
+                addResult(`✅ Projet créé (ID: ${savedProject.id}, Budget: ${savedProject.budget} €)`);
+                
+                // 2. Charger les projets
+                addResult('2️⃣ Chargement des projets...');
+                const projects = await db.getProjects();
+                const foundProject = projects.find(p => p.id === savedProject.id);
+                if (foundProject) {
+                    addResult(`✅ Projet trouvé (Budget: ${foundProject.budget} €)`);
+                } else {
+                    addResult('❌ Projet non trouvé après chargement');
+                    return;
+                }
+                
+                // 3. Mettre à jour le budget
+                addResult('3️⃣ Mise à jour du budget...');
+                const updatedProject = { ...foundProject, budget: 6000.75 };
+                const updatedResult = await db.updateProject(savedProject.id, updatedProject);
+                if (updatedResult) {
+                    addResult(`✅ Budget mis à jour (Nouveau: ${updatedResult.budget} €)`);
+                } else {
+                    addResult('❌ Échec de la mise à jour');
+                    return;
+                }
+                
+                // 4. Vérifier la mise à jour
+                addResult('4️⃣ Vérification de la mise à jour...');
+                const finalProjects = await db.getProjects();
+                const finalProject = finalProjects.find(p => p.id === savedProject.id);
+                if (finalProject && finalProject.budget === 6000.75) {
+                    addResult(`✅ Budget final vérifié (${finalProject.budget} €)`);
+                    log('✅ Workflow complet réussi', 'success');
+                } else {
+                    addResult('❌ Budget final incorrect');
+                    log('❌ Workflow complet échoué', 'error');
+                }
+                
+            } catch (error) {
+                addResult(`❌ Erreur: ${error.message}`);
+                log('❌ Erreur workflow complet', 'error');
+            }
+        }
+        
+        // Initialiser au chargement
+        window.addEventListener('load', () => {
+            setTimeout(initSupabase, 1000);
+        });
+    </script>
+</body>
+</html>

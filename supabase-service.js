@@ -264,6 +264,7 @@ class SupabaseService {
                 trustFlow: project.trust_flow,
                 referringDomains: project.referring_domains,
                 publicationGoal: project.publication_goal || 0,
+                budget: project.budget || 0,
                 createdAt: project.created_at,
                 updatedAt: project.updated_at,
                 keywords: project.keywords || [],
@@ -292,6 +293,7 @@ class SupabaseService {
                 ttf: project.ttf || 'Généraliste',
                 referring_domains: project.referringDomains || 0,
                 publication_goal: project.publicationGoal || 0,
+                budget: project.budget || 0,
                 keywords: project.keywords || [],
                 spots: project.spots || [],
                 updated_at: new Date().toISOString()

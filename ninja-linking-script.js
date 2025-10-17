@@ -56,18 +56,31 @@ async function checkAuthentication() {
         if (user) {
             isAuthenticated = true;
             currentUser = user;
-            // Ne plus afficher automatiquement l'interface principale
-            // L'utilisateur doit cliquer sur "Commencer" depuis la page d'accueil
+            
+            // Sauvegarder l'état d'authentification
+            localStorage.setItem('isAuthenticated', 'true');
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            
             return true;
         } else {
             isAuthenticated = false;
             currentUser = null;
+            
+            // Nettoyer l'état d'authentification
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('currentUser');
+            
             return false;
         }
     } catch (error) {
         console.error('Erreur vérification authentification:', error);
         isAuthenticated = false;
         currentUser = null;
+        
+        // Nettoyer l'état d'authentification en cas d'erreur
+        localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('currentUser');
+        
         return false;
     }
 }
@@ -84,6 +97,11 @@ function showAuthForm() {
     document.getElementById('homepage-container').style.display = 'none';
     document.getElementById('auth-container').style.display = 'flex';
     document.getElementById('main-app').style.display = 'none';
+}
+
+// Afficher la démo (redirige vers l'authentification)
+function showDemo() {
+    showAuthForm();
 }
 
 // Afficher l'application principale
@@ -731,6 +749,22 @@ const footprintsData = {
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('🚀 Initialisation de l\'application...');
     
+    // Vérifier l'état d'authentification persisté
+    const savedAuth = localStorage.getItem('isAuthenticated');
+    const savedUser = localStorage.getItem('currentUser');
+    
+    if (savedAuth === 'true' && savedUser) {
+        try {
+            currentUser = JSON.parse(savedUser);
+            isAuthenticated = true;
+            console.log('✅ État d\'authentification restauré depuis localStorage');
+        } catch (error) {
+            console.error('❌ Erreur parsing utilisateur sauvegardé:', error);
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('currentUser');
+        }
+    }
+    
     // Initialiser Supabase en premier
     await initSupabase();
     
@@ -757,12 +791,12 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Vérifier l'état d'authentification d'abord
     const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
     const rememberMe = localStorage.getItem('rememberMe') === 'true';
-    const savedUser = localStorage.getItem('currentUser');
+    const savedUserData = localStorage.getItem('currentUser');
     
-    if (isAuthenticated && savedUser) {
+    if (isAuthenticated && savedUserData) {
         // Utilisateur connecté, restaurer les variables globales
         window.isAuthenticated = true;
-        window.currentUser = JSON.parse(savedUser);
+        window.currentUser = JSON.parse(savedUserData);
         
         // Charger les données
         await loadData();
@@ -786,10 +820,10 @@ document.addEventListener('DOMContentLoaded', async function() {
         } else {
             switchPage('ninjalinking');
         }
-    } else if (rememberMe && savedUser) {
+    } else if (rememberMe && savedUserData) {
         // "Se souvenir de moi" activé, restaurer les variables globales
         window.isAuthenticated = true;
-        window.currentUser = JSON.parse(savedUser);
+        window.currentUser = JSON.parse(savedUserData);
         
         // Charger les données
         await loadData();
@@ -2175,6 +2209,18 @@ function renderProjects() {
                     <span class="project-detail-label">Domaines référents</span>
                     <span class="project-detail-value">${project.referringDomains || 0}</span>
                 </div>
+                <div class="project-detail">
+                    <span class="project-detail-label">Budget alloué</span>
+                    <span class="project-detail-value budget-allocated">${(project.budget || 0).toFixed(2)} €</span>
+                </div>
+                <div class="project-detail">
+                    <span class="project-detail-label">Budget dépensé</span>
+                    <span class="project-detail-value budget-spent">${calculateProjectSpentBudget(project).toFixed(2)} €</span>
+                </div>
+                <div class="project-detail">
+                    <span class="project-detail-label">Budget restant</span>
+                    <span class="project-detail-value budget-remaining ${getBudgetRemainingClass(project)}">${calculateProjectRemainingBudget(project).toFixed(2)} €</span>
+                </div>
             </div>
             ${project.keywords && project.keywords.length > 0 ? `
                 <div class="project-keywords">
@@ -2192,6 +2238,39 @@ function renderProjects() {
         `;
         grid.appendChild(card);
     });
+}
+
+// Fonction pour calculer le budget dépensé d'un projet
+function calculateProjectSpentBudget(project) {
+    if (!project.spots || !Array.isArray(project.spots)) {
+        return 0;
+    }
+    
+    // Calculer le budget dépensé (spots avec statut "Publié")
+    return project.spots
+        .filter(spot => spot.status === 'Publié')
+        .reduce((sum, spot) => sum + (spot.price || 0), 0);
+}
+
+// Fonction pour calculer le budget restant d'un projet
+function calculateProjectRemainingBudget(project) {
+    const allocatedBudget = project.budget || 0;
+    const spentBudget = calculateProjectSpentBudget(project);
+    return Math.max(0, allocatedBudget - spentBudget);
+}
+
+// Fonction pour déterminer la classe CSS selon le budget restant
+function getBudgetRemainingClass(project) {
+    const remainingBudget = calculateProjectRemainingBudget(project);
+    const allocatedBudget = project.budget || 0;
+    
+    if (remainingBudget === 0 && allocatedBudget > 0) {
+        return 'no-budget';
+    } else if (remainingBudget < allocatedBudget * 0.2 && allocatedBudget > 0) {
+        return 'low-budget';
+    }
+    
+    return '';
 }
 
 function getFilteredProjects() {
@@ -4319,6 +4398,9 @@ async function loadData() {
     
     if (isSupabaseConfigured && db) {
         try {
+            // Vérifier l'authentification persistante
+            await checkAuthentication();
+            
             // Charger les sites publics (toujours disponibles)
             sites = await db.getPublicSites();
             console.log(`✅ Sites publics chargés: ${sites.length} sites`);
