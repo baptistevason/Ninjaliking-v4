@@ -214,6 +214,7 @@ class SupabaseService {
                 ttf: project.ttf || 'Généraliste',
                 referring_domains: project.referringDomains || 0,
                 publication_goal: project.publicationGoal || 0,
+                budget: project.budget || 0,
                 keywords: project.keywords || [],
                 spots: project.spots || []
             };

@@ -12,3 +12,4 @@ CREATE INDEX idx_sites_notes ON sites(notes) WHERE notes IS NOT NULL AND notes !
 SELECT column_name, data_type, is_nullable, column_default 
 FROM information_schema.columns 
 WHERE table_name = 'sites' AND column_name = 'notes';
+

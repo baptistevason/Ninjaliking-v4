@@ -1909,6 +1909,7 @@ function openProjectModal(projectId = null) {
             document.getElementById('projectTTF').value = project.ttf || '';
             document.getElementById('projectReferringDomains').value = project.referringDomains || '';
             document.getElementById('projectPublicationGoal').value = project.publicationGoal || '';
+            document.getElementById('projectBudget').value = project.budget || '';
             
             // Charger les mots-clés
             currentKeywords = project.keywords || [];
@@ -2005,6 +2006,7 @@ async function saveProject(e) {
     const ttf = document.getElementById('projectTTF').value;
     const referringDomains = parseInt(document.getElementById('projectReferringDomains').value) || 0;
     const publicationGoal = parseInt(document.getElementById('projectPublicationGoal').value) || 0;
+    const budget = parseFloat(document.getElementById('projectBudget').value) || 0;
 
     console.log('Données du projet:', { name, url, objective, traffic, trustFlow, ttf, referringDomains });
 
@@ -2022,6 +2024,7 @@ async function saveProject(e) {
         ttf,
         referringDomains,
         publicationGoal,
+        budget,
         keywords: currentKeywords,
         updatedAt: new Date().toISOString()
     };
@@ -2308,6 +2311,9 @@ function loadProjectDetail(projectId) {
     document.getElementById('projectDetailTrustFlow').textContent = project.trustFlow || 0;
     document.getElementById('projectDetailReferringDomains').textContent = project.referringDomains || 0;
     
+    // Calculer et afficher le budget et les dépenses
+    updateBudgetDisplay(project);
+    
     // Afficher la jauge de progression
     const progressSection = document.getElementById('projectProgressSection');
     if (project.publicationGoal && project.publicationGoal > 0) {
@@ -2321,6 +2327,60 @@ function loadProjectDetail(projectId) {
     
     // Charger les spots du projet
     loadProjectSpots(projectId);
+}
+
+// Fonction pour mettre à jour l'affichage du budget et des dépenses
+function updateBudgetDisplay(project) {
+    const budget = project.budget || 0;
+    const spots = project.spots || [];
+    
+    // Calculer les dépenses totales (spots avec statut "Publié")
+    const totalExpenses = spots
+        .filter(spot => spot.status === 'Publié')
+        .reduce((sum, spot) => sum + (spot.price || 0), 0);
+    
+    // Calculer le budget en attente (spots "A publier" et "En attente")
+    const pendingBudget = spots
+        .filter(spot => spot.status === 'A publier' || spot.status === 'En attente')
+        .reduce((sum, spot) => sum + (spot.price || 0), 0);
+    
+    // Calculer le budget total engagé (dépenses + en attente)
+    const totalEngaged = totalExpenses + pendingBudget;
+    
+    // Calculer le reste disponible
+    const remainingBudget = budget - totalEngaged;
+    
+    // Calculer le pourcentage utilisé (basé sur le total engagé)
+    const percentageUsed = budget > 0 ? (totalEngaged / budget) * 100 : 0;
+    
+    // Mettre à jour les éléments HTML
+    document.getElementById('projectBudgetAmount').textContent = budget.toFixed(2) + ' €';
+    document.getElementById('projectTotalExpenses').textContent = totalExpenses.toFixed(2) + ' €';
+    document.getElementById('projectPendingBudget').textContent = pendingBudget.toFixed(2) + ' €';
+    document.getElementById('projectRemainingBudget').textContent = remainingBudget.toFixed(2) + ' €';
+    
+    // Mettre à jour la barre de progression
+    const progressFill = document.getElementById('budgetProgressFill');
+    const progressText = document.getElementById('budgetProgressText');
+    
+    if (progressFill) {
+        progressFill.style.width = Math.min(percentageUsed, 100) + '%';
+    }
+    
+    if (progressText) {
+        progressText.textContent = `${percentageUsed.toFixed(1)}% du budget engagé`;
+    }
+    
+    // Changer la couleur de la barre selon le pourcentage
+    if (progressFill) {
+        if (percentageUsed >= 100) {
+            progressFill.style.background = 'linear-gradient(90deg, var(--danger) 0%, #dc2626 100%)';
+        } else if (percentageUsed >= 80) {
+            progressFill.style.background = 'linear-gradient(90deg, var(--warning) 0%, #f59e0b 100%)';
+        } else {
+            progressFill.style.background = 'linear-gradient(90deg, var(--accent) 0%, var(--primary) 100%)';
+        }
+    }
 }
 
 // Mettre à jour la jauge de progression
@@ -2456,6 +2516,12 @@ function loadProjectSpots(projectId) {
     // Synchroniser projectSpots avec les données du projet
     syncProjectSpots();
     renderProjectSpots();
+    
+    // Sauvegarder automatiquement après chargement
+    if (project && project.spots && project.spots.length > 0) {
+        console.log('💾 Sauvegarde automatique des spots...');
+        saveData();
+    }
 }
 
 function renderProjectSpots() {
@@ -2513,6 +2579,7 @@ function renderProjectSpots() {
             <td><span class="project-spot-traffic">${formatNumber(spot.traffic)}</span></td>
             <td><span class="ttf-tag ttf-${(spot.ttf || 'business').toLowerCase()}">${spot.ttf || 'Business'}</span></td>
             <td><span class="project-spot-date">${spot.publicationDate ? new Date(spot.publicationDate).toLocaleDateString('fr-FR') : 'Non définie'}</span></td>
+            <td><span class="project-spot-price">${spot.price ? spot.price.toFixed(2) + ' €' : '0.00 €'}</span></td>
             <td>
                 <span class="spot-status-${spot.status.toLowerCase().replace(' ', '-').replace('é', 'e')}">${spot.status}</span>
             </td>
@@ -2538,6 +2605,9 @@ function renderProjectSpots() {
         } else {
             updateProgressGaugeWithoutGoal(currentProject);
         }
+        
+        // Mettre à jour l'affichage du budget
+        updateBudgetDisplay(currentProject);
     }
 }
 
@@ -2608,6 +2678,7 @@ async function saveNewSpot(e) {
     const traffic = parseInt(document.getElementById('spotTraffic').value) || 0;
     const ttf = document.getElementById('spotTTF').value;
     const publicationDate = document.getElementById('spotPublicationDate').value;
+    const price = parseFloat(document.getElementById('spotPrice').value) || 0;
     const status = document.getElementById('spotStatus').value;
 
     if (!url) {
@@ -2633,6 +2704,7 @@ async function saveNewSpot(e) {
         trustFlow: trustFlow,
         ttf: ttf,
         publicationDate: publicationDate || null,
+        price: price,
         status: status
     };
 
@@ -2693,6 +2765,7 @@ function toggleProjectEdit() {
             document.getElementById('editProjectTrustFlow').value = project.trustFlow || '';
             document.getElementById('editProjectTTF').value = project.ttf || '';
             document.getElementById('editProjectReferringDomains').value = project.referringDomains || '';
+            document.getElementById('editProjectBudget').value = project.budget || '';
             
             // Charger les mots-clés
             editKeywords = [...(project.keywords || [])];
@@ -2780,6 +2853,7 @@ async function saveProjectFromDetail(e) {
     const ttf = document.getElementById('editProjectTTF').value;
     const referringDomains = parseInt(document.getElementById('editProjectReferringDomains').value) || 0;
     const publicationGoal = parseInt(document.getElementById('editProjectPublicationGoal').value) || 0;
+    const budget = parseFloat(document.getElementById('editProjectBudget').value) || 0;
 
     if (!name || !url || !objective) {
         alert('Veuillez remplir tous les champs obligatoires');
@@ -2795,6 +2869,7 @@ async function saveProjectFromDetail(e) {
         ttf,
         referringDomains,
         publicationGoal,
+        budget,
         keywords: editKeywords,
         updatedAt: new Date().toISOString()
     };
@@ -3537,6 +3612,7 @@ async function addSitesToProject() {
             theme: site.theme,
             trustFlow: site.trustFlow || 0,
             traffic: site.traffic || 0,
+            price: 0, // Prix par défaut à 0
             status: 'À contacter'
         };
         
@@ -4318,6 +4394,342 @@ async function loadData() {
         renderSites();
         updateProjectStats();
     }, 100);
+}
+
+// ============ IMPORT EXCEL ============
+
+// Variables globales pour l'import
+let importedSpotsData = [];
+let currentImportFile = null;
+
+// Ouvrir le modal d'import
+function openImportSpotsModal() {
+    const modal = document.getElementById('importSpotsModal');
+    modal.style.display = 'block';
+    
+    // Réinitialiser le formulaire
+    document.getElementById('excelFile').value = '';
+    document.getElementById('importPreview').style.display = 'none';
+    document.getElementById('importButton').disabled = true;
+    importedSpotsData = [];
+    currentImportFile = null;
+}
+
+// Fermer le modal d'import
+function closeImportSpotsModal() {
+    document.getElementById('importSpotsModal').style.display = 'none';
+    
+    // Nettoyer les données
+    importedSpotsData = [];
+    currentImportFile = null;
+    document.getElementById('importPreview').style.display = 'none';
+    document.getElementById('importButton').disabled = true;
+}
+
+// Gérer la sélection de fichier
+function handleFileSelect(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    currentImportFile = file;
+    console.log('📁 Fichier sélectionné:', file.name);
+    
+    // Vérifier le type de fichier
+    if (!file.name.match(/\.(xlsx|xls)$/i)) {
+        alert('❌ Veuillez sélectionner un fichier Excel (.xlsx ou .xls)');
+        return;
+    }
+    
+    // Lire le fichier Excel
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            
+            // Prendre la première feuille
+            const firstSheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[firstSheetName];
+            
+            // Convertir en JSON
+            const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+            
+            // Traiter les données
+            processExcelData(jsonData);
+            
+        } catch (error) {
+            console.error('❌ Erreur lecture fichier Excel:', error);
+            alert('❌ Erreur lors de la lecture du fichier Excel: ' + error.message);
+        }
+    };
+    
+    reader.readAsArrayBuffer(file);
+}
+
+// Traiter les données Excel
+function processExcelData(jsonData) {
+    if (jsonData.length < 2) {
+        alert('❌ Le fichier Excel doit contenir au moins un en-tête et une ligne de données');
+        return;
+    }
+    
+    const headers = jsonData[0];
+    const dataRows = jsonData.slice(1);
+    
+    console.log('📊 En-têtes détectés:', headers);
+    console.log('📊 Nombre de lignes:', dataRows.length);
+    
+    // Valider les en-têtes requis
+    const requiredHeaders = ['URL', 'Type', 'Thématique', 'Trust Flow', 'Trafic', 'TTF', 'Prix', 'Statut'];
+    const missingHeaders = requiredHeaders.filter(header => !headers.includes(header));
+    
+    if (missingHeaders.length > 0) {
+        alert(`❌ Colonnes manquantes: ${missingHeaders.join(', ')}\n\nVeuillez utiliser le fichier d'exemple.`);
+        return;
+    }
+    
+    // Traiter chaque ligne
+    const processedSpots = [];
+    const errors = [];
+    
+    dataRows.forEach((row, index) => {
+        if (row.length === 0 || row.every(cell => !cell)) return; // Ligne vide
+        
+        try {
+            const spot = {
+                id: Date.now() + Math.random() + index,
+                projectId: currentProjectId,
+                url: row[headers.indexOf('URL')]?.toString().trim() || '',
+                type: row[headers.indexOf('Type')]?.toString().trim() || 'Forum',
+                theme: row[headers.indexOf('Thématique')]?.toString().trim() || 'Généraliste',
+                trustFlow: parseInt(row[headers.indexOf('Trust Flow')]) || 0,
+                traffic: parseInt(row[headers.indexOf('Trafic')]) || 0,
+                ttf: row[headers.indexOf('TTF')]?.toString().trim() || 'Business',
+                price: parseFloat(row[headers.indexOf('Prix')]) || 0,
+                status: row[headers.indexOf('Statut')]?.toString().trim() || 'A publier',
+                publicationDate: null
+            };
+            
+            // Validation
+            if (!spot.url) {
+                errors.push(`Ligne ${index + 2}: URL manquante`);
+                return;
+            }
+            
+            if (!isValidUrl(spot.url)) {
+                errors.push(`Ligne ${index + 2}: URL invalide (${spot.url})`);
+                return;
+            }
+            
+            if (spot.trustFlow < 0 || spot.trustFlow > 100) {
+                errors.push(`Ligne ${index + 2}: Trust Flow invalide (${spot.trustFlow})`);
+                return;
+            }
+            
+            if (spot.traffic < 0) {
+                errors.push(`Ligne ${index + 2}: Trafic invalide (${spot.traffic})`);
+                return;
+            }
+            
+            if (spot.price < 0) {
+                errors.push(`Ligne ${index + 2}: Prix invalide (${spot.price})`);
+                return;
+            }
+            
+            processedSpots.push(spot);
+            
+        } catch (error) {
+            errors.push(`Ligne ${index + 2}: Erreur de traitement - ${error.message}`);
+        }
+    });
+    
+    // Stocker les données traitées
+    importedSpotsData = processedSpots;
+    
+    // Afficher l'aperçu
+    displayImportPreview(processedSpots, errors);
+    
+    // Activer le bouton d'import si des données valides
+    document.getElementById('importButton').disabled = processedSpots.length === 0;
+}
+
+// Valider une URL
+function isValidUrl(string) {
+    try {
+        new URL(string);
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
+
+// Afficher l'aperçu de l'import
+function displayImportPreview(spots, errors) {
+    const preview = document.getElementById('importPreview');
+    const tableHead = document.getElementById('previewTableHead');
+    const tableBody = document.getElementById('previewTableBody');
+    const stats = document.getElementById('importStats');
+    
+    // Afficher le conteneur
+    preview.style.display = 'block';
+    
+    // En-têtes du tableau
+    tableHead.innerHTML = `
+        <tr>
+            <th>URL</th>
+            <th>Type</th>
+            <th>Thématique</th>
+            <th>Trust Flow</th>
+            <th>Trafic</th>
+            <th>TTF</th>
+            <th>Prix</th>
+            <th>Statut</th>
+        </tr>
+    `;
+    
+    // Corps du tableau (limité à 10 lignes pour l'aperçu)
+    tableBody.innerHTML = spots.slice(0, 10).map(spot => `
+        <tr>
+            <td>${spot.url}</td>
+            <td>${spot.type}</td>
+            <td>${spot.theme}</td>
+            <td>${spot.trustFlow}</td>
+            <td>${spot.traffic.toLocaleString()}</td>
+            <td>${spot.ttf}</td>
+            <td>${spot.price.toFixed(2)} €</td>
+            <td>${spot.status}</td>
+        </tr>
+    `).join('');
+    
+    // Statistiques
+    const totalSpots = spots.length;
+    const totalErrors = errors.length;
+    const totalPrice = spots.reduce((sum, spot) => sum + spot.price, 0);
+    
+    stats.innerHTML = `
+        <h5>📊 Statistiques d'import</h5>
+        <p class="stat-success">✅ Spots valides: ${totalSpots}</p>
+        ${totalErrors > 0 ? `<p class="stat-error">❌ Erreurs: ${totalErrors}</p>` : ''}
+        <p>💰 Prix total: ${totalPrice.toFixed(2)} €</p>
+        ${totalSpots > 10 ? `<p><small>⚠️ Affichage des 10 premiers spots sur ${totalSpots}</small></p>` : ''}
+    `;
+    
+    // Afficher les erreurs si il y en a
+    if (errors.length > 0) {
+        const errorDetails = document.createElement('div');
+        errorDetails.className = 'import-errors';
+        errorDetails.innerHTML = `
+            <h5>❌ Erreurs détectées</h5>
+            <div style="max-height: 150px; overflow-y: auto; background: #f8f9fa; padding: 10px; border-radius: 5px;">
+                ${errors.map(error => `<p style="margin: 5px 0; color: #dc3545;">• ${error}</p>`).join('')}
+            </div>
+        `;
+        stats.appendChild(errorDetails);
+    }
+}
+
+// Importer les spots dans le projet
+async function importSpotsFromExcel() {
+    if (importedSpotsData.length === 0) {
+        alert('❌ Aucune donnée valide à importer');
+        return;
+    }
+    
+    try {
+        console.log('📥 Import de', importedSpotsData.length, 'spots...');
+        
+        // Trouver le projet actuel
+        const project = projects.find(p => p.id === currentProjectId);
+        if (!project) {
+            alert('❌ Projet introuvable');
+            return;
+        }
+        
+        // Initialiser les spots si nécessaire
+        if (!project.spots) {
+            project.spots = [];
+        }
+        
+        // Ajouter les spots au projet
+        let addedCount = 0;
+        let skippedCount = 0;
+        
+        importedSpotsData.forEach(spot => {
+            // Vérifier si le spot existe déjà
+            const existingSpot = project.spots.find(s => s.url.toLowerCase() === spot.url.toLowerCase());
+            if (existingSpot) {
+                skippedCount++;
+                console.log(`⚠️ Spot déjà existant ignoré: ${spot.url}`);
+                return;
+            }
+            
+            // Ajouter le spot
+            project.spots.push(spot);
+            addedCount++;
+        });
+        
+        // Sauvegarder les données
+        await saveData();
+        
+        // Mettre à jour l'affichage
+        syncProjectSpots();
+        renderProjectSpots();
+        updateBudgetDisplay(project);
+        
+        // Fermer le modal
+        closeImportSpotsModal();
+        
+        // Afficher le résultat
+        const message = `✅ Import terminé!\n\n` +
+                       `• ${addedCount} spots ajoutés\n` +
+                       `${skippedCount > 0 ? `• ${skippedCount} spots ignorés (déjà existants)\n` : ''}` +
+                       `• Total spots dans le projet: ${project.spots.length}`;
+        
+        alert(message);
+        
+        console.log('✅ Import terminé:', { addedCount, skippedCount, totalSpots: project.spots.length });
+        
+    } catch (error) {
+        console.error('❌ Erreur import:', error);
+        alert('❌ Erreur lors de l\'import: ' + error.message);
+    }
+}
+
+// Télécharger le fichier d'exemple
+function downloadExampleFile() {
+    // Créer les données d'exemple
+    const exampleData = [
+        ['URL', 'Type', 'Thématique', 'Trust Flow', 'Trafic', 'TTF', 'Prix', 'Statut'],
+        ['https://example-blog.com', 'Blog', 'Business & Marketing', 45, 15000, 'Business', 75.00, 'A publier'],
+        ['https://example-forum.com', 'Forum', 'Technologie & Informatique', 30, 8000, 'Computers', 50.00, 'En attente'],
+        ['https://example-media.com', 'Média', 'Actualités & Médias', 70, 25000, 'News', 150.00, 'Publié'],
+        ['https://example-ecommerce.com', 'E-commerce', 'E-commerce & Affiliation', 25, 5000, 'Shopping', 100.00, 'A publier']
+    ];
+    
+    // Créer un workbook
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(exampleData);
+    
+    // Ajouter la feuille au workbook
+    XLSX.utils.book_append_sheet(wb, ws, 'Spots');
+    
+    // Générer le fichier Excel
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    
+    // Créer un blob et télécharger
+    const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const url = window.URL.createObjectURL(blob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'exemple-spots-import.xlsx';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    window.URL.revokeObjectURL(url);
+    
+    console.log('📥 Fichier d\'exemple téléchargé');
 }
 
 // Fermer les modals en cliquant à l'extérieur

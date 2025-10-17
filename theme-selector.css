@@ -63,6 +63,25 @@
     background: linear-gradient(135deg, #2d3748 0%, #4a5568 50%, #718096 100%);
 }
 
+/* Thème automne */
+.theme-autumn {
+    background: linear-gradient(135deg, #d97706 0%, #ea580c 50%, #92400e 100%);
+    color: #fef3c7;
+    border: 1px solid #d97706;
+}
+
+.theme-autumn:hover {
+    background: linear-gradient(135deg, #ea580c 0%, #dc2626 50%, #991b1b 100%);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+}
+
+.theme-autumn.active {
+    border-color: #f59e0b;
+    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.4);
+    transform: scale(1.05);
+}
+
 /* Icônes des thèmes */
 .theme-icon {
     font-size: 18px;

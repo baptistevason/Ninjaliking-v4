@@ -149,3 +149,8 @@ Si le problème persiste, vérifiez :
 2. Que les credentials sont corrects
 3. Que les tables existent avec les bonnes colonnes
 4. Que les politiques RLS sont configurées
+
+
+
+
+

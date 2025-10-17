@@ -7,6 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="ninja-linking-styles.css?v=20241230">
     <link rel="stylesheet" href="white-theme.css?v=20241230">
+    <link rel="stylesheet" href="autumn-theme.css?v=20241230">
     <link rel="stylesheet" href="theme-selector.css?v=20241230">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -273,6 +274,10 @@
                     <div class="theme-option theme-white active" data-theme="white" title="Thème Blanc">
                         <i class="fas fa-sun theme-icon"></i>
                         <div class="theme-tooltip">Blanc</div>
+                    </div>
+                    <div class="theme-option theme-autumn" data-theme="autumn" title="Thème Automne">
+                        <i class="fas fa-leaf theme-icon"></i>
+                        <div class="theme-tooltip">Automne</div>
                     </div>
                 </div>
             </div>
@@ -889,6 +894,10 @@
                                     <label for="editProjectPublicationGoal">Objectif de publication</label>
                                     <input type="number" id="editProjectPublicationGoal" min="0" placeholder="Nombre de liens à obtenir">
                                 </div>
+                                <div class="form-group">
+                                    <label for="editProjectBudget">Budget (€)</label>
+                                    <input type="number" id="editProjectBudget" min="0" step="0.01" placeholder="0.00">
+                                </div>
                                 <div class="form-group full-width">
                                     <label for="editProjectKeywords">Mots-clés à travailler</label>
                                     <div class="keywords-container">
@@ -928,6 +937,37 @@
                         <div class="kpi-card">
                             <div class="kpi-number" id="projectDetailSpotsCount">0</div>
                             <div class="kpi-label">Spots</div>
+                        </div>
+                    </div>
+
+                    <!-- Section Budget et Dépenses -->
+                    <div class="project-budget-section">
+                        <div class="budget-header">
+                            <h3>Budget et Dépenses</h3>
+                        </div>
+                        <div class="budget-cards">
+                            <div class="budget-card">
+                                <div class="budget-label">Budget alloué</div>
+                                <div class="budget-amount" id="projectBudgetAmount">0.00 €</div>
+                            </div>
+                            <div class="budget-card">
+                                <div class="budget-label">Dépenses totales</div>
+                                <div class="budget-amount" id="projectTotalExpenses">0.00 €</div>
+                            </div>
+                            <div class="budget-card">
+                                <div class="budget-label">Budget en attente</div>
+                                <div class="budget-amount" id="projectPendingBudget">0.00 €</div>
+                            </div>
+                            <div class="budget-card">
+                                <div class="budget-label">Reste disponible</div>
+                                <div class="budget-amount" id="projectRemainingBudget">0.00 €</div>
+                            </div>
+                        </div>
+                        <div class="budget-progress">
+                            <div class="budget-progress-bar">
+                                <div class="budget-progress-fill" id="budgetProgressFill"></div>
+                            </div>
+                            <div class="budget-progress-text" id="budgetProgressText">0% du budget utilisé</div>
                         </div>
                     </div>
 
@@ -1019,6 +1059,9 @@
                         <div class="project-spots-header">
                             <h2>Spots du projet (<span id="projectSpotsCount">0</span>)</h2>
                             <div class="project-spots-actions">
+                                <button class="btn btn-info" onclick="openImportSpotsModal()">
+                                    <i class="fas fa-file-excel"></i> Importer Excel
+                                </button>
                                 <button class="btn btn-success admin-only" onclick="exportProjectSpotsToExcel()" style="display: none;">
                                     <i class="fas fa-download"></i> Exporter Excel
                                 </button>
@@ -1039,6 +1082,7 @@
                                         <th class="sortable" data-sort="traffic" onclick="sortSpotsTable('traffic')">TRAFIC</th>
                                         <th class="sortable" data-sort="ttf" onclick="sortSpotsTable('ttf')">TTF</th>
                                         <th class="sortable" data-sort="publicationDate" onclick="sortSpotsTable('publicationDate')">DATE</th>
+                                        <th class="sortable" data-sort="price" onclick="sortSpotsTable('price')">PRIX</th>
                                         <th class="sortable" data-sort="status" onclick="sortSpotsTable('status')">STATUT</th>
                                         <th>ACTIONS</th>
                                     </tr>
@@ -1234,6 +1278,10 @@
                         <input type="number" id="projectPublicationGoal" min="0" placeholder="Nombre de liens à obtenir">
                     </div>
                     <div class="form-group">
+                        <label for="projectBudget">Budget (€)</label>
+                        <input type="number" id="projectBudget" min="0" step="0.01" placeholder="0.00">
+                    </div>
+                    <div class="form-group">
                         <label for="projectKeywords">Mots-clés à travailler</label>
                         <div class="keywords-container">
                             <div class="keywords-input-container">
@@ -1333,6 +1381,10 @@
                     <div class="form-group">
                         <label for="spotPublicationDate">Date</label>
                         <input type="date" id="spotPublicationDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="spotPrice">Prix (€)</label>
+                        <input type="number" id="spotPrice" min="0" step="0.01" placeholder="0.00">
                     </div>
                     <div class="form-group">
                         <label for="spotStatus">Statut</label>
@@ -1530,6 +1582,59 @@
                     <button type="button" class="btn btn-secondary" onclick="closeAddToProjectModal()">Annuler</button>
                     <button type="button" class="btn btn-primary" onclick="addSitesToProject()">
                         <i class="fas fa-plus"></i> Ajouter
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Import Excel -->
+    <div id="importSpotsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Importer des spots depuis Excel</h3>
+                <button class="modal-close" onclick="closeImportSpotsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="import-instructions">
+                    <h4>📋 Instructions d'import</h4>
+                    <p>Veuillez utiliser le fichier Excel d'exemple pour importer vos spots. Les colonnes requises sont :</p>
+                    <ul>
+                        <li><strong>URL</strong> : L'URL du site (obligatoire)</li>
+                        <li><strong>Type</strong> : Forum, Blog, Annuaire, Média, E-commerce, Réseau social, Vitrine</li>
+                        <li><strong>Thématique</strong> : Généraliste, Business & Marketing, etc.</li>
+                        <li><strong>Trust Flow</strong> : Score de 0 à 100</li>
+                        <li><strong>Trafic</strong> : Nombre de visiteurs</li>
+                        <li><strong>TTF</strong> : Topical Trust Flow</li>
+                        <li><strong>Prix</strong> : Prix en euros (optionnel)</li>
+                        <li><strong>Statut</strong> : A publier, En attente, Publié, Rejeté</li>
+                    </ul>
+                </div>
+                
+                <div class="form-group">
+                    <label for="excelFile">Fichier Excel (.xlsx)</label>
+                    <input type="file" id="excelFile" accept=".xlsx,.xls" onchange="handleFileSelect(event)">
+                    <small class="form-help">Format accepté : Excel (.xlsx, .xls)</small>
+                </div>
+                
+                <div class="import-preview" id="importPreview" style="display: none;">
+                    <h4>📊 Aperçu des données</h4>
+                    <div class="preview-table-container">
+                        <table class="preview-table" id="previewTable">
+                            <thead id="previewTableHead"></thead>
+                            <tbody id="previewTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="import-stats" id="importStats"></div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeImportSpotsModal()">Annuler</button>
+                    <button type="button" class="btn btn-info" onclick="downloadExampleFile()">
+                        <i class="fas fa-download"></i> Télécharger l'exemple
+                    </button>
+                    <button type="button" class="btn btn-primary" id="importButton" onclick="importSpotsFromExcel()" disabled>
+                        <i class="fas fa-upload"></i> Importer les spots
                     </button>
                 </div>
             </div>
@@ -1835,5 +1940,10 @@
             console.log('🎨 Thème appliqué:', theme);
         }
     </script>
+    
+    <!-- SheetJS pour la lecture des fichiers Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="supabase-service.js"></script>
+    <script src="ninja-linking-script.js"></script>
 </body>
 </html>

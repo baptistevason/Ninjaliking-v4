@@ -330,6 +330,15 @@
     position: relative;
 }
 
+/* Permettre l'interaction avec les boutons d'action même avec le flou */
+.spots-blurred .project-spots-actions {
+    filter: none;
+    pointer-events: auto;
+    opacity: 1;
+    z-index: 10;
+    position: relative;
+}
+
 .spots-blurred::after {
     content: "Connectez-vous pour voir les spots";
     position: absolute;
@@ -341,9 +350,10 @@
     padding: 1rem 2rem;
     border-radius: 8px;
     font-weight: 600;
-    z-index: 10;
+    z-index: 5;
     text-align: center;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    pointer-events: none;
 }
 
 body {
@@ -4162,5 +4172,244 @@ body {
     .project-checkbox-container {
         top: 8px;
         left: 8px;
+    }
+}
+
+/* ============ SECTION BUDGET ============ */
+.project-budget-section {
+    background: var(--bg-primary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--bg-accent);
+}
+
+.budget-header h3 {
+    color: var(--secondary);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.budget-header h3::before {
+    content: "💰";
+    font-size: 1.5rem;
+}
+
+.budget-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.budget-card {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    border: 1px solid var(--bg-accent);
+    transition: all 0.3s ease;
+}
+
+.budget-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.budget-label {
+    color: var(--secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.budget-amount {
+    color: var(--primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+}
+
+/* Styles spécifiques pour les cartes de budget */
+.budget-card:nth-child(1) .budget-amount {
+    color: var(--primary);
+}
+
+.budget-card:nth-child(2) .budget-amount {
+    color: var(--accent);
+}
+
+.budget-card:nth-child(3) .budget-amount {
+    color: var(--warning);
+}
+
+.budget-card:nth-child(4) .budget-amount {
+    color: var(--secondary);
+}
+
+.budget-progress {
+    margin-top: 1rem;
+}
+
+.budget-progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--bg-accent);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.budget-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--primary) 100%);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+    width: 0%;
+}
+
+.budget-progress-text {
+    color: var(--secondary);
+    font-size: 0.875rem;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Responsive pour la section budget */
+@media (max-width: 768px) {
+    .budget-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============ IMPORT EXCEL ============ */
+.import-instructions {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid var(--primary);
+}
+
+.import-instructions h4 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.import-instructions ul {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.import-instructions li {
+    margin: 0.25rem 0;
+    color: var(--secondary);
+}
+
+.form-help {
+    color: var(--secondary);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.import-preview {
+    margin: 1.5rem 0;
+}
+
+.preview-table-container {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid var(--bg-accent);
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+.preview-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.preview-table th,
+.preview-table td {
+    padding: 0.5rem;
+    text-align: left;
+    border-bottom: 1px solid var(--bg-accent);
+}
+
+.preview-table th {
+    background: var(--bg-secondary);
+    font-weight: 600;
+    color: var(--secondary);
+    position: sticky;
+    top: 0;
+}
+
+.preview-table td {
+    color: var(--secondary);
+}
+
+.preview-table tr:hover {
+    background: var(--bg-secondary);
+}
+
+.import-stats {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.import-stats h5 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.import-stats p {
+    margin: 0.25rem 0;
+    color: var(--secondary);
+}
+
+.import-stats .stat-success {
+    color: var(--accent);
+}
+
+.import-stats .stat-warning {
+    color: var(--warning);
+}
+
+.import-stats .stat-error {
+    color: var(--danger);
+}
+
+/* Styles pour les actions des spots */
+.project-spots-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.project-spots-actions .btn {
+    white-space: nowrap;
+}
+
+/* Responsive pour les actions des spots */
+@media (max-width: 768px) {
+    .project-spots-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .project-spots-actions .btn {
+        width: 100%;
+        justify-content: center;
     }
 }
