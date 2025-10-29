@@ -74,3 +74,6 @@
 - Vérifiez que les URLs sont valides
 - Vérifiez qu'il n'y a pas de doublons dans le catalogue
 
+
+
+

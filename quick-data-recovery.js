@@ -158,3 +158,6 @@ console.log('- quickRecovery() : Récupération complète');
 console.log('- diagnoseData() : Diagnostic des données');
 console.log('- cleanData() : Nettoyage des données');
 
+
+
+

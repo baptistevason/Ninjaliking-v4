@@ -104,3 +104,6 @@ Après la correction :
 - ✅ Les budgets persistent après rechargement
 - ✅ L'interface affiche correctement les budgets
 
+
+
+

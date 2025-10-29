@@ -745,9 +745,200 @@ const footprintsData = {
     ]
 };
 
+// ===== SYSTÈME DE FAVORIS/WISHLIST =====
+let favoriteFootprints = JSON.parse(localStorage.getItem('favoriteFootprints') || '[]');
+let favoriteSerpFootprints = JSON.parse(localStorage.getItem('favoriteSerpFootprints') || '[]');
+let favoriteEreputationFootprints = JSON.parse(localStorage.getItem('favoriteEreputationFootprints') || '[]');
+
+// Fonction pour sauvegarder les favoris
+function saveFavorites() {
+    localStorage.setItem('favoriteFootprints', JSON.stringify(favoriteFootprints));
+    localStorage.setItem('favoriteSerpFootprints', JSON.stringify(favoriteSerpFootprints));
+    localStorage.setItem('favoriteEreputationFootprints', JSON.stringify(favoriteEreputationFootprints));
+}
+
+// Fonction pour basculer l'état favori d'un footprint
+function toggleFavorite(footprint, type) {
+    console.log('🔄 Toggle favorite:', {footprint, type});
+    
+    if (!footprint || !type) {
+        console.error('❌ Paramètres manquants:', {footprint, type});
+        return;
+    }
+    
+    // Décoder les caractères échappés
+    const decodedFootprint = footprint.replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+    console.log('🔄 Footprint décodé:', decodedFootprint);
+    
+    let favoritesArray;
+    
+    switch(type) {
+        case 'ninjalinking':
+            favoritesArray = favoriteFootprints;
+            break;
+        case 'serp':
+            favoritesArray = favoriteSerpFootprints;
+            break;
+        case 'ereputation':
+            favoritesArray = favoriteEreputationFootprints;
+            break;
+        default:
+            console.error('❌ Type non reconnu:', type);
+            return;
+    }
+    
+    const index = favoritesArray.indexOf(decodedFootprint);
+    let isNowFavorite;
+    
+    if (index > -1) {
+        // Retirer des favoris
+        favoritesArray.splice(index, 1);
+        isNowFavorite = false;
+        console.log('❌ Retiré des favoris:', decodedFootprint);
+    } else {
+        // Ajouter aux favoris
+        favoritesArray.push(decodedFootprint);
+        isNowFavorite = true;
+        console.log('❤️ Ajouté aux favoris:', decodedFootprint);
+    }
+    
+    // Sauvegarder
+    saveFavorites();
+    
+    // Mettre à jour tous les boutons favoris
+    updateAllFavoriteButtons();
+    
+    // Notification
+    showNotification(
+        isNowFavorite ? 'Footprint ajouté aux favoris' : 'Footprint retiré des favoris',
+        isNowFavorite ? 'success' : 'warning'
+    );
+}
+
+// Fonction pour mettre à jour un bouton favori spécifique
+function updateFavoriteButton(footprint, type, isFavorite) {
+    // Échapper les caractères spéciaux pour le sélecteur
+    const escapedFootprint = footprint.replace(/"/g, '\\"').replace(/'/g, "\\'");
+    const buttons = document.querySelectorAll(`[data-footprint="${escapedFootprint}"][data-type="${type}"]`);
+    console.log(`🔄 Mise à jour de ${buttons.length} boutons pour ${footprint}`);
+    
+    buttons.forEach(button => {
+        if (isFavorite) {
+            button.classList.add('favorited');
+            button.title = 'Retirer des favoris';
+            button.innerHTML = '<i class="fas fa-heart"></i>';
+        } else {
+            button.classList.remove('favorited');
+            button.title = 'Ajouter aux favoris';
+            button.innerHTML = '<i class="fas fa-heart"></i>';
+        }
+    });
+}
+
+// Fonction pour vérifier si un footprint est en favoris
+function checkIfFavorite(footprint, type) {
+    switch(type) {
+        case 'ninjalinking':
+            return favoriteFootprints.includes(footprint);
+        case 'serp':
+            return favoriteSerpFootprints.includes(footprint);
+        case 'ereputation':
+            return favoriteEreputationFootprints.includes(footprint);
+        default:
+            return false;
+    }
+}
+
+// Fonction pour mettre à jour tous les boutons favoris
+function updateAllFavoriteButtons() {
+    const allFavoriteButtons = document.querySelectorAll('.favorite-btn');
+    allFavoriteButtons.forEach(button => {
+        const footprint = button.getAttribute('data-footprint');
+        const type = button.getAttribute('data-type');
+        
+        if (footprint && type) {
+            // Décoder les caractères échappés
+            const decodedFootprint = footprint.replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+            const isFavorite = checkIfFavorite(decodedFootprint, type);
+            
+            if (isFavorite) {
+                button.classList.add('favorited');
+                button.title = 'Retirer des favoris';
+                button.innerHTML = '<i class="fas fa-heart"></i>';
+            } else {
+                button.classList.remove('favorited');
+                button.title = 'Ajouter aux favoris';
+                button.innerHTML = '<i class="fas fa-heart"></i>';
+            }
+        }
+    });
+}
+
 // Initialisation
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('🚀 Initialisation de l\'application...');
+    
+    // Event listener simple pour les boutons favoris
+    document.addEventListener('click', function(e) {
+        console.log('🖱️ Clic détecté sur:', e.target, 'Closest remove-favorite-btn:', e.target.closest('.remove-favorite-btn'));
+        
+        // Boutons favoris
+        if (e.target.closest('.favorite-btn')) {
+            e.preventDefault();
+            e.stopPropagation();
+            const button = e.target.closest('.favorite-btn');
+            const footprint = button.getAttribute('data-footprint');
+            const type = button.getAttribute('data-type');
+            console.log('🖱️ Clic sur bouton favori:', {footprint, type});
+            if (footprint && type) {
+                toggleFavorite(footprint, type);
+            }
+        }
+        // Boutons dans la section favoris
+        else if (e.target.closest('.remove-favorite-btn')) {
+            e.preventDefault();
+            e.stopPropagation();
+            const button = e.target.closest('.remove-favorite-btn');
+            const footprint = button.getAttribute('data-footprint');
+            const type = button.getAttribute('data-type');
+            console.log('🗑️ Clic sur bouton supprimer favori:', {footprint, type, button});
+            if (footprint && type) {
+                removeFromFavorites(footprint, type);
+            } else {
+                console.error('❌ Paramètres manquants pour suppression:', {footprint, type});
+            }
+        }
+        // Sélecteur de thème
+        else if (e.target.closest('.theme-option')) {
+            e.preventDefault();
+            e.stopPropagation();
+            const themeOption = e.target.closest('.theme-option');
+            const theme = themeOption.getAttribute('data-theme');
+            console.log('🎨 Changement de thème:', theme);
+            switchTheme(theme);
+        }
+    });
+    
+    // Fonction pour créer un bouton favori
+    function createFavoriteButton(footprint, type) {
+        const isFavorite = checkIfFavorite(footprint, type);
+        
+        return `
+            <button class="favorite-btn ${isFavorite ? 'favorited' : ''}" 
+                    data-footprint="${footprint}" 
+                    data-type="${type}"
+                    title="${isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}">
+                ${isFavorite ? '❤️' : '🤍'}
+            </button>
+        `;
+    }
+
+
+    // Charger le thème sauvegardé
+    loadSavedTheme();
+    
+    // Mettre à jour tous les boutons favoris au chargement
+    updateAllFavoriteButtons();
     
     // Vérifier l'état d'authentification persisté
     const savedAuth = localStorage.getItem('isAuthenticated');
@@ -1099,12 +1290,22 @@ function renderFootprints() {
     selectedFootprints.forEach(footprint => {
         const item = document.createElement('div');
         item.className = 'footprint-item';
+        
+        // Échapper les guillemets pour les attributs HTML
+        const escapedFootprint = footprint.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        
         item.innerHTML = `
-            <input type="checkbox" class="footprint-checkbox" data-footprint="${footprint}">
+            <input type="checkbox" class="footprint-checkbox" data-footprint="${escapedFootprint}">
             <span class="footprint-text">${footprint}</span>
+            <button class="favorite-btn" data-footprint="${escapedFootprint}" data-type="ninjalinking" title="Ajouter aux favoris">
+                <i class="fas fa-heart"></i>
+            </button>
         `;
         footprintsList.appendChild(item);
     });
+    
+    // Mettre à jour l'état des boutons favoris après création
+    updateAllFavoriteButtons();
 }
 
 function getCheckedFootprints() {
@@ -1405,43 +1606,23 @@ function renderSerpFootprints() {
         const item = document.createElement('div');
         item.className = 'footprint-item';
         
-        // Afficher le footprint complet sans division
-        let displayText = footprint;
+        // Échapper les guillemets pour les attributs HTML
+        const escapedFootprint = footprint.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         
         item.innerHTML = `
-            <input type="checkbox" class="footprint-checkbox" data-footprint="${footprint}">
-            <span class="footprint-text">${displayText}</span>
-            <button class="remove-footprint" onclick="removeSerpFootprint('${footprint}')">
-                <i class="fas fa-times"></i>
+            <input type="checkbox" class="footprint-checkbox" data-footprint="${escapedFootprint}">
+            <span class="footprint-text">${footprint}</span>
+            <button class="favorite-btn" data-footprint="${escapedFootprint}" data-type="serp" title="Ajouter aux favoris">
+                <i class="fas fa-heart"></i>
             </button>
         `;
         footprintsList.appendChild(item);
     });
+    
+    // Mettre à jour l'état des boutons favoris après création
+    updateAllFavoriteButtons();
 }
 
-function removeSerpFootprint(footprint) {
-    selectedSerpFootprints = selectedSerpFootprints.filter(f => f !== footprint);
-    
-    // Vérifier si une catégorie doit être désélectionnée
-    for (const category in serpFootprintsData) {
-        const categoryFootprints = serpFootprintsData[category];
-        if (categoryFootprints.includes(footprint)) {
-            const hasSelectedFootprints = categoryFootprints.some(f => selectedSerpFootprints.includes(f));
-            if (!hasSelectedFootprints) {
-                const card = document.querySelector(`#serp-page [data-category="${category}"]`);
-                card.classList.remove('selected');
-            }
-            break;
-        }
-    }
-    
-    renderSerpFootprints();
-    
-    // Masquer la section si plus de footprints
-    if (selectedSerpFootprints.length === 0) {
-        document.getElementById('serpFootprintsSection').style.display = 'none';
-    }
-}
 
 function getSelectedSerpOperators() {
     return selectedSerpFootprints;
@@ -1615,46 +1796,23 @@ function renderEreputationFootprints() {
         const item = document.createElement('div');
         item.className = 'footprint-item';
         
-        // Afficher le footprint complet sans division
-        let displayText = footprint;
+        // Échapper les guillemets pour les attributs HTML
+        const escapedFootprint = footprint.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         
         item.innerHTML = `
-            <input type="checkbox" class="footprint-checkbox" data-footprint="${footprint}">
-            <span class="footprint-text">${displayText}</span>
-            <button class="remove-footprint" onclick="removeEreputationFootprint('${footprint}')">
-                <i class="fas fa-times"></i>
+            <input type="checkbox" class="footprint-checkbox" data-footprint="${escapedFootprint}">
+            <span class="footprint-text">${footprint}</span>
+            <button class="favorite-btn" data-footprint="${escapedFootprint}" data-type="ereputation" title="Ajouter aux favoris">
+                <i class="fas fa-heart"></i>
             </button>
         `;
         footprintsList.appendChild(item);
     });
+    
+    // Mettre à jour l'état des boutons favoris après création
+    updateAllFavoriteButtons();
 }
 
-function removeEreputationFootprint(footprint) {
-    selectedEreputationFootprints = selectedEreputationFootprints.filter(f => f !== footprint);
-    
-    // Vérifier si toutes les catégories de ce footprint sont désélectionnées
-    Object.keys(ereputationFootprintsData).forEach(category => {
-        const categoryFootprints = ereputationFootprintsData[category];
-        if (categoryFootprints.includes(footprint)) {
-            const hasOtherFootprints = categoryFootprints.some(f => selectedEreputationFootprints.includes(f));
-            if (!hasOtherFootprints) {
-                const card = document.querySelector(`#ereputation-page [data-category="${category}"]`);
-                if (card) {
-                    card.classList.remove('selected');
-                }
-            }
-        }
-    });
-    
-    renderEreputationFootprints();
-    
-    if (selectedEreputationFootprints.length === 0) {
-        document.getElementById('ereputationFootprintsSection').style.display = 'none';
-    }
-    
-    updateEreputationYearSelection();
-    updateEreputationDateSelection();
-}
 
 function getCheckedEreputationFootprints() {
     // Récupérer les cases cochées de la page E-Réputation uniquement
@@ -5354,4 +5512,332 @@ function addSupabaseConfigButton() {
         configBtn.onclick = configureSupabase;
         header.appendChild(configBtn);
     }
+}
+
+// ===== FONCTIONS DE FAVORIS SIMPLIFIÉES =====
+
+// Fonction pour afficher la section des favoris
+function showFavorites() {
+    const currentPage = getCurrentPage();
+    let footprintsSection, favoritesSection, favoritesList;
+    
+    switch(currentPage) {
+        case 'ninjalinking':
+            footprintsSection = document.getElementById('footprintsSection');
+            favoritesSection = document.getElementById('favoritesSection');
+            favoritesList = document.getElementById('favoritesList');
+            break;
+        case 'serp':
+            footprintsSection = document.getElementById('serpFootprintsSection');
+            favoritesSection = document.getElementById('serpFavoritesSection');
+            favoritesList = document.getElementById('serpFavoritesList');
+            break;
+        case 'ereputation':
+            footprintsSection = document.getElementById('ereputationFootprintsSection');
+            favoritesSection = document.getElementById('ereputationFavoritesSection');
+            favoritesList = document.getElementById('ereputationFavoritesList');
+            break;
+        default:
+            footprintsSection = document.getElementById('footprintsSection');
+            favoritesSection = document.getElementById('favoritesSection');
+            favoritesList = document.getElementById('favoritesList');
+    }
+    
+    if (footprintsSection && favoritesSection) {
+        footprintsSection.style.display = 'none';
+        favoritesSection.style.display = 'block';
+        renderFavoritesList(favoritesList);
+    }
+}
+
+// Fonction pour masquer la section des favoris
+function hideFavorites() {
+    const currentPage = getCurrentPage();
+    let footprintsSection, favoritesSection;
+    
+    switch(currentPage) {
+        case 'ninjalinking':
+            footprintsSection = document.getElementById('footprintsSection');
+            favoritesSection = document.getElementById('favoritesSection');
+            break;
+        case 'serp':
+            footprintsSection = document.getElementById('serpFootprintsSection');
+            favoritesSection = document.getElementById('serpFavoritesSection');
+            break;
+        case 'ereputation':
+            footprintsSection = document.getElementById('ereputationFootprintsSection');
+            favoritesSection = document.getElementById('ereputationFavoritesSection');
+            break;
+        default:
+            footprintsSection = document.getElementById('footprintsSection');
+            favoritesSection = document.getElementById('favoritesSection');
+    }
+    
+    if (footprintsSection && favoritesSection) {
+        footprintsSection.style.display = 'block';
+        favoritesSection.style.display = 'none';
+    }
+}
+
+// Fonction pour rendre la liste des favoris
+function renderFavoritesList(targetList = null) {
+    const favoritesList = targetList || document.getElementById('favoritesList');
+    if (!favoritesList) return;
+    
+    favoritesList.innerHTML = '';
+    
+    const allFavorites = [
+        ...favoriteFootprints.map(f => ({footprint: f, type: 'ninjalinking', label: 'Ninja Linking'})),
+        ...favoriteSerpFootprints.map(f => ({footprint: f, type: 'serp', label: 'SERP'})),
+        ...favoriteEreputationFootprints.map(f => ({footprint: f, type: 'ereputation', label: 'E-Réputation'}))
+    ];
+    
+    if (allFavorites.length === 0) {
+        favoritesList.innerHTML = `
+            <div class="empty-favorites">
+                <i class="fas fa-heart-broken"></i>
+                <p>Aucun footprint en favori pour le moment</p>
+                <p>Cliquez sur les cœurs à côté des footprints pour les ajouter à vos favoris</p>
+            </div>
+        `;
+        return;
+    }
+    
+    allFavorites.forEach(({footprint, type, label}) => {
+        const item = document.createElement('div');
+        item.className = 'favorite-item';
+        
+        // Échapper les caractères spéciaux pour les attributs data
+        const escapedFootprint = footprint.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        
+        item.innerHTML = `
+            <div class="favorite-content">
+                <span class="favorite-type">${label}</span>
+                <span class="favorite-text">${footprint}</span>
+            </div>
+            <div class="favorite-actions">
+                <button class="btn btn-sm btn-danger remove-favorite-btn" data-footprint="${escapedFootprint}" data-type="${type}" title="Retirer des favoris">
+                    <i class="fas fa-heart-broken"></i>
+                </button>
+            </div>
+        `;
+        favoritesList.appendChild(item);
+    });
+}
+
+// Fonction pour utiliser un footprint favori
+function useFavoriteFootprint(footprint, type) {
+    if (!footprint || !type) return;
+    
+    switch(type) {
+        case 'ninjalinking':
+            if (!selectedFootprints.includes(footprint)) {
+                selectedFootprints.push(footprint);
+                renderFootprints();
+            }
+            showPage('ninjalinking');
+            break;
+        case 'serp':
+            if (!selectedSerpFootprints.includes(footprint)) {
+                selectedSerpFootprints.push(footprint);
+                renderSerpFootprints();
+            }
+            showPage('serp');
+            break;
+        case 'ereputation':
+            if (!selectedEreputationFootprints.includes(footprint)) {
+                selectedEreputationFootprints.push(footprint);
+                renderEreputationFootprints();
+            }
+            showPage('ereputation');
+            break;
+    }
+    
+    showNotification('Footprint ajouté à la sélection', 'success');
+}
+
+// Fonction pour retirer un footprint des favoris
+function removeFromFavorites(footprint, type) {
+    if (!footprint || !type) return;
+    
+    // Décoder les caractères échappés
+    const decodedFootprint = footprint.replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+    console.log('🗑️ Suppression du favori:', {footprint, decodedFootprint, type});
+    
+    let favoritesArray;
+    
+    switch(type) {
+        case 'ninjalinking':
+            favoritesArray = favoriteFootprints;
+            break;
+        case 'serp':
+            favoritesArray = favoriteSerpFootprints;
+            break;
+        case 'ereputation':
+            favoritesArray = favoriteEreputationFootprints;
+            break;
+        default:
+            return;
+    }
+    
+    const index = favoritesArray.indexOf(decodedFootprint);
+    if (index > -1) {
+        favoritesArray.splice(index, 1);
+        saveFavorites();
+        updateAllFavoriteButtons(); // Mettre à jour tous les boutons
+        renderFavoritesList(); // Re-rendre la liste des favoris
+        showNotification('Footprint retiré des favoris', 'warning');
+        console.log('✅ Favori supprimé:', decodedFootprint);
+    } else {
+        console.log('❌ Favori non trouvé:', decodedFootprint);
+    }
+}
+
+// Fonction pour vider tous les favoris
+function clearAllFavorites() {
+    if (confirm('Êtes-vous sûr de vouloir vider tous vos favoris ? Cette action est irréversible.')) {
+        favoriteFootprints = [];
+        favoriteSerpFootprints = [];
+        favoriteEreputationFootprints = [];
+        
+        saveFavorites();
+        
+        const allFavoritesLists = document.querySelectorAll('.favorites-list');
+        allFavoritesLists.forEach(list => {
+            renderFavoritesList(list);
+        });
+        
+        showNotification('Tous les favoris ont été supprimés', 'warning');
+    }
+}
+
+// Fonction pour détecter la page actuelle
+function getCurrentPage() {
+    const pages = document.querySelectorAll('.page');
+    for (let page of pages) {
+        if (page.classList.contains('active') && page.id) {
+            if (page.id === 'ninjalinking-page') return 'ninjalinking';
+            if (page.id === 'serp-page') return 'serp';
+            if (page.id === 'ereputation-page') return 'ereputation';
+        }
+    }
+    return 'ninjalinking'; // Fallback
+}
+
+// Fonction pour afficher une page
+function showPage(pageId) {
+    console.log(`🔄 Affichage de la page: ${pageId}`);
+    
+    // Masquer toutes les pages
+    const allPages = document.querySelectorAll('.page');
+    allPages.forEach(page => {
+        page.classList.remove('active');
+    });
+    
+    // Désactiver tous les boutons de navigation
+    const allNavBtns = document.querySelectorAll('.nav-btn');
+    allNavBtns.forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Activer le bouton correspondant
+    const activeBtn = document.querySelector(`[data-page="${pageId}"]`);
+    if (activeBtn) {
+        activeBtn.classList.add('active');
+    }
+    
+    // Afficher la page correspondante
+    const activePage = document.getElementById(`${pageId}-page`);
+    if (activePage) {
+        activePage.classList.add('active');
+    }
+}
+
+// Fonction pour changer de thème
+function switchTheme(theme) {
+    const body = document.body;
+    const themeOptions = document.querySelectorAll('.theme-option');
+    
+    // Retirer toutes les classes de thème
+    body.classList.remove('white-theme', 'autumn-theme', 'dark-theme');
+    
+    // Désactiver tous les boutons de thème
+    themeOptions.forEach(option => {
+        option.classList.remove('active');
+    });
+    
+    // Appliquer le nouveau thème
+    switch(theme) {
+        case 'white':
+            body.classList.add('white-theme');
+            break;
+        case 'autumn':
+            body.classList.add('autumn-theme');
+            break;
+        case 'dark':
+            body.classList.add('dark-theme');
+            break;
+    }
+    
+    // Activer le bouton correspondant
+    const activeOption = document.querySelector(`[data-theme="${theme}"]`);
+    if (activeOption) {
+        activeOption.classList.add('active');
+    }
+    
+    // Sauvegarder le thème
+    localStorage.setItem('selectedTheme', theme);
+    
+    console.log(`🎨 Thème changé vers: ${theme}`);
+}
+
+// Fonction pour charger le thème sauvegardé
+function loadSavedTheme() {
+    const savedTheme = localStorage.getItem('selectedTheme') || 'white';
+    switchTheme(savedTheme);
+}
+
+// Fonction pour afficher une notification
+function showNotification(message, type = 'info') {
+    // Créer l'élément de notification s'il n'existe pas
+    let notification = document.getElementById('notification');
+    if (!notification) {
+        notification = document.createElement('div');
+        notification.id = 'notification';
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            z-index: 10000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        `;
+        document.body.appendChild(notification);
+    }
+    
+    // Définir le style selon le type
+    const colors = {
+        success: '#28a745',
+        warning: '#ffc107',
+        error: '#dc3545',
+        info: '#17a2b8'
+    };
+    
+    notification.style.backgroundColor = colors[type] || colors.info;
+    notification.textContent = message;
+    
+    // Afficher la notification
+    notification.style.opacity = '1';
+    notification.style.transform = 'translateX(0)';
+    
+    // Masquer après 3 secondes
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transform = 'translateX(100%)';
+    }, 3000);
 }
