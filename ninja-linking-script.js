@@ -2762,6 +2762,7 @@ function loadProjectSpots(projectId) {
 }
 
 function renderProjectSpots() {
+    // Rendu des spots du projet avec colonne URL CIBLE
     const tbody = document.getElementById('projectSpotsTableBody');
     const spotsCount = document.getElementById('projectSpotsCount');
     const kpiSpotsCount = document.getElementById('projectDetailSpotsCount');
