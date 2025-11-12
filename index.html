@@ -1,0 +1,1896 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RéputaLink - Outil de Link Building</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="ninja-linking-styles.css">
+    <link rel="stylesheet" href="white-theme.css">
+    <link rel="stylesheet" href="autumn-theme.css">
+    <link rel="stylesheet" href="theme-selector.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="white-theme">
+    
+    <div class="app">
+        <!-- Page d'accueil -->
+        <div id="homepage-container" class="homepage-container">
+            <div class="homepage-hero">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        RéputaLink
+                        <span class="stars-inline">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </span>
+                    </h1>
+                    <p class="hero-subtitle">Outil professionnel de link building et gestion de projets SEO</p>
+                    <div class="hero-features">
+                        <div class="feature">
+                            <i class="fas fa-search"></i>
+                            <span>Recherche de footprints</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Analyse SERP</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>E-Réputation</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-robot"></i>
+                            <span>IA & Prompts</span>
+                        </div>
+                    </div>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary btn-large" onclick="showAuthForm()">
+                            <i class="fas fa-sign-in-alt"></i> Commencer
+                        </button>
+                        <button class="btn btn-secondary btn-large" onclick="showDemo()">
+                            <i class="fas fa-play"></i> Voir la démo
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="hero-graphic">
+                        <div class="graphic-element element-1">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <div class="graphic-element element-2">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="graphic-element element-3">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div class="graphic-element element-4">
+                            <i class="fas fa-database"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section des fonctionnalités -->
+            <div class="homepage-features">
+                <div class="features-container">
+                    <h2>Fonctionnalités principales</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h3>Ninja Linking</h3>
+                            <p>Recherche d'opportunités de liens avec des footprints personnalisés pour maximiser votre référencement.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h3>Exploration SERP</h3>
+                            <p>Opérateurs avancés Google/Bing pour analyser la concurrence et découvrir de nouvelles opportunités.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h3>E-Réputation</h3>
+                            <p>Analysez votre réputation en ligne et identifiez les mentions de votre marque sur le web.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <h3>IA & Prompts</h3>
+                            <p>Prompts ChatGPT optimisés pour analyser et améliorer votre présence digitale.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-folder-open"></i>
+                            </div>
+                            <h3>Gestion de Projets</h3>
+                            <p>Suivez vos projets SEO avec des KPIs détaillés et une gestion complète des spots.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <h3>Catalogue de Sites</h3>
+                            <p>Base de données complète de sites partenaires avec import/export et gestion en masse.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section CTA -->
+            <div class="homepage-cta">
+                <div class="cta-content">
+                    <h2>Prêt à optimiser votre référencement ?</h2>
+                    <p>Rejoignez des centaines de professionnels qui utilisent RéputaLink pour améliorer leur visibilité en ligne.</p>
+                    <button class="btn btn-primary btn-large" onclick="showAuthForm()">
+                        <i class="fas fa-rocket"></i> Commencer maintenant
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interface d'authentification -->
+        <div id="auth-container" class="auth-container" style="display: none;">
+            <div class="auth-modal">
+                <div class="auth-header">
+                    <h1>RéputaLink</h1>
+                    <p>Outil professionnel de link building</p>
+                </div>
+                
+                <!-- Formulaire de connexion -->
+                <div id="login-form" class="auth-form active">
+                    <h2>Connexion</h2>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input type="email" id="loginEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Mot de passe</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        <div class="form-group remember-me">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="rememberMe">
+                                <span class="checkmark"></span>
+                                <span class="checkbox-text">Se souvenir de moi</span>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Se connecter</button>
+                        <p class="auth-switch">
+                            Pas de compte ? <a href="#" onclick="showSignupForm()">Créer un compte</a>
+                        </p>
+                        <p class="auth-switch">
+                            <a href="#" onclick="showResetForm()">Mot de passe oublié ?</a>
+                        </p>
+                    </form>
+                </div>
+
+                <!-- Formulaire d'inscription -->
+                <div id="signup-form" class="auth-form">
+                    <h2>Créer un compte</h2>
+                    <form id="signupForm">
+                        <div class="form-group">
+                            <label for="signupEmail">Email</label>
+                            <input type="email" id="signupEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupPassword">Mot de passe</label>
+                            <input type="password" id="signupPassword" required minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <label for="signupConfirmPassword">Confirmer le mot de passe</label>
+                            <input type="password" id="signupConfirmPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Créer le compte</button>
+                        <p class="auth-switch">
+                            Déjà un compte ? <a href="#" onclick="showLoginForm()">Se connecter</a>
+                        </p>
+                    </form>
+                </div>
+
+                <!-- Formulaire de réinitialisation -->
+                <div id="reset-form" class="auth-form">
+                    <h2>Mot de passe oublié</h2>
+                    <form id="resetForm">
+                        <div class="form-group">
+                            <label for="resetEmail">Email</label>
+                            <input type="email" id="resetEmail" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Envoyer le lien de réinitialisation</button>
+                        <p class="auth-switch">
+                            <a href="#" onclick="showLoginForm()">Retour à la connexion</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interface principale (masquée par défaut) -->
+        <div id="main-app" class="main-app" style="display: none;">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-content">
+                    <div class="header-left">
+                        <button onclick="showHomepage()" class="btn btn-secondary btn-sm" title="Retour à l'accueil">
+                            <i class="fas fa-home"></i> Accueil
+                        </button>
+                    </div>
+                    <div class="header-center">
+                        <h1>RéputaLink</h1>
+                        <p>Outil professionnel de link building</p>
+                    </div>
+                    <div class="user-info" id="userInfo">
+                        <div class="user-email-container" id="userEmailContainer" style="display: none;">
+                            <span id="userEmail" class="user-email"></span>
+                        </div>
+                        <button onclick="logout()" class="btn btn-secondary btn-sm" id="logoutBtn" style="display: none;" title="Déconnexion">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                        <button onclick="showAuthForm()" class="btn btn-primary btn-sm" id="loginBtn">
+                            <i class="fas fa-sign-in-alt"></i> Se connecter
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+        <!-- Navigation -->
+        <nav class="navigation">
+            <div class="nav-container">
+                <div class="nav-buttons">
+                    <button class="nav-btn active" data-page="ninjalinking">
+                        <i class="fas fa-search"></i>
+                        <span>Ninjalinking</span>
+                    </button>
+                    <button class="nav-btn" data-page="serp">
+                        <i class="fas fa-search-plus"></i>
+                        <span>Exploration SERP</span>
+                    </button>
+                    <button class="nav-btn" data-page="ereputation">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>E-Réputation</span>
+                    </button>
+                    <button class="nav-btn" data-page="ia">
+                        <i class="fas fa-robot"></i>
+                        <span>IA</span>
+                    </button>
+                    <button class="nav-btn" data-page="projects">
+                        <i class="fas fa-folder-open"></i>
+                        <span>Projets</span>
+                    </button>
+                    <button class="nav-btn" data-page="catalog">
+                        <i class="fas fa-database"></i>
+                        <span>Catalogue</span>
+                    </button>
+                </div>
+                <!-- Sélecteur de thème intégré -->
+                <div class="theme-selector" id="themeSelector">
+                    <div class="theme-option theme-white active" data-theme="white" title="Thème Blanc">
+                        <i class="fas fa-sun theme-icon"></i>
+                        <div class="theme-tooltip">Blanc</div>
+                    </div>
+                    <div class="theme-option theme-autumn" data-theme="autumn" title="Thème Automne">
+                        <i class="fas fa-leaf theme-icon"></i>
+                        <div class="theme-tooltip">Automne</div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Page Ninjalinking -->
+            <div class="page active" id="ninjalinking-page">
+                <div class="page-header">
+                    <h2>Recherche de Footprints</h2>
+                    <p>Sélectionnez vos catégories et générez vos recherches Google</p>
+                </div>
+
+                <div class="search-section">
+                    <div class="search-form">
+                        <input type="text" id="keywordInput" placeholder="Entrez vos mots-clés...">
+                        <button onclick="generateSearches('google')" class="btn btn-primary">
+                            <i class="fab fa-google"></i> Google
+                        </button>
+                        <button onclick="generateSearches('bing')" class="btn btn-primary">
+                            <i class="fab fa-microsoft"></i> Bing
+                        </button>
+                    </div>
+                </div>
+
+                <div class="categories-grid">
+                    <div class="category-card" data-category="blogs">
+                        <div class="card-icon">
+                            <i class="fas fa-blog"></i>
+                        </div>
+                        <h3>📝 Blogs</h3>
+                        <p>Opportunités de commentaires sur blogs</p>
+                    </div>
+
+                    <div class="category-card" data-category="forums">
+                        <div class="card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>💬 Forums</h3>
+                        <p>Discussions et forums spécialisés</p>
+                    </div>
+
+                    <div class="category-card" data-category="livres-dor">
+                        <div class="card-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h3>📖 Livres d'or</h3>
+                        <p>Livres d'or et guestbooks</p>
+                    </div>
+
+                    <div class="category-card" data-category="annuaires">
+                        <div class="card-icon">
+                            <i class="fas fa-list"></i>
+                        </div>
+                        <h3>📚 Annuaires</h3>
+                        <p>Soumission dans les annuaires</p>
+                    </div>
+
+                    <div class="category-card" data-category="profils">
+                        <div class="card-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3>👤 Profils utilisateurs</h3>
+                        <p>Pages de profils utilisateurs</p>
+                    </div>
+
+                    <div class="category-card" data-category="hybrides">
+                        <div class="card-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <h3>⚙️ Hybrides</h3>
+                        <p>CMS et plateformes précises</p>
+                    </div>
+
+                    <div class="category-card" data-category="articles-invites">
+                        <div class="card-icon">
+                            <i class="fas fa-pen-fancy"></i>
+                        </div>
+                        <h3>✍️ Articles invités</h3>
+                        <p>Opportunités d'articles invités</p>
+                    </div>
+                </div>
+
+                <div class="footprints-section" id="footprintsSection" style="display: none;">
+                    <div class="footprints-header">
+                        <h3>Footprints sélectionnés</h3>
+                        <div class="footprints-actions">
+                            <button class="btn btn-secondary" onclick="selectAllFootprints()">
+                                <i class="fas fa-check-square"></i> Tout sélectionner
+                            </button>
+                            <button class="btn btn-secondary" onclick="deselectAllFootprints()">
+                                <i class="fas fa-square"></i> Tout désélectionner
+                            </button>
+                            <button class="btn btn-primary" onclick="showFavorites()">
+                                <i class="fas fa-heart"></i> Mes favoris
+                            </button>
+                        </div>
+                    </div>
+                    <div class="footprints-list" id="footprintsList"></div>
+                </div>
+
+                <!-- Section Favoris -->
+                <div class="favorites-section" id="favoritesSection" style="display: none;">
+                    <div class="favorites-header">
+                        <h3><i class="fas fa-heart"></i> Mes Footprints Favoris</h3>
+                        <div class="favorites-actions">
+                            <button class="btn btn-secondary" onclick="hideFavorites()">
+                                <i class="fas fa-arrow-left"></i> Retour
+                            </button>
+                            <button class="btn btn-danger" onclick="clearAllFavorites()">
+                                <i class="fas fa-trash"></i> Vider les favoris
+                            </button>
+                        </div>
+                    </div>
+                    <div class="favorites-list" id="favoritesList"></div>
+                </div>
+
+            </div>
+
+            <!-- Page Exploration SERP -->
+            <div class="page" id="serp-page">
+                <div class="page-header">
+                    <h2>Exploration SERP</h2>
+                    <p>Opérateurs avancés Google/Bing pour des recherches précises</p>
+                </div>
+
+                <div class="search-section">
+                    <div class="search-form">
+                        <input type="text" id="serpKeyword" placeholder="Entrez votre mot-clé pour tester...">
+                        <button onclick="testSerpOperators('google')" class="btn btn-primary">
+                            <i class="fab fa-google"></i> Google
+                        </button>
+                        <button onclick="testSerpOperators('bing')" class="btn btn-primary">
+                            <i class="fab fa-microsoft"></i> Bing
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Catégories d'opérateurs SERP -->
+                <div class="categories-grid">
+                    <div class="category-card" data-category="analyse-concurrents">
+                        <div class="card-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>🔧 Analyse de sites concurrents</h3>
+                        <p>Selon une requête</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="contenus-autorite">
+                        <div class="card-icon">
+                            <i class="fas fa-archive"></i>
+                        </div>
+                        <h3>🗃 Contenus evergreen ou d'autorité</h3>
+                        <p>Contenus de référence</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="contenus-seo">
+                        <div class="card-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>📚 Contenus optimisés SEO</h3>
+                        <p>Détection de contenus SEO</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="operateurs-date">
+                        <div class="card-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3>📅 Opérateurs de date</h3>
+                        <p>Pour contenus récents</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="fichiers-telechargeables">
+                        <div class="card-icon">
+                            <i class="fas fa-file-download"></i>
+                        </div>
+                        <h3>🔍 Fichiers téléchargeables</h3>
+                        <p>PDF, DOC, XLS, etc.</p>
+                    </div>
+                </div>
+
+                <!-- Sélection d'année (visible uniquement si des footprints avec année sont sélectionnés) -->
+                <div id="serpYearSelection" class="year-selection" style="display: none;">
+                    <h4><i class="fas fa-calendar"></i> Sélection d'année</h4>
+                    <div class="year-input">
+                        <label for="serpYear">Année :</label>
+                        <select id="serpYear">
+                            <option value="2024">2024</option>
+                            <option value="2025" selected>2025</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Sélection de dates (visible uniquement si des opérateurs de date sont sélectionnés) -->
+                <div id="serpDateSelection" class="date-selection" style="display: none;">
+                    <h4><i class="fas fa-calendar"></i> Sélection de dates</h4>
+                    <div class="date-inputs">
+                        <div class="date-input-group">
+                            <label for="serpDateFrom">Date de début :</label>
+                            <input type="date" id="serpDateFrom" class="date-input">
+                        </div>
+                        <div class="date-input-group">
+                            <label for="serpDateTo">Date de fin :</label>
+                            <input type="date" id="serpDateTo" class="date-input">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Affichage des footprints sélectionnés -->
+                <div id="serpFootprintsSection" class="footprints-section" style="display: none;">
+                    <div class="footprints-header">
+                        <h3><i class="fas fa-list"></i> Footprints sélectionnés</h3>
+                        <div class="footprints-actions">
+                            <button class="btn btn-secondary" onclick="selectAllSerpFootprints()">
+                                <i class="fas fa-check-square"></i> Tout sélectionner
+                            </button>
+                            <button class="btn btn-secondary" onclick="deselectAllSerpFootprints()">
+                                <i class="fas fa-square"></i> Tout désélectionner
+                            </button>
+                            <button class="btn btn-primary" onclick="showFavorites()">
+                                <i class="fas fa-heart"></i> Mes favoris
+                            </button>
+                        </div>
+                    </div>
+                    <div id="serpFootprintsList" class="footprints-list"></div>
+                </div>
+
+                <!-- Section Favoris SERP -->
+                <div class="favorites-section" id="serpFavoritesSection" style="display: none;">
+                    <div class="favorites-header">
+                        <h3><i class="fas fa-heart"></i> Mes Footprints Favoris SERP</h3>
+                        <div class="favorites-actions">
+                            <button class="btn btn-secondary" onclick="hideFavorites()">
+                                <i class="fas fa-arrow-left"></i> Retour
+                            </button>
+                            <button class="btn btn-danger" onclick="clearAllFavorites()">
+                                <i class="fas fa-trash"></i> Vider les favoris
+                            </button>
+                        </div>
+                    </div>
+                    <div class="favorites-list" id="serpFavoritesList"></div>
+                </div>
+            </div>
+
+            <!-- Page E-Réputation -->
+            <div class="page" id="ereputation-page">
+                <div class="page-header">
+                    <h2>E-Réputation</h2>
+                    <p>Footprints SEO pour analyser la réputation en ligne</p>
+                </div>
+
+                <div class="search-section">
+                    <div class="search-form">
+                        <input type="text" id="ereputationKeyword" placeholder="Entrez votre mot-clé pour analyser l'e-réputation...">
+                        <button onclick="testEreputationOperators('google')" class="btn btn-primary">
+                            <i class="fab fa-google"></i> Google
+                        </button>
+                        <button onclick="testEreputationOperators('bing')" class="btn btn-primary">
+                            <i class="fab fa-microsoft"></i> Bing
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Catégories d'opérateurs E-Réputation -->
+                <div class="categories-grid">
+                    <div class="category-card" data-category="avis-notations">
+                        <div class="card-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3>📣 Avis & notations</h3>
+                        <p>Plateformes d'avis et notations</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="forums-discussion">
+                        <div class="card-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3>💬 Forums de discussion</h3>
+                        <p>Forums et discussions communautaires</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="blogs-articles">
+                        <div class="card-icon">
+                            <i class="fas fa-blog"></i>
+                        </div>
+                        <h3>📝 Blogs, articles et news</h3>
+                        <p>Contenus éditoriaux et articles</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="reseaux-sociaux">
+                        <div class="card-icon">
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                        <h3>👥 Réseaux sociaux</h3>
+                        <p>Via Google (Twitter, Facebook, etc.)</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="contenus-autorite">
+                        <div class="card-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h3>📂 Contenus à forte autorité</h3>
+                        <p>Fichiers (PDF, DOC, PPT)</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="charge-emotionnelle">
+                        <div class="card-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h3>🔎 Charge émotionnelle</h3>
+                        <p>Requêtes à forte suspicion</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="retours-utilisateurs">
+                        <div class="card-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <h3>💬 Retours utilisateurs</h3>
+                        <p>Recherches classiques sur les retours</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="filtres-temporels">
+                        <div class="card-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3>📅 Filtres temporels</h3>
+                        <p>Pour contenus récents</p>
+                    </div>
+                </div>
+
+                <!-- Sélection d'année (visible uniquement si des footprints avec année sont sélectionnés) -->
+                <div id="ereputationYearSelection" class="year-selection" style="display: none;">
+                    <h4><i class="fas fa-calendar"></i> Sélection d'année</h4>
+                    <div class="year-input">
+                        <label for="ereputationYear">Année :</label>
+                        <select id="ereputationYear">
+                            <option value="2024">2024</option>
+                            <option value="2025" selected>2025</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Sélection de dates (visible uniquement si des opérateurs de date sont sélectionnés) -->
+                <div id="ereputationDateSelection" class="date-selection" style="display: none;">
+                    <h4><i class="fas fa-calendar"></i> Sélection de dates</h4>
+                    <div class="date-inputs">
+                        <div class="date-input-group">
+                            <label for="ereputationDateFrom">Date de début :</label>
+                            <input type="date" id="ereputationDateFrom" class="date-input">
+                        </div>
+                        <div class="date-input-group">
+                            <label for="ereputationDateTo">Date de fin :</label>
+                            <input type="date" id="ereputationDateTo" class="date-input">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Affichage des footprints sélectionnés -->
+                <div id="ereputationFootprintsSection" class="footprints-section" style="display: none;">
+                    <div class="footprints-header">
+                        <h3><i class="fas fa-list"></i> Footprints sélectionnés</h3>
+                        <div class="footprints-actions">
+                            <button onclick="selectAllEreputationFootprints()" class="btn btn-secondary">
+                                <i class="fas fa-check-square"></i> Tout sélectionner
+                            </button>
+                            <button onclick="deselectAllEreputationFootprints()" class="btn btn-outline">
+                                <i class="fas fa-square"></i> Tout désélectionner
+                            </button>
+                            <button class="btn btn-primary" onclick="showFavorites()">
+                                <i class="fas fa-heart"></i> Mes favoris
+                            </button>
+                        </div>
+                    </div>
+                    <div id="ereputationFootprintsList" class="footprints-list"></div>
+                </div>
+
+                <!-- Section Favoris E-Réputation -->
+                <div class="favorites-section" id="ereputationFavoritesSection" style="display: none;">
+                    <div class="favorites-header">
+                        <h3><i class="fas fa-heart"></i> Mes Footprints Favoris E-Réputation</h3>
+                        <div class="favorites-actions">
+                            <button class="btn btn-secondary" onclick="hideFavorites()">
+                                <i class="fas fa-arrow-left"></i> Retour
+                            </button>
+                            <button class="btn btn-danger" onclick="clearAllFavorites()">
+                                <i class="fas fa-trash"></i> Vider les favoris
+                            </button>
+                        </div>
+                    </div>
+                    <div class="favorites-list" id="ereputationFavoritesList"></div>
+                </div>
+            </div>
+
+            <!-- Page IA -->
+            <div class="page" id="ia-page">
+                <div class="page-header">
+                    <h2>IA</h2>
+                    <p>Prompts ChatGPT pour analyser et optimiser votre présence digitale</p>
+                </div>
+
+                <div class="search-section">
+                    <div class="search-form">
+                        <input type="text" id="iaKeyword" placeholder="Entrez votre mot-clé pour générer des prompts IA...">
+                    </div>
+                </div>
+
+                <!-- Catégories de prompts IA -->
+                <div class="categories-grid">
+                    <div class="category-card" data-category="ereputation">
+                        <div class="card-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>🛡️ E-Réputation</h3>
+                        <p>Analyse de la réputation en ligne</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="concurrence">
+                        <div class="card-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>📊 Concurrence</h3>
+                        <p>Analyse concurrentielle</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="seo">
+                        <div class="card-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>🔍 SEO</h3>
+                        <p>Optimisation du référencement</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="contenu">
+                        <div class="card-icon">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <h3>📝 Contenu</h3>
+                        <p>Stratégie de contenu</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="social">
+                        <div class="card-icon">
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                        <h3>📱 Social Media</h3>
+                        <p>Stratégie réseaux sociaux</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="marketing">
+                        <div class="card-icon">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <h3>🎯 Marketing</h3>
+                        <p>Stratégie marketing complète</p>
+                    </div>
+                </div>
+
+                <!-- Affichage des prompts sélectionnés -->
+                <div id="iaPromptsSection" class="prompts-section" style="display: none;">
+                    <div class="prompts-header">
+                        <h3><i class="fas fa-robot"></i> Prompts sélectionnés</h3>
+                        <div class="prompts-actions">
+                            <button onclick="selectAllIaPrompts()" class="btn btn-secondary">
+                                <i class="fas fa-check-square"></i> Tout sélectionner
+                            </button>
+                            <button onclick="deselectAllIaPrompts()" class="btn btn-outline">
+                                <i class="fas fa-square"></i> Tout désélectionner
+                            </button>
+                        </div>
+                    </div>
+                    <div id="iaPromptsList" class="prompts-list"></div>
+                </div>
+            </div>
+
+            <!-- Page Projets -->
+            <div class="page" id="projects-page">
+                <div class="projects-dashboard">
+                    <!-- Header avec statistiques -->
+                    <div class="projects-header">
+                        <div class="projects-title">
+                            <h2>Mes Projets</h2>
+                            <p>Gérez vos projets SEO et E-Réputation</p>
+                        </div>
+                        <div class="projects-actions">
+                            <button class="btn btn-secondary" onclick="selectAllProjects()">
+                                <i class="fas fa-check-square"></i> Tout sélectionner
+                            </button>
+                            <button class="btn btn-primary" onclick="openProjectModal()">
+                                <i class="fas fa-plus"></i> + Nouveau projet
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Statistiques -->
+                    <div class="projects-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon total">
+                                <i class="fas fa-bullseye"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-number" id="totalProjectsCount">0</span>
+                                <span class="stat-label">Total projets</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon seo">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-number" id="seoProjectsCount">0</span>
+                                <span class="stat-label">Référencement</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon reputation">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-number" id="reputationProjectsCount">0</span>
+                                <span class="stat-label">E-Réputation</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon monthly">
+                                <i class="fas fa-calendar"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-number" id="monthlyProjectsCount">0</span>
+                                <span class="stat-label">Ce mois</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recherche et filtres -->
+                    <div class="projects-filters">
+                        <div class="search-bar">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="projectSearch" placeholder="Rechercher par nom ou URL...">
+                        </div>
+                        <div class="filter-group">
+                            <i class="fas fa-filter"></i>
+                            <select id="objectiveFilter">
+                                <option value="">Tous les objectifs</option>
+                                <option value="SEO">Référencement</option>
+                                <option value="E-Réputation">E-Réputation</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Actions en masse pour projets -->
+                    <div class="bulk-actions" id="projectBulkActions" style="display: none;">
+                        <div class="bulk-actions-info">
+                            <span id="selectedProjectsCount">0</span> projet(s) sélectionné(s)
+                        </div>
+                        <div class="bulk-actions-buttons">
+                            <button class="btn btn-danger" onclick="deleteSelectedProjects()">
+                                <i class="fas fa-trash"></i> Supprimer
+                            </button>
+                            <button class="btn btn-outline" onclick="clearProjectSelection()">
+                                <i class="fas fa-times"></i> Annuler sélection
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Liste des projets -->
+                    <div class="projects-content">
+                        <div class="projects-info">
+                            <h3>Projets (<span id="projectCount">0</span>)</h3>
+                        </div>
+                        <div class="projects-grid" id="projectsGrid">
+                            <!-- Les projets seront affichés ici -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Détail Projet -->
+            <div class="page" id="project-detail-page">
+                <div class="project-detail-back">
+                    <button class="btn btn-secondary" onclick="switchPage('projects')">
+                        <i class="fas fa-arrow-left"></i> Retour aux projets
+                    </button>
+                </div>
+                <div class="project-detail-container">
+                    <!-- Header du projet -->
+                    <div class="project-detail-header">
+                        <div class="project-detail-info">
+                            <div class="project-detail-title-container">
+                                <h1 class="project-detail-title" id="projectDetailTitle">Nom du projet</h1>
+                                <button class="project-edit-btn" onclick="toggleProjectEdit()" id="projectEditBtn">
+                                    <i class="fas fa-edit"></i> Modifier le projet
+                                </button>
+                            </div>
+                            <div class="project-detail-url-container">
+                                <a href="#" target="_blank" class="project-detail-url" id="projectDetailUrl">
+                                    URL du projet <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                            <div class="project-detail-keywords" id="projectDetailKeywords">
+                                <!-- Les mots-clés seront affichés ici -->
+                            </div>
+                            <div class="project-detail-updated" id="projectDetailUpdated">
+                                Dernière mise à jour : <span id="projectDetailUpdatedDate">-</span>
+                            </div>
+                        </div>
+                        <div class="project-detail-objective">
+                            <span class="project-objective-tag" id="projectDetailObjective">Référencement</span>
+                        </div>
+                    </div>
+
+                    <!-- Formulaire d'édition du projet -->
+                    <div class="project-edit-form" id="projectEditForm" style="display: none;">
+                        <form id="projectDetailForm">
+                            <div class="edit-form-grid">
+                                <div class="form-group">
+                                    <label for="editProjectName">Nom du projet *</label>
+                                    <input type="text" id="editProjectName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editProjectUrl">URL du site *</label>
+                                    <input type="url" id="editProjectUrl" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editProjectObjective">Objectif *</label>
+                                    <select id="editProjectObjective" required>
+                                        <option value="">Sélectionner un objectif</option>
+                                        <option value="SEO">Référencement</option>
+                                        <option value="E-Réputation">E-Réputation</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editProjectTraffic">Trafic</label>
+                                    <input type="number" id="editProjectTraffic" min="0" placeholder="50000">
+                                </div>
+                                <div class="form-group">
+                                    <label for="editProjectTrustFlow">Trust Flow</label>
+                                    <input type="number" id="editProjectTrustFlow" min="0" max="100" placeholder="50">
+                                </div>
+                                <div class="form-group">
+                                    <label for="editProjectTTF">TTF</label>
+                                    <select id="editProjectTTF">
+                                        <option value="Arts">Arts</option>
+                                        <option value="Adult">Adult</option>
+                                        <option value="Business">Business</option>
+                                        <option value="Computers">Computers</option>
+                                        <option value="Games">Games</option>
+                                        <option value="Health">Health</option>
+                                        <option value="Home">Home</option>
+                                        <option value="News">News</option>
+                                        <option value="Reference">Reference</option>
+                                        <option value="Regional">Regional</option>
+                                        <option value="Science">Science</option>
+                                        <option value="Shopping">Shopping</option>
+                                        <option value="Society">Society</option>
+                                        <option value="Sports">Sports</option>
+                                        <option value="Recreation">Recreation</option>
+                                        <option value="Vitrine">Vitrine</option>
+                                        <option value="World">World</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editProjectReferringDomains">Domaines référents</label>
+                                    <input type="number" id="editProjectReferringDomains" min="0" placeholder="0">
+                                </div>
+                                <div class="form-group">
+                                    <label for="editProjectPublicationGoal">Objectif de publication</label>
+                                    <input type="number" id="editProjectPublicationGoal" min="0" placeholder="Nombre de liens à obtenir">
+                                </div>
+                                <div class="form-group">
+                                    <label for="editProjectBudget">Budget (€)</label>
+                                    <input type="number" id="editProjectBudget" min="0" step="0.01" placeholder="0.00">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="editProjectKeywords">Mots-clés à travailler</label>
+                                    <div class="keywords-container">
+                                        <div class="keywords-input-container">
+                                            <input type="text" id="editKeywordInput" placeholder="Ajouter un mot-clé...">
+                                            <button type="button" class="btn btn-sm btn-primary" onclick="addEditKeyword()">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="keywords-tags" id="editKeywordsTags">
+                                            <!-- Les mots-clés seront affichés ici -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="edit-form-actions">
+                                <button type="button" class="btn btn-secondary" onclick="cancelProjectEdit()">Annuler</button>
+                                <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- KPIs du projet -->
+                    <div class="project-kpis">
+                        <div class="kpi-card">
+                            <div class="kpi-number" id="projectDetailTraffic">0</div>
+                            <div class="kpi-label">Trafic</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-number" id="projectDetailTrustFlow">0</div>
+                            <div class="kpi-label">Trust Flow</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-number" id="projectDetailReferringDomains">0</div>
+                            <div class="kpi-label">Domaines référents</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-number" id="projectDetailSpotsCount">0</div>
+                            <div class="kpi-label">Spots</div>
+                        </div>
+                    </div>
+
+                    <!-- Section Budget et Dépenses -->
+                    <div class="project-budget-section">
+                        <div class="budget-header">
+                            <h3>Budget et Dépenses</h3>
+                        </div>
+                        <div class="budget-cards">
+                            <div class="budget-card">
+                                <div class="budget-label">Budget alloué</div>
+                                <div class="budget-amount" id="projectBudgetAmount">0.00 €</div>
+                            </div>
+                            <div class="budget-card">
+                                <div class="budget-label">Dépenses totales</div>
+                                <div class="budget-amount" id="projectTotalExpenses">0.00 €</div>
+                            </div>
+                            <div class="budget-card">
+                                <div class="budget-label">Budget en attente</div>
+                                <div class="budget-amount" id="projectPendingBudget">0.00 €</div>
+                            </div>
+                            <div class="budget-card">
+                                <div class="budget-label">Reste disponible</div>
+                                <div class="budget-amount" id="projectRemainingBudget">0.00 €</div>
+                            </div>
+                        </div>
+                        <div class="budget-progress">
+                            <div class="budget-progress-bar">
+                                <div class="budget-progress-fill" id="budgetProgressFill"></div>
+                            </div>
+                            <div class="budget-progress-text" id="budgetProgressText">0% du budget utilisé</div>
+                        </div>
+                    </div>
+
+                    <!-- Jauge de progression de l'objectif de publication -->
+                    <div class="project-progress-section" id="projectProgressSection" style="display: none;">
+                        <div class="progress-card">
+                            <div class="progress-header">
+                                <div class="progress-title">
+                                    <div class="progress-icon">
+                                        <i class="fas fa-bullseye"></i>
+                                    </div>
+                                    <div class="progress-title-content">
+                                        <h3>Objectif de publication</h3>
+                                        <p class="progress-subtitle" id="progressSubtitle">Définissez un objectif pour suivre vos progrès</p>
+                                    </div>
+                                </div>
+                                <div class="progress-actions">
+                                    <button class="btn-edit-goal" onclick="editPublicationGoal()" title="Modifier l'objectif">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="progress-content">
+                                <div class="progress-stats-grid">
+                                    <div class="stat-item current">
+                                        <div class="stat-value" id="progressCurrent">0</div>
+                                        <div class="stat-label">Publiés</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="stat-separator">
+                                        <div class="separator-line"></div>
+                                        <div class="separator-text">sur</div>
+                                    </div>
+                                    
+                                    <div class="stat-item goal">
+                                        <div class="stat-value" id="progressGoal">0</div>
+                                        <div class="stat-label">Objectif</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-flag"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="progress-visual">
+                                    <div class="progress-bar-container">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" id="progressFill"></div>
+                                            <div class="progress-milestones" id="progressMilestones"></div>
+                                        </div>
+                                        <div class="progress-labels">
+                                            <span class="progress-start">0</span>
+                                            <span class="progress-end" id="progressEndLabel">0</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="progress-info">
+                                        <div class="progress-percentage-container">
+                                            <div class="progress-percentage" id="progressPercentage">0%</div>
+                                            <div class="progress-percentage-label">complété</div>
+                                        </div>
+                                        <div class="progress-status" id="progressStatus"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="progress-details" id="progressDetails" style="display: none;">
+                                    <div class="progress-detail-item">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span>Dernière mise à jour : <span id="lastUpdate">Aujourd'hui</span></span>
+                                    </div>
+                                    <div class="progress-detail-item">
+                                        <i class="fas fa-trending-up"></i>
+                                        <span>Vitesse : <span id="progressSpeed">0</span> liens/semaine</span>
+                                    </div>
+                                    <div class="progress-detail-item">
+                                        <i class="fas fa-clock"></i>
+                                        <span>Estimation : <span id="progressETA">-</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section des spots -->
+                    <div class="project-spots-section">
+                        <div class="project-spots-header">
+                            <h2>Spots du projet (<span id="projectSpotsCount">0</span>)</h2>
+                            <div class="project-spots-actions">
+                                <button class="btn btn-info" onclick="openImportSpotsModal()">
+                                    <i class="fas fa-file-excel"></i> Importer Excel
+                                </button>
+                                <button class="btn btn-success admin-only" onclick="exportProjectSpotsToExcel()" style="display: none;">
+                                    <i class="fas fa-download"></i> Exporter Excel
+                                </button>
+                                <button class="btn btn-primary" onclick="openAddSpotModal()">
+                                    <i class="fas fa-plus"></i> + Ajouter un spot
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="project-spots-table-container">
+                            <table class="project-spots-table" id="projectSpotsTable">
+                                <thead>
+                                    <tr>
+                                        <th class="sortable" data-sort="url" onclick="sortSpotsTable('url')">SITE</th>
+                                        <th>URL CIBLE</th>
+                                        <th class="sortable" data-sort="type" onclick="sortSpotsTable('type')">TYPE</th>
+                                        <th class="sortable" data-sort="theme" onclick="sortSpotsTable('theme')">THÉMATIQUE</th>
+                                        <th class="sortable" data-sort="trustFlow" onclick="sortSpotsTable('trustFlow')">TF</th>
+                                        <th class="sortable" data-sort="traffic" onclick="sortSpotsTable('traffic')">TRAFIC</th>
+                                        <th class="sortable" data-sort="ttf" onclick="sortSpotsTable('ttf')">TTF</th>
+                                        <th class="sortable" data-sort="publicationDate" onclick="sortSpotsTable('publicationDate')">DATE</th>
+                                        <th class="sortable" data-sort="price" onclick="sortSpotsTable('price')">PRIX</th>
+                                        <th class="sortable" data-sort="status" onclick="sortSpotsTable('status')">STATUT</th>
+                                        <th>ACTIONS</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="projectSpotsTableBody">
+                                    <!-- Les spots seront affichés ici -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Catalogue -->
+            <div class="page" id="catalog-page">
+                <div class="catalog-header">
+                    <div class="catalog-title">
+                        <h2>Catalogue de Spots</h2>
+                        <p>Gérez votre base de données de sites</p>
+                    </div>
+        <div class="catalog-actions">
+            <button class="btn btn-success admin-only" onclick="openImportModal()" style="display: none;">
+                <i class="fas fa-upload"></i> Importer
+            </button>
+            <button class="btn btn-info admin-only" onclick="downloadCSVModel()" style="display: none;">
+                <i class="fas fa-download"></i> Modèle CSV
+            </button>
+            <button class="btn btn-success admin-only" onclick="downloadExcelModel()" style="display: none;">
+                <i class="fas fa-download"></i> Modèle Excel
+            </button>
+            <button class="btn btn-info admin-only" onclick="exportToExcel()" style="display: none;">
+                <i class="fas fa-download"></i> Exporter Excel
+            </button>
+            <button class="btn btn-primary admin-only" onclick="openSiteModal()" style="display: none;">
+                <i class="fas fa-plus"></i> Ajouter
+            </button>
+        </div>
+                </div>
+
+                <div class="catalog-filters">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="catalogSearch" placeholder="Rechercher par nom ou URL...">
+                    </div>
+                    <div class="filter-dropdowns">
+                        <div class="filter-group">
+                            <i class="fas fa-filter"></i>
+                            <select id="typeFilter">
+                                <option value="">Tous les types</option>
+                                <option value="Forum">Forum</option>
+                                <option value="Blog">Blog</option>
+                                <option value="Annuaire">Annuaire</option>
+                                <option value="Média">Média</option>
+                                <option value="E-commerce">E-commerce</option>
+                                <option value="Réseau social">Réseau social</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <i class="fas fa-filter"></i>
+                            <select id="themeFilter">
+                                <option value="">Toutes les thématiques</option>
+                                <option value="Généraliste">Généraliste</option>
+                                <option value="Actualités & Médias">Actualités & Médias</option>
+                                <option value="Business & Marketing">Business & Marketing</option>
+                                <option value="E-commerce & Affiliation">E-commerce & Affiliation</option>
+                                <option value="Éducation & Formation">Éducation & Formation</option>
+                                <option value="Santé & Bien-être">Santé & Bien-être</option>
+                                <option value="Technologie & Informatique">Technologie & Informatique</option>
+                                <option value="Lifestyle & Loisirs">Lifestyle & Loisirs</option>
+                                <option value="Finance & Crypto">Finance & Crypto</option>
+                                <option value="Immobilier">Immobilier</option>
+                                <option value="Automobile">Automobile</option>
+                                <option value="Cuisine & Alimentation">Cuisine & Alimentation</option>
+                                <option value="Animaux">Animaux</option>
+                                <option value="Développement personnel">Développement personnel</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions en masse -->
+                <div class="bulk-actions" id="bulkActions" style="display: none;">
+                    <div class="bulk-actions-info">
+                        <span id="selectedCount">0</span> site(s) sélectionné(s)
+                    </div>
+                    <div class="bulk-actions-buttons">
+                        <button class="btn btn-secondary" onclick="editSelectedSites()">
+                            <i class="fas fa-edit"></i> Modifier
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteSelectedSites()">
+                            <i class="fas fa-trash"></i> Supprimer
+                        </button>
+                        <button class="btn btn-primary" onclick="showAddToProjectModal()">
+                            <i class="fas fa-plus"></i> Ajouter au projet
+                        </button>
+                        <button class="btn btn-outline" onclick="clearSelection()">
+                            <i class="fas fa-times"></i> Annuler sélection
+                        </button>
+                    </div>
+                </div>
+
+                <div class="catalog-content">
+                    <div class="catalog-info">
+                        <h3>Spots (<span id="sitesCount">0</span>)</h3>
+                    </div>
+                    <div class="catalog-table-container">
+                        <table class="catalog-table" id="catalogTable">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="selectAllSites"></th>
+                                    <th class="sortable" data-sort="url" onclick="sortTable('url')">URL</th>
+                                    <th class="sortable" data-sort="type" onclick="sortTable('type')">TYPE</th>
+                                    <th class="sortable" data-sort="theme" onclick="sortTable('theme')">THÉMATIQUE</th>
+                                    <th class="sortable" data-sort="traffic" onclick="sortTable('traffic')">TRAFIC</th>
+                                    <th class="sortable" data-sort="trustFlow" onclick="sortTable('trustFlow')">TRUST FLOW</th>
+                                    <th class="sortable" data-sort="ttf" onclick="sortTable('ttf')">TOPICAL TRUST FLOW (TTF)</th>
+                                    <th class="sortable" data-sort="follow" onclick="sortTable('follow')">FOLLOW</th>
+                                    <th>NOTES</th>
+                                    <th>ACTIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="catalogTableBody">
+                                <!-- Les sites seront affichés ici -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Projet -->
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalProjectTitle">Nouveau Projet</h3>
+                <button class="modal-close" onclick="closeProjectModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="projectForm">
+                    <div class="form-group">
+                        <label for="projectName">Nom du projet *</label>
+                        <input type="text" id="projectName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectUrl">URL du site *</label>
+                        <input type="url" id="projectUrl" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectObjective">Objectif *</label>
+                        <select id="projectObjective" required>
+                            <option value="">Sélectionner un objectif</option>
+                            <option value="SEO">Référencement</option>
+                            <option value="E-Réputation">E-Réputation</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectTraffic">Trafic</label>
+                        <input type="number" id="projectTraffic" min="0" placeholder="50000">
+                    </div>
+                    <div class="form-group">
+                        <label for="projectTrustFlow">Trust Flow</label>
+                        <input type="number" id="projectTrustFlow" min="0" max="100" placeholder="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="projectTTF">TTF</label>
+                        <select id="projectTTF">
+                            <option value="Arts">Arts</option>
+                            <option value="Adult">Adult</option>
+                            <option value="Business">Business</option>
+                            <option value="Computers">Computers</option>
+                            <option value="Games">Games</option>
+                            <option value="Health">Health</option>
+                            <option value="Home">Home</option>
+                            <option value="News">News</option>
+                            <option value="Reference">Reference</option>
+                            <option value="Regional">Regional</option>
+                            <option value="Science">Science</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Society">Society</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Recreation">Recreation</option>
+                            <option value="Vitrine">Vitrine</option>
+                            <option value="World">World</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectReferringDomains">Domaines référents</label>
+                        <input type="number" id="projectReferringDomains" min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="projectPublicationGoal">Objectif de publication</label>
+                        <input type="number" id="projectPublicationGoal" min="0" placeholder="Nombre de liens à obtenir">
+                    </div>
+                    <div class="form-group">
+                        <label for="projectBudget">Budget (€)</label>
+                        <input type="number" id="projectBudget" min="0" step="0.01" placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="projectKeywords">Mots-clés à travailler</label>
+                        <div class="keywords-container">
+                            <div class="keywords-input-container">
+                                <input type="text" id="projectKeywordInput" placeholder="Ajouter un mot-clé...">
+                                <button type="button" class="btn btn-sm btn-primary" onclick="addKeyword()">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="keywords-tags" id="keywordsTags">
+                                <!-- Les mots-clés seront affichés ici -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeProjectModal()">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ajouter Spot -->
+    <div id="addSpotModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Ajouter un spot au projet</h3>
+                <button class="modal-close" onclick="closeAddSpotModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addSpotForm">
+                    <div class="form-group">
+                        <label for="spotUrl">URL du site *</label>
+                        <input type="url" id="spotUrl" required placeholder="https://exemple.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="spotTargetUrl">Url cible</label>
+                        <input type="url" id="spotTargetUrl" placeholder="https://votre-site.com/page-cible">
+                    </div>
+                    <div class="form-group">
+                        <label for="spotType">Type</label>
+                        <select id="spotType">
+                            <option value="Forum">Forum</option>
+                            <option value="Blog">Blog</option>
+                            <option value="Annuaire">Annuaire</option>
+                            <option value="Média">Média</option>
+                            <option value="E-commerce">E-commerce</option>
+                            <option value="Réseau social">Réseau social</option>
+                            <option value="Vitrine">Vitrine</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="spotTheme">Thématique</label>
+                        <select id="spotTheme">
+                            <option value="Généraliste">Généraliste</option>
+                            <option value="Actualités & Médias">Actualités & Médias</option>
+                            <option value="Business & Marketing">Business & Marketing</option>
+                            <option value="E-commerce & Affiliation">E-commerce & Affiliation</option>
+                            <option value="Éducation & Formation">Éducation & Formation</option>
+                            <option value="Santé & Bien-être">Santé & Bien-être</option>
+                            <option value="Technologie & Informatique">Technologie & Informatique</option>
+                            <option value="Lifestyle & Loisirs">Lifestyle & Loisirs</option>
+                            <option value="Finance & Crypto">Finance & Crypto</option>
+                            <option value="Immobilier">Immobilier</option>
+                            <option value="Automobile">Automobile</option>
+                            <option value="Cuisine & Alimentation">Cuisine & Alimentation</option>
+                            <option value="Animaux">Animaux</option>
+                            <option value="Développement personnel">Développement personnel</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="spotTrustFlow">Trust Flow</label>
+                        <input type="number" id="spotTrustFlow" min="0" max="100" placeholder="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="spotTraffic">Trafic</label>
+                        <input type="number" id="spotTraffic" min="0" placeholder="10000">
+                    </div>
+                    <div class="form-group">
+                        <label for="spotTTF">TTF</label>
+                        <select id="spotTTF">
+                            <option value="Arts">Arts</option>
+                            <option value="Adult">Adult</option>
+                            <option value="Business">Business</option>
+                            <option value="Computers">Computers</option>
+                            <option value="Games">Games</option>
+                            <option value="Health">Health</option>
+                            <option value="Home">Home</option>
+                            <option value="News">News</option>
+                            <option value="Reference">Reference</option>
+                            <option value="Regional">Regional</option>
+                            <option value="Science">Science</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Society">Society</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Recreation">Recreation</option>
+                            <option value="Vitrine">Vitrine</option>
+                            <option value="World">World</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="spotPublicationDate">Date</label>
+                        <input type="date" id="spotPublicationDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="spotPrice">Prix (€)</label>
+                        <input type="number" id="spotPrice" min="0" step="0.01" placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="spotStatus">Statut</label>
+                        <select id="spotStatus">
+                            <option value="A publier">A publier</option>
+                            <option value="En attente">En attente</option>
+                            <option value="A vérifier">A vérifier</option>
+                            <option value="Publié">Publié</option>
+                            <option value="Rejeté">Rejeté</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeAddSpotModal()">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Ajouter le spot</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Modifier Spot -->
+    <div id="editSpotModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Modifier le spot</h3>
+                <button class="modal-close" onclick="closeEditSpotModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editSpotForm">
+                    <div class="form-group">
+                        <label for="editSpotUrl">URL du site *</label>
+                        <input type="url" id="editSpotUrl" required placeholder="https://exemple.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="editSpotTargetUrl">Url cible</label>
+                        <input type="url" id="editSpotTargetUrl" placeholder="https://votre-site.com/page-cible">
+                    </div>
+                    <div class="form-group">
+                        <label for="editSpotType">Type</label>
+                        <select id="editSpotType">
+                            <option value="Forum">Forum</option>
+                            <option value="Blog">Blog</option>
+                            <option value="Annuaire">Annuaire</option>
+                            <option value="Média">Média</option>
+                            <option value="E-commerce">E-commerce</option>
+                            <option value="Réseau social">Réseau social</option>
+                            <option value="Vitrine">Vitrine</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editSpotTheme">Thématique</label>
+                        <select id="editSpotTheme">
+                            <option value="Généraliste">Généraliste</option>
+                            <option value="Actualités & Médias">Actualités & Médias</option>
+                            <option value="Business & Marketing">Business & Marketing</option>
+                            <option value="E-commerce & Affiliation">E-commerce & Affiliation</option>
+                            <option value="Éducation & Formation">Éducation & Formation</option>
+                            <option value="Santé & Bien-être">Santé & Bien-être</option>
+                            <option value="Technologie & Informatique">Technologie & Informatique</option>
+                            <option value="Lifestyle & Loisirs">Lifestyle & Loisirs</option>
+                            <option value="Finance & Crypto">Finance & Crypto</option>
+                            <option value="Immobilier">Immobilier</option>
+                            <option value="Automobile">Automobile</option>
+                            <option value="Cuisine & Alimentation">Cuisine & Alimentation</option>
+                            <option value="Animaux">Animaux</option>
+                            <option value="Développement personnel">Développement personnel</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editSpotTrustFlow">Trust Flow</label>
+                        <input type="number" id="editSpotTrustFlow" min="0" max="100" placeholder="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="editSpotTraffic">Trafic</label>
+                        <input type="number" id="editSpotTraffic" min="0" placeholder="10000">
+                    </div>
+                    <div class="form-group">
+                        <label for="editSpotTTF">TTF</label>
+                        <select id="editSpotTTF">
+                            <option value="Arts">Arts</option>
+                            <option value="Adult">Adult</option>
+                            <option value="Business">Business</option>
+                            <option value="Computers">Computers</option>
+                            <option value="Games">Games</option>
+                            <option value="Health">Health</option>
+                            <option value="Home">Home</option>
+                            <option value="News">News</option>
+                            <option value="Reference">Reference</option>
+                            <option value="Regional">Regional</option>
+                            <option value="Science">Science</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Society">Society</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Recreation">Recreation</option>
+                            <option value="World">World</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editSpotPublicationDate">Date</label>
+                        <input type="date" id="editSpotPublicationDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="editSpotStatus">Statut</label>
+                        <select id="editSpotStatus">
+                            <option value="A publier">A publier</option>
+                            <option value="En attente">En attente</option>
+                            <option value="A vérifier">A vérifier</option>
+                            <option value="Publié">Publié</option>
+                            <option value="Rejeté">Rejeté</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeEditSpotModal()">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Import Sites -->
+    <div id="importModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Importer des sites en masse</h3>
+                <button class="modal-close" onclick="closeImportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="import-instructions">
+                    <h4>Instructions d'import :</h4>
+                    <ol>
+                        <li>Téléchargez le modèle Excel ou CSV pour voir le format attendu</li>
+                        <li>Remplissez votre fichier avec vos sites</li>
+                        <li>Sélectionnez votre fichier (CSV, Excel .xlsx ou .xls)</li>
+                        <li>Cliquez sur "Importer"</li>
+                    </ol>
+                </div>
+                
+                <div class="form-group">
+                    <label for="importFile">Fichier à importer</label>
+                    <input type="file" id="importFile" accept="*" onchange="handleFileSelect(event)">
+                    <small class="form-help">Formats supportés : CSV (.csv), Excel (.xlsx, .xls)</small>
+                </div>
+                
+                <div class="import-preview" id="importPreview" style="display: none;">
+                    <h4>Aperçu des données :</h4>
+                    <div class="preview-table-container">
+                        <table class="preview-table" id="previewTable">
+                            <thead>
+                                <tr>
+                                    <th>URL</th>
+                                    <th>Type</th>
+                                    <th>Thématique</th>
+                                    <th>Trafic</th>
+                                    <th>Trust Flow</th>
+                                    <th>TTF</th>
+                                    <th>Follow</th>
+                                </tr>
+                            </thead>
+                            <tbody id="previewTableBody">
+                                <!-- Les données seront affichées ici -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="import-stats" id="importStats">
+                        <!-- Les statistiques seront affichées ici -->
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeImportModal()">Annuler</button>
+                    <button type="button" class="btn btn-primary" id="importBtn" onclick="importCSVData()" disabled>
+                        <i class="fas fa-upload"></i> Importer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ajouter au Projet -->
+    <div id="addToProjectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Ajouter au projet</h3>
+                <button class="modal-close" onclick="closeAddToProjectModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="selectProject">Sélectionner un projet</label>
+                    <select id="selectProject" required>
+                        <option value="">Choisir un projet...</option>
+                        <!-- Les projets seront ajoutés dynamiquement -->
+                    </select>
+                </div>
+                <div class="selected-sites-preview" id="selectedSitesPreview">
+                    <!-- Aperçu des sites sélectionnés -->
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeAddToProjectModal()">Annuler</button>
+                    <button type="button" class="btn btn-primary" onclick="addSitesToProject()">
+                        <i class="fas fa-plus"></i> Ajouter
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Import Excel -->
+    <div id="importSpotsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Importer des spots depuis Excel</h3>
+                <button class="modal-close" onclick="closeImportSpotsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="import-instructions">
+                    <h4>📋 Instructions d'import</h4>
+                    <p>Veuillez utiliser le fichier Excel d'exemple pour importer vos spots. Les colonnes requises sont :</p>
+                    <ul>
+                        <li><strong>URL</strong> : L'URL du site (obligatoire)</li>
+                        <li><strong>Type</strong> : Forum, Blog, Annuaire, Média, E-commerce, Réseau social, Vitrine</li>
+                        <li><strong>Thématique</strong> : Généraliste, Business & Marketing, etc.</li>
+                        <li><strong>Trust Flow</strong> : Score de 0 à 100</li>
+                        <li><strong>Trafic</strong> : Nombre de visiteurs</li>
+                        <li><strong>TTF</strong> : Topical Trust Flow</li>
+                        <li><strong>Prix</strong> : Prix en euros (optionnel)</li>
+                        <li><strong>Statut</strong> : A publier, En attente, Publié, Rejeté</li>
+                    </ul>
+                </div>
+                
+                <div class="form-group">
+                    <label for="excelFile">Fichier Excel (.xlsx)</label>
+                    <input type="file" id="excelFile" accept=".xlsx,.xls" onchange="handleFileSelect(event)">
+                    <small class="form-help">Format accepté : Excel (.xlsx, .xls)</small>
+                </div>
+                
+                <div class="import-preview" id="importPreview" style="display: none;">
+                    <h4>📊 Aperçu des données</h4>
+                    <div class="preview-table-container">
+                        <table class="preview-table" id="previewTable">
+                            <thead id="previewTableHead"></thead>
+                            <tbody id="previewTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="import-stats" id="importStats"></div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeImportSpotsModal()">Annuler</button>
+                    <button type="button" class="btn btn-info" onclick="downloadExampleFile()">
+                        <i class="fas fa-download"></i> Télécharger l'exemple
+                    </button>
+                    <button type="button" class="btn btn-primary" id="importButton" onclick="importSpotsFromExcel()" disabled>
+                        <i class="fas fa-upload"></i> Importer les spots
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Notes du Site -->
+    <div id="siteNotesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Notes du site</h3>
+                <button class="modal-close" onclick="closeSiteNotesModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="site-info">
+                    <h4 id="siteNotesUrl"></h4>
+                    <p id="siteNotesType"></p>
+                </div>
+                <div class="form-group">
+                    <label for="siteNotesContent">Instructions et notes</label>
+                    <div class="wysiwyg-container">
+                        <div class="wysiwyg-toolbar">
+                            <button type="button" class="toolbar-btn" data-command="bold" title="Gras">
+                                <i class="fas fa-bold"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="italic" title="Italique">
+                                <i class="fas fa-italic"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="underline" title="Souligné">
+                                <i class="fas fa-underline"></i>
+                            </button>
+                            <div class="toolbar-separator"></div>
+                            <button type="button" class="toolbar-btn" data-command="formatBlock" data-value="h1" title="Titre 1">
+                                <span style="font-weight: bold; font-size: 1.2em;">H1</span>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="formatBlock" data-value="h2" title="Titre 2">
+                                <span style="font-weight: bold; font-size: 1.1em;">H2</span>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="formatBlock" data-value="h3" title="Titre 3">
+                                <span style="font-weight: bold;">H3</span>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="formatBlock" data-value="h4" title="Titre 4">
+                                <span style="font-weight: bold; font-size: 0.9em;">H4</span>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="formatBlock" data-value="h5" title="Titre 5">
+                                <span style="font-weight: bold; font-size: 0.8em;">H5</span>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="formatBlock" data-value="h6" title="Titre 6">
+                                <span style="font-weight: bold; font-size: 0.7em;">H6</span>
+                            </button>
+                            <div class="toolbar-separator"></div>
+                            <button type="button" class="toolbar-btn" data-command="insertUnorderedList" title="Liste à puces">
+                                <i class="fas fa-list-ul"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="insertOrderedList" title="Liste numérotée">
+                                <i class="fas fa-list-ol"></i>
+                            </button>
+                            <div class="toolbar-separator"></div>
+                            <button type="button" class="toolbar-btn" data-command="createLink" title="Lien">
+                                <i class="fas fa-link"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-command="removeFormat" title="Supprimer le formatage">
+                                <i class="fas fa-remove-format"></i>
+                            </button>
+                        </div>
+                        <div id="siteNotesContent" class="wysiwyg-editor" contenteditable="true" data-placeholder="Ajoutez des instructions spécifiques pour ce site..."></div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeSiteNotesModal()">Fermer</button>
+                    <button type="button" class="btn btn-primary" onclick="saveSiteNotes()" id="saveNotesBtn" style="display: none;">
+                        <i class="fas fa-save"></i> Sauvegarder
+                    </button>
+                    <button type="button" class="btn btn-warning" onclick="forceAdminMode()" id="forceAdminBtn" style="display: none;">
+                        <i class="fas fa-crown"></i> Mode Admin
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Site -->
+    <div id="siteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalSiteTitle">Nouveau Site</h3>
+                <button class="modal-close" onclick="closeSiteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="siteForm">
+                    <div class="form-group">
+                        <label for="siteUrl">URL *</label>
+                        <input type="url" id="siteUrl" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="siteType">Type</label>
+                        <select id="siteType">
+                            <option value="Forum">Forum</option>
+                            <option value="Blog">Blog</option>
+                            <option value="Annuaire">Annuaire</option>
+                            <option value="Média">Média</option>
+                            <option value="E-commerce">E-commerce</option>
+                            <option value="Réseau social">Réseau social</option>
+                            <option value="Vitrine">Vitrine</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="siteTheme">Thématique</label>
+                        <select id="siteTheme">
+                            <option value="Généraliste">Généraliste</option>
+                            <option value="Actualités & Médias">Actualités & Médias</option>
+                            <option value="Business & Marketing">Business & Marketing</option>
+                            <option value="E-commerce & Affiliation">E-commerce & Affiliation</option>
+                            <option value="Éducation & Formation">Éducation & Formation</option>
+                            <option value="Santé & Bien-être">Santé & Bien-être</option>
+                            <option value="Technologie & Informatique">Technologie & Informatique</option>
+                            <option value="Lifestyle & Loisirs">Lifestyle & Loisirs</option>
+                            <option value="Finance & Crypto">Finance & Crypto</option>
+                            <option value="Immobilier">Immobilier</option>
+                            <option value="Automobile">Automobile</option>
+                            <option value="Cuisine & Alimentation">Cuisine & Alimentation</option>
+                            <option value="Animaux">Animaux</option>
+                            <option value="Développement personnel">Développement personnel</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="siteTraffic">Trafic</label>
+                        <input type="number" id="siteTraffic" min="0" placeholder="10000">
+                    </div>
+                    <div class="form-group">
+                        <label for="siteTrustFlow">Trust Flow</label>
+                        <input type="number" id="siteTrustFlow" min="0" max="100" placeholder="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="siteTTF">Topical Trust Flow (TTF)</label>
+                        <select id="siteTTF">
+                            <option value="Arts">Arts</option>
+                            <option value="Adult">Adult</option>
+                            <option value="Business">Business</option>
+                            <option value="Computers">Computers</option>
+                            <option value="Games">Games</option>
+                            <option value="Health">Health</option>
+                            <option value="Home">Home</option>
+                            <option value="News">News</option>
+                            <option value="Reference">Reference</option>
+                            <option value="Regional">Regional</option>
+                            <option value="Science">Science</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Society">Society</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Recreation">Recreation</option>
+                            <option value="Vitrine">Vitrine</option>
+                            <option value="World">World</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="siteFollow">Follow</label>
+                        <select id="siteFollow">
+                            <option value="Oui">Oui</option>
+                            <option value="Non">Non</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeSiteModal()">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div> <!-- Fermeture de main-app -->
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="supabase-service.js"></script>
+    <script src="ninja-linking-script.js"></script>
+    <script>
+        // Configuration automatique de l'URL de redirection au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vérifier si l'URL de redirection est déjà configurée
+            const currentRedirectUrl = localStorage.getItem('email-redirect-url');
+            
+            if (!currentRedirectUrl) {
+                // Configuration automatique avec l'URL de production
+                const productionUrl = 'https://reputalink.netlify.app';
+                localStorage.setItem('email-redirect-url', productionUrl);
+                console.log('🔗 URL de redirection configurée automatiquement:', productionUrl);
+            } else {
+                console.log('🔗 URL de redirection actuelle:', currentRedirectUrl);
+            }
+        });
+    </script>
+</body>
+</html>

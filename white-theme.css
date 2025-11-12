@@ -1,0 +1,556 @@
+/* ============ THÈME BLANC/CLAIR ============ */
+:root {
+    /* Couleurs blanc/clair - Palette propre */
+    --white-primary: #ffffff;        /* Blanc pur */
+    --white-secondary: #f8fafc;      /* Gris très clair */
+    --white-accent: #e2e8f0;         /* Gris clair */
+    --white-text: #1a202c;            /* Noir doux */
+    --white-text-secondary: #4a5568;  /* Gris foncé */
+    --white-border: #e2e8f0;         /* Bordure grise */
+    --white-hover: #f1f5f9;          /* Hover gris clair */
+    
+    /* Couleurs d'accent */
+    --white-blue: #3b82f6;           /* Bleu */
+    --white-green: #10b981;          /* Vert */
+    --white-red: #ef4444;            /* Rouge */
+    --white-yellow: #f59e0b;         /* Jaune */
+    
+    /* Dégradés blanc */
+    --white-gradient-1: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #e2e8f0 100%);
+    --white-gradient-2: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
+    --white-gradient-3: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #1e40af 100%);
+    
+    /* Ombres blanc */
+    --white-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    --white-shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.15);
+    --white-shadow-hover: 0 6px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Application du thème blanc - Thème de base original */
+body.white-theme {
+    background: #f8fafc;
+    color: #1a202c;
+}
+
+.white-theme .auth-container {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.white-theme .auth-modal {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    margin: 1rem;
+}
+
+.white-theme .auth-header h1 {
+    color: #1a202c;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.white-theme .auth-header p {
+    color: #4a5568;
+    font-size: 0.9rem;
+}
+
+.white-theme .header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.white-theme .navigation {
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+}
+
+/* Sélecteur de thème dans la navigation */
+.white-theme .theme-selector {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.white-theme .theme-option {
+    background: white;
+    border: 1px solid #e2e8f0;
+    color: #1a202c;
+}
+
+.white-theme .theme-option:hover {
+    background: #3b82f6;
+    color: white;
+    transform: scale(1.05);
+}
+
+.white-theme .theme-option.active {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+/* Email utilisateur avec thème blanc */
+.white-theme .user-email {
+    background: #3b82f6;
+    color: white;
+    border: 1px solid #2563eb;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.white-theme .user-email:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.white-theme .nav-btn {
+    background: none;
+    border: none;
+    padding: 1rem 2rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #64748b;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 3px solid transparent;
+    position: relative;
+}
+
+.white-theme .nav-btn:hover {
+    color: #3b82f6;
+    background: #f1f5f9;
+}
+
+.white-theme .nav-btn.active {
+    color: #3b82f6;
+    border-bottom-color: #3b82f6;
+    background: #f8fafc;
+}
+
+.white-theme .main-content {
+    flex: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    width: 100%;
+    background: #f8fafc;
+}
+
+.white-theme .btn-primary {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+}
+
+.white-theme .btn-primary:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.white-theme .btn-secondary {
+    background: #64748b;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+}
+
+.white-theme .btn-secondary:hover {
+    background: #475569;
+}
+
+.white-theme .card {
+    background: var(--white-primary);
+    border: 2px solid var(--white-border);
+    box-shadow: var(--white-shadow);
+}
+
+.white-theme .card:hover {
+    box-shadow: var(--white-shadow-hover);
+}
+
+.white-theme .card-icon {
+    background: var(--white-gradient-3);
+}
+
+.white-theme .form-group input,
+.white-theme .form-group select,
+.white-theme .form-group textarea {
+    border: 2px solid var(--white-border);
+    background: var(--white-primary);
+    color: var(--white-text);
+}
+
+.white-theme .form-group input:focus,
+.white-theme .form-group select:focus,
+.white-theme .form-group textarea:focus {
+    border-color: var(--white-blue);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.white-theme .form-group label {
+    color: var(--white-text);
+    font-weight: 600;
+}
+
+.white-theme .table {
+    background: var(--white-primary);
+    border: 2px solid var(--white-border);
+}
+
+.white-theme .table th {
+    background: var(--white-gradient-3);
+    color: white;
+    border-bottom: 2px solid var(--white-border);
+}
+
+.white-theme .table td {
+    border-bottom: 1px solid var(--white-border);
+    color: var(--white-text);
+}
+
+.white-theme .table tr:hover {
+    background: var(--white-hover);
+}
+
+.white-theme .modal {
+    background: var(--white-primary);
+    border: 3px solid var(--white-border);
+    box-shadow: var(--white-shadow-lg);
+}
+
+.white-theme .modal-header {
+    background: var(--white-gradient-3);
+    color: white;
+    border-bottom: 2px solid var(--white-border);
+}
+
+.white-theme .modal-body {
+    background: var(--white-primary);
+    color: var(--white-text);
+}
+
+/* ============ BOUTONS DU CATALOGUE - THÈME BLANC ============ */
+.white-theme .catalog-actions .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.white-theme .catalog-actions .btn-primary {
+    background: var(--white-blue);
+    color: white;
+    border-color: var(--white-blue);
+}
+
+.white-theme .catalog-actions .btn-primary:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.white-theme .catalog-actions .btn-secondary {
+    background: var(--white-text-secondary);
+    color: white;
+    border-color: var(--white-text-secondary);
+}
+
+.white-theme .catalog-actions .btn-secondary:hover {
+    background: #374151;
+    border-color: #374151;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(75, 85, 99, 0.3);
+}
+
+.white-theme .catalog-actions .btn-success {
+    background: var(--white-green);
+    color: white;
+    border-color: var(--white-green);
+}
+
+.white-theme .catalog-actions .btn-success:hover {
+    background: #059669;
+    border-color: #059669;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.white-theme .catalog-actions .btn-info {
+    background: var(--white-blue);
+    color: white;
+    border-color: var(--white-blue);
+}
+
+.white-theme .catalog-actions .btn-info:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.white-theme .catalog-actions .btn-warning {
+    background: var(--white-yellow);
+    color: white;
+    border-color: var(--white-yellow);
+}
+
+.white-theme .catalog-actions .btn-warning:hover {
+    background: #d97706;
+    border-color: #d97706;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.white-theme .catalog-actions .btn-danger {
+    background: var(--white-red);
+    color: white;
+    border-color: var(--white-red);
+}
+
+.white-theme .catalog-actions .btn-danger:hover {
+    background: #dc2626;
+    border-color: #dc2626;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.white-theme .catalog-actions .btn-outline {
+    background: transparent;
+    color: var(--white-text);
+    border-color: var(--white-border);
+}
+
+.white-theme .catalog-actions .btn-outline:hover {
+    background: var(--white-hover);
+    border-color: var(--white-text-secondary);
+    color: var(--white-text);
+}
+
+/* ============ BOUTONS EN MASSE - THÈME BLANC ============ */
+.white-theme .bulk-actions {
+    background: var(--white-primary);
+    border: 2px solid var(--white-border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.white-theme .bulk-actions-info {
+    color: var(--white-text);
+    font-weight: 500;
+}
+
+.white-theme .bulk-actions-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.white-theme .bulk-actions .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border: 2px solid transparent;
+}
+
+/* ============ BOUTONS DE PROJET - THÈME BLANC ============ */
+.white-theme .projects-actions .btn,
+.white-theme .project-spots-actions .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.white-theme .projects-actions .btn-primary,
+.white-theme .project-spots-actions .btn-primary {
+    background: var(--white-blue);
+    color: white;
+    border-color: var(--white-blue);
+}
+
+.white-theme .projects-actions .btn-primary:hover,
+.white-theme .project-spots-actions .btn-primary:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.white-theme .projects-actions .btn-secondary,
+.white-theme .project-spots-actions .btn-secondary {
+    background: var(--white-text-secondary);
+    color: white;
+    border-color: var(--white-text-secondary);
+}
+
+.white-theme .projects-actions .btn-secondary:hover,
+.white-theme .project-spots-actions .btn-secondary:hover {
+    background: #374151;
+    border-color: #374151;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(75, 85, 99, 0.3);
+}
+
+.white-theme .projects-actions .btn-success,
+.white-theme .project-spots-actions .btn-success {
+    background: var(--white-green);
+    color: white;
+    border-color: var(--white-green);
+}
+
+.white-theme .projects-actions .btn-success:hover,
+.white-theme .project-spots-actions .btn-success:hover {
+    background: #059669;
+    border-color: #059669;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* ============ BOUTONS D'ACTION DES SPOTS - THÈME BLANC ============ */
+.white-theme .project-spot-action-btn {
+    width: 32px;
+    height: 32px;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.white-theme .project-spot-action-btn.edit {
+    background: #dbeafe;
+    color: #3b82f6;
+    border-color: #dbeafe;
+}
+
+.white-theme .project-spot-action-btn.edit:hover {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.white-theme .project-spot-action-btn.delete {
+    background: #fef2f2;
+    color: #ef4444;
+    border-color: #fef2f2;
+}
+
+.white-theme .project-spot-action-btn.delete:hover {
+    background: #ef4444;
+    color: white;
+    border-color: #ef4444;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* ============ BOUTONS DE FORMULAIRE - THÈME BLANC ============ */
+.white-theme .form-actions .btn,
+.white-theme .edit-form-actions .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.white-theme .form-actions .btn-primary,
+.white-theme .edit-form-actions .btn-primary {
+    background: var(--white-blue);
+    color: white;
+    border-color: var(--white-blue);
+}
+
+.white-theme .form-actions .btn-primary:hover,
+.white-theme .edit-form-actions .btn-primary:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.white-theme .form-actions .btn-secondary,
+.white-theme .edit-form-actions .btn-secondary {
+    background: var(--white-text-secondary);
+    color: white;
+    border-color: var(--white-text-secondary);
+}
+
+.white-theme .form-actions .btn-secondary:hover,
+.white-theme .edit-form-actions .btn-secondary:hover {
+    background: #374151;
+    border-color: #374151;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(75, 85, 99, 0.3);
+}
+
+/* ============ BOUTONS DE NAVIGATION - THÈME BLANC ============ */
+.white-theme .project-detail-back .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.white-theme .project-detail-back .btn-secondary {
+    background: var(--white-text-secondary);
+    color: white;
+    border-color: var(--white-text-secondary);
+}
+
+.white-theme .project-detail-back .btn-secondary:hover {
+    background: #374151;
+    border-color: #374151;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(75, 85, 99, 0.3);
+}
+
+/* Étoiles inline - Thème blanc */
+.white-theme .stars-inline i {
+    color: #3b82f6;
+    text-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+}

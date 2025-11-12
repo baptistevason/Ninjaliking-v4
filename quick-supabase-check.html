@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vérification Rapide Supabase</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        button { background: #007bff; color: white; border: none; padding: 15px 30px; border-radius: 5px; cursor: pointer; margin: 10px; font-size: 16px; }
+        button:hover { background: #0056b3; }
+        .check-item { margin: 10px 0; padding: 10px; border-radius: 5px; border-left: 4px solid #ddd; }
+        .check-pass { border-left-color: #28a745; background: #d4edda; }
+        .check-fail { border-left-color: #dc3545; background: #f8d7da; }
+        .check-warning { border-left-color: #ffc107; background: #fff3cd; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ Vérification Rapide Supabase</h1>
+        
+        <div id="status" class="status info">
+            Vérification en cours...
+        </div>
+        
+        <div id="checks">
+            <div class="check-item" id="check-config">
+                <strong>🔧 Configuration Supabase</strong>
+                <div id="config-details">Vérification...</div>
+            </div>
+            
+            <div class="check-item" id="check-connection">
+                <strong>🌐 Connexion</strong>
+                <div id="connection-details">Vérification...</div>
+            </div>
+            
+            <div class="check-item" id="check-tables">
+                <strong>📊 Tables</strong>
+                <div id="tables-details">Vérification...</div>
+            </div>
+            
+            <div class="check-item" id="check-budget">
+                <strong>💰 Fonctionnalité Budget</strong>
+                <div id="budget-details">Vérification...</div>
+            </div>
+            
+            <div class="check-item" id="check-import">
+                <strong>📊 Import Excel</strong>
+                <div id="import-details">Vérification...</div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin: 20px 0;">
+            <button onclick="runQuickCheck()">🚀 Lancer la Vérification</button>
+            <button onclick="openFullTest()">🔍 Test Complet</button>
+        </div>
+        
+        <div id="summary" style="margin-top: 20px; padding: 15px; border-radius: 5px; display: none;">
+            <h3>📋 Résumé</h3>
+            <div id="summary-content"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script>
+        let supabase = null;
+        let checkResults = {};
+        
+        function updateStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+        
+        function updateCheck(checkId, passed, message, details = '') {
+            const checkElement = document.getElementById(checkId);
+            const detailsElement = document.getElementById(checkId.replace('check-', '') + '-details');
+            
+            checkElement.className = `check-item ${passed ? 'check-pass' : 'check-fail'}`;
+            detailsElement.innerHTML = `<strong>${message}</strong>${details ? `<br><small>${details}</small>` : ''}`;
+            
+            checkResults[checkId] = { passed, message, details };
+        }
+        
+        function updateSummary() {
+            const passed = Object.values(checkResults).filter(r => r.passed).length;
+            const total = Object.keys(checkResults).length;
+            
+            const summary = document.getElementById('summary');
+            const content = document.getElementById('summary-content');
+            
+            summary.style.display = 'block';
+            summary.className = passed === total ? 'success' : passed > 0 ? 'warning' : 'error';
+            
+            content.innerHTML = `
+                <strong>Tests: ${passed}/${total} réussis</strong><br>
+                ${passed === total ? 
+                    '✅ <strong>Prêt pour la production !</strong>' : 
+                    passed > 0 ? 
+                        '⚠️ <strong>Problèmes détectés</strong> - Vérifiez avant la production' :
+                        '❌ <strong>Échec critique</strong> - Ne pas déployer'
+                }
+            `;
+        }
+        
+        async function runQuickCheck() {
+            updateStatus('🚀 Lancement de la vérification rapide...');
+            
+            // Réinitialiser
+            checkResults = {};
+            
+            // 1. Vérifier la configuration
+            await checkConfiguration();
+            
+            // 2. Vérifier la connexion
+            await checkConnection();
+            
+            // 3. Vérifier les tables
+            await checkTables();
+            
+            // 4. Vérifier la fonctionnalité budget
+            await checkBudgetFeature();
+            
+            // 5. Vérifier l'import Excel
+            await checkImportFeature();
+            
+            // Afficher le résumé
+            updateSummary();
+            
+            const passed = Object.values(checkResults).filter(r => r.passed).length;
+            const total = Object.keys(checkResults).length;
+            
+            if (passed === total) {
+                updateStatus('🎉 Tous les tests sont passés ! Prêt pour la production.', 'success');
+            } else {
+                updateStatus(`⚠️ ${total - passed} test(s) ont échoué. Vérifiez avant la production.`, 'warning');
+            }
+        }
+        
+        async function checkConfiguration() {
+            const url = localStorage.getItem('supabase-url');
+            const key = localStorage.getItem('supabase-anon-key');
+            
+            if (!url || !key) {
+                updateCheck('check-config', false, 'Configuration manquante', 
+                    'URL ou clé Supabase non trouvée dans localStorage');
+                return;
+            }
+            
+            if (!url.startsWith('https://')) {
+                updateCheck('check-config', false, 'URL invalide', 
+                    'L\'URL doit commencer par https://');
+                return;
+            }
+            
+            if (!key.startsWith('eyJ')) {
+                updateCheck('check-config', false, 'Clé invalide', 
+                    'La clé doit commencer par eyJ');
+                return;
+            }
+            
+            try {
+                supabase = createClient(url, key);
+                updateCheck('check-config', true, 'Configuration valide', 
+                    `URL: ${url.substring(0, 30)}...`);
+            } catch (error) {
+                updateCheck('check-config', false, 'Erreur initialisation', error.message);
+            }
+        }
+        
+        async function checkConnection() {
+            if (!supabase) {
+                updateCheck('check-connection', false, 'Client non initialisé', 
+                    'Configuration Supabase requise');
+                return;
+            }
+            
+            try {
+                const { data, error } = await supabase
+                    .from('projects')
+                    .select('id')
+                    .limit(1);
+                
+                if (error) throw error;
+                
+                updateCheck('check-connection', true, 'Connexion réussie', 
+                    'Communication avec Supabase établie');
+            } catch (error) {
+                updateCheck('check-connection', false, 'Échec de connexion', error.message);
+            }
+        }
+        
+        async function checkTables() {
+            if (!supabase) {
+                updateCheck('check-tables', false, 'Client non initialisé', 
+                    'Configuration Supabase requise');
+                return;
+            }
+            
+            try {
+                // Test table projects
+                const { data: projects, error: projectsError } = await supabase
+                    .from('projects')
+                    .select('id, name, budget')
+                    .limit(1);
+                
+                if (projectsError) throw new Error(`Table projects: ${projectsError.message}`);
+                
+                // Test table sites
+                const { data: sites, error: sitesError } = await supabase
+                    .from('sites')
+                    .select('id, url, type')
+                    .limit(1);
+                
+                if (sitesError) throw new Error(`Table sites: ${sitesError.message}`);
+                
+                updateCheck('check-tables', true, 'Tables accessibles', 
+                    `Projects: ${projects?.length || 0}, Sites: ${sites?.length || 0}`);
+            } catch (error) {
+                updateCheck('check-tables', false, 'Erreur accès tables', error.message);
+            }
+        }
+        
+        async function checkBudgetFeature() {
+            if (!supabase) {
+                updateCheck('check-budget', false, 'Client non initialisé', 
+                    'Configuration Supabase requise');
+                return;
+            }
+            
+            try {
+                // Vérifier que la colonne budget existe
+                const { data, error } = await supabase
+                    .from('projects')
+                    .select('budget')
+                    .limit(1);
+                
+                if (error) throw error;
+                
+                updateCheck('check-budget', true, 'Fonctionnalité budget OK', 
+                    'Colonne budget accessible');
+            } catch (error) {
+                updateCheck('check-budget', false, 'Erreur fonctionnalité budget', error.message);
+            }
+        }
+        
+        async function checkImportFeature() {
+            try {
+                // Vérifier que SheetJS est disponible
+                if (typeof XLSX === 'undefined') {
+                    updateCheck('check-import', false, 'SheetJS non chargé', 
+                        'Bibliothèque XLSX requise pour l\'import Excel');
+                    return;
+                }
+                
+                // Vérifier que les fonctions d'import existent
+                if (typeof openImportSpotsModal === 'undefined') {
+                    updateCheck('check-import', false, 'Fonctions d\'import manquantes', 
+                        'Scripts d\'import Excel non chargés');
+                    return;
+                }
+                
+                updateCheck('check-import', true, 'Import Excel disponible', 
+                    'Fonctionnalités d\'import opérationnelles');
+            } catch (error) {
+                updateCheck('check-import', false, 'Erreur vérification import', error.message);
+            }
+        }
+        
+        function openFullTest() {
+            window.open('verify-supabase-production.html', '_blank');
+        }
+        
+        // Auto-lancer la vérification au chargement
+        window.addEventListener('load', () => {
+            setTimeout(runQuickCheck, 1000);
+        });
+    </script>
+</body>
+</html>

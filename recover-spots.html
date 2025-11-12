@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Récupération des Spots - Ninja Linking</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
+        button:hover { background: #0056b3; }
+        .project-card { border: 1px solid #ddd; margin: 10px 0; padding: 15px; border-radius: 5px; background: #f9f9f9; }
+        .spot-item { background: #e8f5e8; padding: 8px; margin: 5px 0; border-radius: 3px; border-left: 4px solid #28a745; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Récupération des Spots Perdus</h1>
+        
+        <div id="status" class="status info">
+            Initialisation en cours...
+        </div>
+        
+        <div class="project-card">
+            <h3>📊 État Actuel</h3>
+            <div id="current-state">Analyse en cours...</div>
+        </div>
+        
+        <div class="project-card">
+            <h3>🛠️ Actions de Récupération</h3>
+            <button onclick="analyzeProjects()">🔍 Analyser les Projets</button>
+            <button onclick="recoverSpots()">🔄 Récupérer les Spots</button>
+            <button onclick="initializeSpots()">⚡ Initialiser les Spots</button>
+            <button onclick="saveChanges()">💾 Sauvegarder</button>
+        </div>
+        
+        <div class="project-card">
+            <h3>📋 Détail des Projets</h3>
+            <div id="projects-detail">En attente...</div>
+        </div>
+        
+        <div class="project-card">
+            <h3>🔧 Console de Debug</h3>
+            <div id="debug-console" style="background: #f8f9fa; padding: 10px; border-radius: 3px; font-family: monospace; max-height: 200px; overflow-y: auto;"></div>
+        </div>
+    </div>
+
+    <script src="supabase-service.js"></script>
+    <script>
+        let projects = [];
+        let isAuthenticated = false;
+        let isSupabaseConfigured = false;
+        let db = null;
+
+        function log(message, type = 'info') {
+            const console = document.getElementById('debug-console');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}\n`;
+            console.textContent += logEntry;
+            console.scrollTop = console.scrollHeight;
+            
+            // Mettre à jour le statut
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+
+        async function init() {
+            log('🔍 Initialisation de la récupération...');
+            
+            try {
+                // Vérifier l'authentification
+                isAuthenticated = localStorage.getItem('ninjalinking-authenticated') === 'true';
+                log(`Authentification: ${isAuthenticated ? '✅ Connecté' : '❌ Non connecté'}`);
+                
+                // Vérifier Supabase
+                isSupabaseConfigured = localStorage.getItem('ninjalinking-supabase-configured') === 'true';
+                log(`Supabase: ${isSupabaseConfigured ? '✅ Configuré' : '❌ Non configuré'}`);
+                
+                if (isSupabaseConfigured) {
+                    db = new SupabaseService();
+                    await db.initialize();
+                    log('✅ Service Supabase initialisé');
+                }
+                
+                // Charger les projets
+                await loadProjects();
+                
+            } catch (error) {
+                log(`❌ Erreur d'initialisation: ${error.message}`, 'error');
+            }
+        }
+        
+        async function loadProjects() {
+            try {
+                if (isSupabaseConfigured && db && isAuthenticated) {
+                    projects = await db.getProjects();
+                    log(`📊 Projets chargés depuis Supabase: ${projects.length}`);
+                } else {
+                    const savedProjects = localStorage.getItem('ninjalinking-projects');
+                    if (savedProjects) {
+                        projects = JSON.parse(savedProjects);
+                        log(`📊 Projets chargés depuis localStorage: ${projects.length}`);
+                    } else {
+                        projects = [];
+                        log('⚠️ Aucun projet trouvé', 'warning');
+                    }
+                }
+                
+                analyzeProjects();
+                
+            } catch (error) {
+                log(`❌ Erreur chargement projets: ${error.message}`, 'error');
+            }
+        }
+        
+        function analyzeProjects() {
+            log('🔍 Analyse des projets...');
+            
+            let totalSpots = 0;
+            let projectsWithSpots = 0;
+            let projectsWithoutSpots = 0;
+            
+            const detail = projects.map(project => {
+                const spotsCount = project.spots ? project.spots.length : 0;
+                totalSpots += spotsCount;
+                
+                if (spotsCount > 0) {
+                    projectsWithSpots++;
+                } else {
+                    projectsWithoutSpots++;
+                }
+                
+                return `
+                    <div style="margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                        <strong>${project.name}</strong> (ID: ${project.id})<br>
+                        <small>Spots: ${spotsCount} | Mots-clés: ${project.keywords ? project.keywords.length : 0}</small>
+                        ${spotsCount === 0 ? '<span style="color: red;"> ❌ PAS DE SPOTS</span>' : '<span style="color: green;"> ✅ OK</span>'}
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('projects-detail').innerHTML = detail;
+            
+            document.getElementById('current-state').innerHTML = `
+                <p><strong>Total projets:</strong> ${projects.length}</p>
+                <p><strong>Projets avec spots:</strong> ${projectsWithSpots}</p>
+                <p><strong>Projets sans spots:</strong> ${projectsWithoutSpots}</p>
+                <p><strong>Total spots:</strong> ${totalSpots}</p>
+            `;
+            
+            log(`📊 Analyse terminée: ${projects.length} projets, ${totalSpots} spots total`);
+        }
+        
+        async function recoverSpots() {
+            log('🔄 Tentative de récupération des spots...');
+            
+            try {
+                let recovered = 0;
+                
+                for (let project of projects) {
+                    // Vérifier si le projet a des spots
+                    if (!project.spots || project.spots.length === 0) {
+                        log(`🔍 Projet "${project.name}" sans spots, tentative de récupération...`);
+                        
+                        // Essayer de récupérer depuis Supabase si disponible
+                        if (isSupabaseConfigured && db) {
+                            try {
+                                const fullProject = await db.getProject(project.id);
+                                if (fullProject && fullProject.spots && fullProject.spots.length > 0) {
+                                    project.spots = fullProject.spots;
+                                    recovered++;
+                                    log(`✅ Spots récupérés pour "${project.name}": ${fullProject.spots.length} spots`);
+                                }
+                            } catch (error) {
+                                log(`⚠️ Impossible de récupérer depuis Supabase pour "${project.name}"`);
+                            }
+                        }
+                        
+                        // Si toujours pas de spots, initialiser un tableau vide
+                        if (!project.spots) {
+                            project.spots = [];
+                            log(`⚡ Spots initialisés pour "${project.name}"`);
+                        }
+                    }
+                }
+                
+                if (recovered > 0) {
+                    log(`✅ Récupération terminée: ${recovered} projets récupérés`);
+                } else {
+                    log('⚠️ Aucun spot récupéré, initialisation des tableaux vides');
+                }
+                
+                analyzeProjects();
+                
+            } catch (error) {
+                log(`❌ Erreur récupération: ${error.message}`, 'error');
+            }
+        }
+        
+        function initializeSpots() {
+            log('⚡ Initialisation des spots pour tous les projets...');
+            
+            let initialized = 0;
+            
+            projects.forEach(project => {
+                if (!project.spots) {
+                    project.spots = [];
+                    initialized++;
+                    log(`⚡ Spots initialisés pour "${project.name}"`);
+                }
+            });
+            
+            log(`✅ Initialisation terminée: ${initialized} projets initialisés`);
+            analyzeProjects();
+        }
+        
+        async function saveChanges() {
+            log('💾 Sauvegarde des modifications...');
+            
+            try {
+                if (isSupabaseConfigured && db && isAuthenticated) {
+                    // Sauvegarder dans Supabase
+                    for (let project of projects) {
+                        await db.updateProject(project.id, project);
+                    }
+                    log('✅ Projets sauvegardés dans Supabase');
+                } else {
+                    // Sauvegarder dans localStorage
+                    localStorage.setItem('ninjalinking-projects', JSON.stringify(projects));
+                    log('✅ Projets sauvegardés dans localStorage');
+                }
+                
+                log('✅ Sauvegarde terminée avec succès', 'success');
+                
+            } catch (error) {
+                log(`❌ Erreur sauvegarde: ${error.message}`, 'error');
+            }
+        }
+        
+        // Initialiser au chargement
+        init();
+    </script>
+</body>
+</html>
+

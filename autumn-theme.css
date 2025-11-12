@@ -1,0 +1,480 @@
+/* ============ THÈME AUTOMNE ============ */
+/* Couleurs inspirées de l'automne : feuilles dorées, orange, rouge, marron */
+
+:root {
+    /* Couleurs principales automne */
+    --primary: #d97706;           /* Orange doré */
+    --secondary: #92400e;          /* Marron chaud */
+    --accent: #ea580c;            /* Orange vif */
+    --success: #16a34a;           /* Vert forêt */
+    --warning: #f59e0b;            /* Jaune doré */
+    --danger: #dc2626;             /* Rouge feuille */
+    --info: #0891b2;               /* Bleu ciel automnal */
+    
+    /* Couleurs de fond */
+    --bg-primary: #fef3c7;        /* Crème chaud */
+    --bg-secondary: #fef7cd;       /* Beige doré */
+    --bg-accent: #fed7aa;          /* Pêche douce */
+    --bg-tertiary: #fde68a;        /* Jaune paille */
+    
+    /* Couleurs de texte */
+    --text-primary: #451a03;       /* Marron foncé */
+    --text-secondary: #92400e;    /* Marron moyen */
+    --text-muted: #a16207;        /* Marron clair */
+    --text-inverse: #fef3c7;       /* Crème */
+    
+    /* Couleurs de bordure */
+    --border-primary: #d97706;     /* Orange doré */
+    --border-secondary: #f59e0b;   /* Jaune doré */
+    --border-accent: #ea580c;      /* Orange vif */
+    
+    /* Ombres automne */
+    --shadow-sm: 0 1px 2px 0 rgba(217, 119, 6, 0.1);
+    --shadow: 0 4px 6px -1px rgba(217, 119, 6, 0.1), 0 2px 4px -1px rgba(217, 119, 6, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(217, 119, 6, 0.1), 0 4px 6px -2px rgba(217, 119, 6, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(217, 119, 6, 0.1), 0 10px 10px -5px rgba(217, 119, 6, 0.04);
+}
+
+/* Application du thème automne */
+body.autumn-theme {
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    color: var(--text-primary);
+}
+
+/* S'assurer que le thème blanc n'est pas affecté */
+body.white-theme {
+    background: #ffffff !important;
+    color: #1a202c !important;
+}
+
+/* Réinitialiser les variables CSS pour le thème blanc */
+body.white-theme {
+    --primary: #3b82f6;
+    --secondary: #6b7280;
+    --accent: #8b5cf6;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --info: #06b6d4;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-accent: #e2e8f0;
+    --bg-tertiary: #cbd5e1;
+    --text-primary: #1a202c;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
+    --text-inverse: #ffffff;
+    --border-primary: #e2e8f0;
+    --border-secondary: #cbd5e1;
+    --border-accent: #a0aec0;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* ============ HEADER AUTOMNE ============ */
+body.autumn-theme .header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    border-bottom: 3px solid var(--border-primary);
+    box-shadow: var(--shadow-lg);
+}
+
+bodybody.autumn-theme .header::before {
+    content: "🍂";
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 1.5rem;
+    opacity: 0.7;
+}
+
+bodybody.autumn-theme .header h1 {
+    color: var(--text-inverse);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+bodybody.autumn-theme .header .user-info {
+    color: var(--text-inverse);
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* ============ NAVIGATION AUTOMNE ============ */
+bodybody.autumn-theme .nav {
+    background: linear-gradient(90deg, var(--secondary) 0%, var(--primary) 100%);
+    border-bottom: 2px solid var(--border-primary);
+}
+
+bodybody.autumn-theme .nav-item {
+    color: var(--text-inverse);
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+bodybody.autumn-theme .nav-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-bottom-color: var(--border-secondary);
+    transform: translateY(-2px);
+}
+
+bodybody.autumn-theme .nav-item.active {
+    background: rgba(255, 255, 255, 0.2);
+    border-bottom-color: var(--border-secondary);
+    box-shadow: var(--shadow);
+}
+
+/* ============ CARTES AUTOMNE ============ */
+body.autumn-theme .card {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-accent) 100%);
+    border: 2px solid var(--border-secondary);
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+}
+
+body.autumn-theme .card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--border-primary);
+}
+
+body.autumn-theme .card-header {
+    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+    color: var(--text-inverse);
+    border-bottom: 2px solid var(--border-primary);
+}
+
+body.autumn-theme .card-title {
+    color: var(--text-inverse);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* ============ BOUTONS AUTOMNE ============ */
+body.autumn-theme .btn {
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+body.autumn-theme .btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    border: 2px solid var(--border-primary);
+    color: var(--text-inverse);
+}
+
+body.autumn-theme .btn-primary:hover {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+body.autumn-theme .btn-secondary {
+    background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+    border: 2px solid var(--border-secondary);
+    color: var(--text-inverse);
+}
+
+body.autumn-theme .btn-success {
+    background: linear-gradient(135deg, var(--success) 0%, #22c55e 100%);
+    border: 2px solid var(--success);
+    color: var(--text-inverse);
+}
+
+body.autumn-theme .btn-warning {
+    background: linear-gradient(135deg, var(--warning) 0%, #fbbf24 100%);
+    border: 2px solid var(--warning);
+    color: var(--text-primary);
+}
+
+body.autumn-theme .btn-danger {
+    background: linear-gradient(135deg, var(--danger) 0%, #ef4444 100%);
+    border: 2px solid var(--danger);
+    color: var(--text-inverse);
+}
+
+body.autumn-theme .btn-info {
+    background: linear-gradient(135deg, var(--info) 0%, #06b6d4 100%);
+    border: 2px solid var(--info);
+    color: var(--text-inverse);
+}
+
+/* ============ FORMULAIRES AUTOMNE ============ */
+body.autumn-theme .form-group input,
+body.autumn-theme .form-group select,
+body.autumn-theme .form-group textarea {
+    background: var(--bg-primary);
+    border: 2px solid var(--border-secondary);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+body.autumn-theme .form-group input:focus,
+body.autumn-theme .form-group select:focus,
+body.autumn-theme .form-group textarea:focus {
+    border-color: var(--border-primary);
+    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+    background: var(--bg-secondary);
+}
+
+body.autumn-theme .form-group label {
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+/* ============ TABLEAUX AUTOMNE ============ */
+body.autumn-theme .table {
+    background: var(--bg-primary);
+    border: 2px solid var(--border-secondary);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+body.autumn-theme .table th {
+    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+    color: var(--text-inverse);
+    border-bottom: 2px solid var(--border-primary);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+body.autumn-theme .table td {
+    border-bottom: 1px solid var(--border-secondary);
+    color: var(--text-primary);
+}
+
+body.autumn-theme .table tr:hover {
+    background: var(--bg-accent);
+}
+
+body.autumn-theme .table tr:nth-child(even) {
+    background: var(--bg-tertiary);
+}
+
+/* ============ MODALS AUTOMNE ============ */
+body.autumn-theme .modal {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+body.autumn-theme .modal-content {
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    border: 3px solid var(--border-primary);
+    box-shadow: var(--shadow-xl);
+    border-radius: 12px;
+}
+
+body.autumn-theme .modal-header {
+    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+    color: var(--text-inverse);
+    border-bottom: 2px solid var(--border-primary);
+    border-radius: 8px 8px 0 0;
+}
+
+body.autumn-theme .modal-close {
+    color: var(--text-inverse);
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+body.autumn-theme .modal-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+/* ============ STATUTS AUTOMNE ============ */
+body.autumn-theme .spot-status-a-publier {
+    background: linear-gradient(135deg, var(--warning) 0%, #fbbf24 100%);
+    color: var(--text-primary);
+    border: 1px solid var(--warning);
+}
+
+body.autumn-theme .spot-status-en-attente {
+    background: linear-gradient(135deg, var(--info) 0%, #06b6d4 100%);
+    color: var(--text-inverse);
+    border: 1px solid var(--info);
+}
+
+body.autumn-theme .spot-status-publie {
+    background: linear-gradient(135deg, var(--success) 0%, #22c55e 100%);
+    color: var(--text-inverse);
+    border: 1px solid var(--success);
+}
+
+body.autumn-theme .spot-status-rejete {
+    background: linear-gradient(135deg, var(--danger) 0%, #ef4444 100%);
+    color: var(--text-inverse);
+    border: 1px solid var(--danger);
+}
+
+/* ============ BUDGET AUTOMNE ============ */
+bodybody.autumn-theme .project-budget-section {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-accent) 100%);
+    border: 2px solid var(--border-secondary);
+    box-shadow: var(--shadow);
+}
+
+bodybody.autumn-theme .budget-card {
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-tertiary) 100%);
+    border: 2px solid var(--border-secondary);
+    transition: all 0.3s ease;
+}
+
+bodybody.autumn-theme .budget-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--border-primary);
+}
+
+bodybody.autumn-theme .budget-progress-bar {
+    background: var(--bg-primary);
+    border: 2px solid var(--border-secondary);
+}
+
+bodybody.autumn-theme .budget-progress-fill {
+    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+}
+
+/* ============ KPI AUTOMNE ============ */
+body.autumn-theme .kpi-card {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-accent) 100%);
+    border: 2px solid var(--border-secondary);
+    transition: all 0.3s ease;
+}
+
+body.autumn-theme .kpi-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--border-primary);
+}
+
+body.autumn-theme .kpi-number {
+    color: var(--primary);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+body.autumn-theme .kpi-label {
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+/* ============ IMPORT EXCEL AUTOMNE ============ */
+body.autumn-theme .import-instructions {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-accent) 100%);
+    border-left: 4px solid var(--border-primary);
+}
+
+body.autumn-theme .import-stats {
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-tertiary) 100%);
+    border: 2px solid var(--border-secondary);
+}
+
+body.autumn-theme .preview-table {
+    background: var(--bg-primary);
+    border: 2px solid var(--border-secondary);
+}
+
+body.autumn-theme .preview-table th {
+    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+    color: var(--text-inverse);
+    border-bottom: 2px solid var(--border-primary);
+}
+
+body.autumn-theme .preview-table td {
+    border-bottom: 1px solid var(--border-secondary);
+    color: var(--text-primary);
+}
+
+body.autumn-theme .preview-table tr:hover {
+    background: var(--bg-accent);
+}
+
+/* ============ ANIMATIONS AUTOMNE ============ */
+body.autumn-theme .card,
+body.autumn-theme .btn,
+body.autumn-theme .kpi-card {
+    position: relative;
+    overflow: hidden;
+}
+
+body.autumn-theme .card::before,
+body.autumn-theme .btn::before,
+body.autumn-theme .kpi-card::before {
+    content: "🍂";
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 1.2rem;
+    opacity: 0.1;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(10deg); }
+}
+
+/* ============ RESPONSIVE AUTOMNE ============ */
+@media (max-width: 768px) {
+    body.autumn-theme .header::before {
+        display: none;
+    }
+    
+    body.autumn-theme .card,
+    body.autumn-theme .kpi-card {
+        margin-bottom: 1rem;
+    }
+    
+    body.autumn-theme .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* ============ SCROLLBAR AUTOMNE ============ */
+body.autumn-theme ::-webkit-scrollbar {
+    width: 8px;
+}
+
+body.autumn-theme ::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+body.autumn-theme ::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    border-radius: 4px;
+}
+
+body.autumn-theme ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+}
+
+/* ============ NOTIFICATIONS AUTOMNE ============ */
+body.autumn-theme .notification {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-accent) 100%);
+    border: 2px solid var(--border-primary);
+    box-shadow: var(--shadow-lg);
+}
+
+body.autumn-theme .notification.success {
+    border-color: var(--success);
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+}
+
+body.autumn-theme .notification.error {
+    border-color: var(--danger);
+    background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+}
+
+body.autumn-theme .notification.warning {
+    border-color: var(--warning);
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+}
+
+body.autumn-theme .notification.info {
+    border-color: var(--info);
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+}

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔍 Debug Sauvegarde Budget</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .status { padding: 15px; margin: 15px 0; border-radius: 5px; font-weight: bold; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        button { background: #007bff; color: white; border: none; padding: 15px 30px; border-radius: 5px; cursor: pointer; margin: 10px; font-size: 16px; }
+        button:hover { background: #0056b3; }
+        button.success { background: #28a745; }
+        button.success:hover { background: #218838; }
+        .data-item { margin: 10px 0; padding: 10px; background: #f8f9fa; border-radius: 3px; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; font-size: 12px; }
+        .step { margin: 10px 0; padding: 15px; background: #e7f3ff; border-left: 4px solid #007bff; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Debug Sauvegarde Budget</h1>
+        
+        <div id="status" class="status info">
+            Diagnostic de la sauvegarde du budget...
+        </div>
+        
+        <div class="step">
+            <h3>🔍 Étape 1 : Vérifier la Structure</h3>
+            <p>Vérifions que la colonne budget existe et est accessible</p>
+            <button onclick="checkBudgetColumn()">🔍 Vérifier Colonne Budget</button>
+            <div id="column-results"></div>
+        </div>
+        
+        <div class="step">
+            <h3>📊 Étape 2 : Vérifier les Données Existantes</h3>
+            <p>Regardons les projets existants et leurs budgets</p>
+            <button onclick="checkExistingProjects()">📊 Vérifier Projets Existants</button>
+            <div id="projects-results"></div>
+        </div>
+        
+        <div class="step">
+            <h3>🧪 Étape 3 : Test de Sauvegarde</h3>
+            <p>Testons la sauvegarde d'un projet avec budget</p>
+            <button onclick="testBudgetSave()">🧪 Tester Sauvegarde</button>
+            <div id="save-results"></div>
+        </div>
+        
+        <div class="step">
+            <h3>🔧 Étape 4 : Debug localStorage</h3>
+            <p>Vérifions les données dans localStorage</p>
+            <button onclick="debugLocalStorage()">🔧 Debug localStorage</button>
+            <div id="localstorage-results"></div>
+        </div>
+        
+        <div class="step">
+            <h3>🔄 Étape 5 : Test Complet</h3>
+            <p>Test complet de création, sauvegarde et chargement</p>
+            <button onclick="fullTest()" class="success">🔄 Test Complet</button>
+            <div id="fulltest-results"></div>
+        </div>
+        
+        <div id="results" style="margin-top: 20px;"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-service.js"></script>
+    
+    <script>
+        let supabase = null;
+        let db = null;
+        
+        function log(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+        
+        function addResult(containerId, message) {
+            const container = document.getElementById(containerId);
+            const item = document.createElement('div');
+            item.className = 'data-item';
+            item.innerHTML = message;
+            container.appendChild(item);
+        }
+        
+        async function initSupabase() {
+            try {
+                const defaultUrl = 'https://kckdjgedbjjuhmcqcmpe.supabase.co';
+                const defaultKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtja2RqZ2VkYmpqdWhtY3FjbXBlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxMjQzMzMsImV4cCI6MjA3MzcwMDMzM30.-TUGbwjk_8OUGZKJdnU5CqyJHI8wm4o1j1LdzRnSKhg';
+                
+                const supabaseUrl = localStorage.getItem('supabase-url') || defaultUrl;
+                const supabaseKey = localStorage.getItem('supabase-anon-key') || defaultKey;
+                
+                supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+                
+                db = new SupabaseService();
+                await db.initialize(supabaseUrl, supabaseKey);
+                
+                log('✅ Supabase initialisé', 'success');
+                return true;
+            } catch (error) {
+                log('❌ Erreur initialisation Supabase: ' + error.message, 'error');
+                return false;
+            }
+        }
+        
+        async function checkBudgetColumn() {
+            log('🔍 Vérification de la colonne budget...', 'info');
+            
+            try {
+                if (!supabase) {
+                    await initSupabase();
+                }
+                
+                // Vérifier la structure de la table
+                const { data: columns, error } = await supabase
+                    .from('information_schema.columns')
+                    .select('column_name, data_type, is_nullable, column_default')
+                    .eq('table_name', 'projects')
+                    .eq('column_name', 'budget');
+                
+                if (error) {
+                    addResult('column-results', `❌ Erreur: ${error.message}`);
+                    log('❌ Erreur vérification colonne', 'error');
+                    return;
+                }
+                
+                if (columns && columns.length > 0) {
+                    const col = columns[0];
+                    addResult('column-results', '✅ Colonne budget trouvée !');
+                    addResult('column-results', `<strong>Type:</strong> ${col.data_type}`);
+                    addResult('column-results', `<strong>Nullable:</strong> ${col.is_nullable}`);
+                    addResult('column-results', `<strong>Défaut:</strong> ${col.column_default || 'Aucun'}`);
+                    log('✅ Colonne budget vérifiée', 'success');
+                } else {
+                    addResult('column-results', '❌ Colonne budget non trouvée !');
+                    log('❌ Colonne budget manquante', 'error');
+                }
+                
+            } catch (error) {
+                addResult('column-results', `❌ Erreur: ${error.message}`);
+                log('❌ Erreur vérification', 'error');
+            }
+        }
+        
+        async function checkExistingProjects() {
+            log('📊 Vérification des projets existants...', 'info');
+            
+            try {
+                if (!supabase) {
+                    await initSupabase();
+                }
+                
+                // Récupérer les projets avec budget
+                const { data: projects, error } = await supabase
+                    .from('projects')
+                    .select('id, name, budget, created_at')
+                    .order('created_at', { ascending: false })
+                    .limit(10);
+                
+                if (error) {
+                    addResult('projects-results', `❌ Erreur: ${error.message}`);
+                    log('❌ Erreur récupération projets', 'error');
+                    return;
+                }
+                
+                addResult('projects-results', `<h4>📊 Projets trouvés (${projects.length}):</h4>`);
+                
+                if (projects && projects.length > 0) {
+                    projects.forEach(project => {
+                        const budgetDisplay = project.budget !== null ? `${project.budget} €` : 'Non défini';
+                        const style = project.budget !== null ? 'background: #d4edda;' : 'background: #fff3cd;';
+                        addResult('projects-results', 
+                            `<div style="${style} padding: 10px; margin: 5px 0; border-radius: 3px;">
+                                <strong>${project.name}</strong> (ID: ${project.id})<br>
+                                💰 Budget: ${budgetDisplay}<br>
+                                📅 Créé: ${new Date(project.created_at).toLocaleString()}
+                            </div>`
+                        );
+                    });
+                    log('✅ Projets récupérés', 'success');
+                } else {
+                    addResult('projects-results', '⚠️ Aucun projet trouvé');
+                    log('⚠️ Aucun projet trouvé', 'warning');
+                }
+                
+            } catch (error) {
+                addResult('projects-results', `❌ Erreur: ${error.message}`);
+                log('❌ Erreur vérification projets', 'error');
+            }
+        }
+        
+        async function testBudgetSave() {
+            log('🧪 Test de sauvegarde avec budget...', 'info');
+            
+            try {
+                if (!db) {
+                    await initSupabase();
+                }
+                
+                // Créer un projet de test avec budget
+                const testProject = {
+                    name: 'Test Budget Debug ' + Date.now(),
+                    url: 'https://test-budget-debug-' + Date.now() + '.com',
+                    objective: 'SEO',
+                    traffic: 1000,
+                    trustFlow: 50,
+                    ttf: 'Business',
+                    referringDomains: 10,
+                    publicationGoal: 5,
+                    budget: 2500.75,
+                    keywords: ['test', 'debug', 'budget'],
+                    spots: []
+                };
+                
+                addResult('save-results', '<h4>🧪 Projet de test:</h4>');
+                addResult('save-results', `<pre>${JSON.stringify(testProject, null, 2)}</pre>`);
+                
+                // Tenter la sauvegarde via le service
+                const result = await db.saveProject(testProject);
+                
+                if (result) {
+                    addResult('save-results', '✅ Projet sauvegardé avec succès !');
+                    addResult('save-results', `📊 ID: ${result.id}`);
+                    addResult('save-results', `💰 Budget sauvegardé: ${result.budget} €`);
+                    log('✅ Test de sauvegarde réussi', 'success');
+                    
+                    // Vérifier immédiatement en base
+                    const { data: savedProject, error: fetchError } = await supabase
+                        .from('projects')
+                        .select('id, name, budget')
+                        .eq('id', result.id)
+                        .single();
+                    
+                    if (fetchError) {
+                        addResult('save-results', `⚠️ Erreur vérification: ${fetchError.message}`);
+                    } else {
+                        addResult('save-results', `✅ Vérification en base: ${savedProject.budget} €`);
+                    }
+                    
+                } else {
+                    addResult('save-results', '❌ Échec de la sauvegarde');
+                    log('❌ Test de sauvegarde échoué', 'error');
+                }
+                
+            } catch (error) {
+                addResult('save-results', `❌ Erreur: ${error.message}`);
+                log('❌ Erreur test sauvegarde', 'error');
+            }
+        }
+        
+        function debugLocalStorage() {
+            log('🔧 Debug localStorage...', 'info');
+            
+            try {
+                const projects = localStorage.getItem('ninjalinking-projects');
+                const sites = localStorage.getItem('ninjalinking-sites');
+                const supabaseUrl = localStorage.getItem('supabase-url');
+                const supabaseKey = localStorage.getItem('supabase-anon-key');
+                const isAuth = localStorage.getItem('isAuthenticated');
+                
+                addResult('localstorage-results', '<h4>📱 localStorage:</h4>');
+                addResult('localstorage-results', `<strong>Projets:</strong> ${projects ? 'Présent' : 'Absent'}`);
+                addResult('localstorage-results', `<strong>Sites:</strong> ${sites ? 'Présent' : 'Absent'}`);
+                addResult('localstorage-results', `<strong>Supabase URL:</strong> ${supabaseUrl || 'Non configuré'}`);
+                addResult('localstorage-results', `<strong>Supabase Key:</strong> ${supabaseKey ? 'Configurée' : 'Non configurée'}`);
+                addResult('localstorage-results', `<strong>Authentifié:</strong> ${isAuth || 'Non'}`);
+                
+                if (projects) {
+                    const parsedProjects = JSON.parse(projects);
+                    addResult('localstorage-results', `<h4>📊 Projets dans localStorage (${parsedProjects.length}):</h4>`);
+                    parsedProjects.forEach(project => {
+                        const budgetDisplay = project.budget !== undefined ? `${project.budget} €` : 'Non défini';
+                        addResult('localstorage-results', 
+                            `<div style="background: #f8f9fa; padding: 10px; margin: 5px 0; border-radius: 3px;">
+                                <strong>${project.name}</strong><br>
+                                💰 Budget: ${budgetDisplay}
+                            </div>`
+                        );
+                    });
+                }
+                
+                log('✅ Debug localStorage terminé', 'success');
+                
+            } catch (error) {
+                addResult('localstorage-results', `❌ Erreur: ${error.message}`);
+                log('❌ Erreur debug localStorage', 'error');
+            }
+        }
+        
+        async function fullTest() {
+            log('🔄 Test complet en cours...', 'info');
+            
+            try {
+                if (!db) {
+                    await initSupabase();
+                }
+                
+                addResult('fulltest-results', '<h4>🔄 Test complet:</h4>');
+                
+                // 1. Créer un projet avec budget
+                const testProject = {
+                    name: 'Test Complet Budget ' + Date.now(),
+                    url: 'https://test-complet-' + Date.now() + '.com',
+                    objective: 'SEO',
+                    traffic: 2000,
+                    trustFlow: 60,
+                    ttf: 'Business',
+                    referringDomains: 20,
+                    publicationGoal: 10,
+                    budget: 5000.00,
+                    keywords: ['test', 'complet'],
+                    spots: []
+                };
+                
+                addResult('fulltest-results', '1️⃣ Création du projet...');
+                addResult('fulltest-results', `<pre>${JSON.stringify(testProject, null, 2)}</pre>`);
+                
+                // 2. Sauvegarder
+                addResult('fulltest-results', '2️⃣ Sauvegarde...');
+                const savedProject = await db.saveProject(testProject);
+                
+                if (!savedProject) {
+                    addResult('fulltest-results', '❌ Échec de la sauvegarde');
+                    return;
+                }
+                
+                addResult('fulltest-results', `✅ Projet sauvegardé (ID: ${savedProject.id})`);
+                addResult('fulltest-results', `💰 Budget: ${savedProject.budget} €`);
+                
+                // 3. Vérifier en base
+                addResult('fulltest-results', '3️⃣ Vérification en base...');
+                const { data: fetchedProject, error: fetchError } = await supabase
+                    .from('projects')
+                    .select('*')
+                    .eq('id', savedProject.id)
+                    .single();
+                
+                if (fetchError) {
+                    addResult('fulltest-results', `❌ Erreur récupération: ${fetchError.message}`);
+                    return;
+                }
+                
+                addResult('fulltest-results', `✅ Projet récupéré de la base`);
+                addResult('fulltest-results', `💰 Budget en base: ${fetchedProject.budget} €`);
+                
+                // 4. Vérifier la cohérence
+                if (savedProject.budget === fetchedProject.budget) {
+                    addResult('fulltest-results', '✅ Budget cohérent entre sauvegarde et base');
+                    log('✅ Test complet réussi', 'success');
+                } else {
+                    addResult('fulltest-results', '❌ Budget incohérent');
+                    log('❌ Test complet échoué', 'error');
+                }
+                
+            } catch (error) {
+                addResult('fulltest-results', `❌ Erreur: ${error.message}`);
+                log('❌ Erreur test complet', 'error');
+            }
+        }
+        
+        // Initialiser au chargement
+        window.addEventListener('load', () => {
+            setTimeout(initSupabase, 1000);
+        });
+    </script>
+</body>
+</html>
+
+
+
+

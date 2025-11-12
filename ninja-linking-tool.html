@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ninja Linking Tool - Outil de Link Building</title>
+    <link rel="stylesheet" href="ninja-linking-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-bullseye"></i> Ninja Linking Tool</h1>
+                <p>Outil professionnel de link building</p>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="navigation">
+            <div class="nav-container">
+                <button class="nav-btn active" data-page="ninjalinking">
+                    <i class="fas fa-search"></i>
+                    <span>Ninjalinking</span>
+                </button>
+                <button class="nav-btn" data-page="serp">
+                    <i class="fas fa-search-plus"></i>
+                    <span>Exploration SERP</span>
+                </button>
+                <button class="nav-btn" data-page="projects">
+                    <i class="fas fa-folder-open"></i>
+                    <span>Projets</span>
+                </button>
+                <button class="nav-btn" data-page="catalog">
+                    <i class="fas fa-database"></i>
+                    <span>Catalogue</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Page Ninjalinking -->
+            <div class="page active" id="ninjalinking-page">
+                <div class="page-header">
+                    <h2>Recherche de Footprints</h2>
+                    <p>Sélectionnez vos catégories et générez vos recherches Google</p>
+                </div>
+
+                <div class="search-section">
+                    <div class="search-form">
+                        <input type="text" id="keywordInput" placeholder="Entrez vos mots-clés...">
+                        <button onclick="generateSearches()" class="btn btn-primary">
+                            <i class="fas fa-external-link-alt"></i> Générer les recherches
+                        </button>
+                    </div>
+                </div>
+
+                <div class="categories-grid">
+                    <div class="category-card" data-category="avis">
+                        <div class="card-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3>Sites d'avis clients</h3>
+                        <p>Rechercher sur les plateformes d'avis</p>
+                    </div>
+
+                    <div class="category-card" data-category="commentaires">
+                        <div class="card-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3>Commentaires</h3>
+                        <p>Opportunités dans les commentaires</p>
+                    </div>
+
+                    <div class="category-card" data-category="forums">
+                        <div class="card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Forums</h3>
+                        <p>Discussions et forums spécialisés</p>
+                    </div>
+
+                    <div class="category-card" data-category="articles">
+                        <div class="card-icon">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <h3>Articles invités</h3>
+                        <p>Opportunités d'articles invités</p>
+                    </div>
+                </div>
+
+                <div class="footprints-section" id="footprintsSection" style="display: none;">
+                    <div class="footprints-header">
+                        <h3>Footprints sélectionnés</h3>
+                        <div class="footprints-actions">
+                            <button class="btn btn-secondary" onclick="selectAllFootprints()">
+                                <i class="fas fa-check-square"></i> Tout sélectionner
+                            </button>
+                            <button class="btn btn-secondary" onclick="deselectAllFootprints()">
+                                <i class="fas fa-square"></i> Tout désélectionner
+                            </button>
+                            <button class="btn btn-primary" onclick="showFavorites()">
+                                <i class="fas fa-heart"></i> Mes favoris
+                            </button>
+                        </div>
+                    </div>
+                    <div class="footprints-list" id="footprintsList"></div>
+                </div>
+
+                <!-- Section Favoris -->
+                <div class="favorites-section" id="favoritesSection" style="display: none;">
+                    <div class="favorites-header">
+                        <h3><i class="fas fa-heart"></i> Mes Footprints Favoris</h3>
+                        <div class="favorites-actions">
+                            <button class="btn btn-secondary" onclick="hideFavorites()">
+                                <i class="fas fa-arrow-left"></i> Retour
+                            </button>
+                            <button class="btn btn-danger" onclick="clearAllFavorites()">
+                                <i class="fas fa-trash"></i> Vider les favoris
+                            </button>
+                        </div>
+                    </div>
+                    <div class="favorites-list" id="favoritesList"></div>
+                </div>
+            </div>
+
+            <!-- Page Exploration SERP -->
+            <div class="page" id="serp-page">
+                <div class="page-header">
+                    <h2>Exploration SERP</h2>
+                    <p>Opérateurs avancés Google/Bing pour des recherches précises</p>
+                </div>
+
+                <div class="search-section">
+                    <div class="search-form">
+                        <input type="text" id="serpKeyword" placeholder="Entrez votre mot-clé pour tester...">
+                        <button onclick="testSerpOperators()" class="btn btn-primary">
+                            <i class="fas fa-external-link-alt"></i> Lancer les recherches
+                        </button>
+                    </div>
+                </div>
+
+                <div class="operators-grid">
+                    <div class="operator-category">
+                        <h3><i class="fas fa-clock"></i> Recherche temporelle</h3>
+                        <div class="operator-list">
+                            <label class="operator-item">
+                                <input type="checkbox" data-operator="daterange">
+                                <span>Daterange</span>
+                                <code>daterange:2024-01-01..2024-12-31</code>
+                            </label>
+                            <label class="operator-item">
+                                <input type="checkbox" data-operator="before">
+                                <span>Avant une date</span>
+                                <code>before:2024-01-01</code>
+                            </label>
+                            <label class="operator-item">
+                                <input type="checkbox" data-operator="after">
+                                <span>Après une date</span>
+                                <code>after:2024-01-01</code>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="operator-category">
+                        <h3><i class="fas fa-heading"></i> Titres et contenus</h3>
+                        <div class="operator-list">
+                            <label class="operator-item">
+                                <input type="checkbox" data-operator="intitle">
+                                <span>Dans le titre</span>
+                                <code>intitle:"mot-clé"</code>
+                            </label>
+                            <label class="operator-item">
+                                <input type="checkbox" data-operator="intext">
+                                <span>Dans le contenu</span>
+                                <code>intext:"mot-clé"</code>
+                            </label>
+                            <label class="operator-item">
+                                <input type="checkbox" data-operator="inurl">
+                                <span>Dans l'URL</span>
+                                <code>inurl:mot-clé</code>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="operator-category">
+                        <h3><i class="fas fa-file"></i> Types de fichiers</h3>
+                        <div class="operator-list">
+                            <label class="operator-item">
+                                <input type="checkbox" data-operator="filetype:pdf">
+                                <span>Fichiers PDF</span>
+                                <code>filetype:pdf</code>
+                            </label>
+                            <label class="operator-item">
+                                <input type="checkbox" data-operator="filetype:doc">
+                                <span>Documents Word</span>
+                                <code>filetype:doc</code>
+                            </label>
+                            <label class="operator-item">
+                                <input type="checkbox" data-operator="filetype:ppt">
+                                <span>Présentations</span>
+                                <code>filetype:ppt</code>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="operator-category">
+                        <h3><i class="fas fa-sitemap"></i> Sites spécifiques</h3>
+                        <div class="operator-list">
+                            <label class="operator-item">
+                                <input type="checkbox" data-operator="site:">
+                                <span>Site spécifique</span>
+                                <code>site:exemple.com</code>
+                            </label>
+                            <label class="operator-item">
+                                <input type="checkbox" data-operator="related:">
+                                <span>Sites similaires</span>
+                                <code>related:exemple.com</code>
+                            </label>
+                            <label class="operator-item">
+                                <input type="checkbox" data-operator="link:">
+                                <span>Sites qui lient vers</span>
+                                <code>link:exemple.com</code>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Projets -->
+            <div class="page" id="projects-page">
+                <div class="projects-dashboard">
+                    <!-- Header avec statistiques -->
+                    <div class="projects-header">
+                        <div class="projects-title">
+                            <h2>Mes Projets</h2>
+                            <p>Gérez vos projets SEO et E-Réputation</p>
+                        </div>
+                        <div class="projects-actions">
+                            <button class="btn btn-secondary" onclick="selectAllProjects()">
+                                <i class="fas fa-check-square"></i> Tout sélectionner
+                            </button>
+                            <button class="btn btn-primary" onclick="openProjectModal()">
+                                <i class="fas fa-plus"></i> + Nouveau projet
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Statistiques -->
+                    <div class="projects-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon total">
+                                <i class="fas fa-bullseye"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-number" id="totalProjectsCount">0</span>
+                                <span class="stat-label">Total projets</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon seo">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-number" id="seoProjectsCount">0</span>
+                                <span class="stat-label">Référencement</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon reputation">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-number" id="reputationProjectsCount">0</span>
+                                <span class="stat-label">E-Réputation</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon monthly">
+                                <i class="fas fa-calendar"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-number" id="monthlyProjectsCount">0</span>
+                                <span class="stat-label">Ce mois</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recherche et filtres -->
+                    <div class="projects-filters">
+                        <div class="search-bar">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="projectSearch" placeholder="Rechercher par nom ou URL...">
+                        </div>
+                        <div class="filter-group">
+                            <i class="fas fa-filter"></i>
+                            <select id="objectiveFilter">
+                                <option value="">Tous les objectifs</option>
+                                <option value="SEO">Référencement</option>
+                                <option value="E-Réputation">E-Réputation</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Actions en masse pour projets -->
+                    <div class="bulk-actions" id="projectBulkActions" style="display: none;">
+                        <div class="bulk-actions-info">
+                            <span id="selectedProjectsCount">0</span> projet(s) sélectionné(s)
+                        </div>
+                        <div class="bulk-actions-buttons">
+                            <button class="btn btn-danger" onclick="deleteSelectedProjects()">
+                                <i class="fas fa-trash"></i> Supprimer
+                            </button>
+                            <button class="btn btn-outline" onclick="clearProjectSelection()">
+                                <i class="fas fa-times"></i> Annuler sélection
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Liste des projets -->
+                    <div class="projects-content">
+                        <div class="projects-info">
+                            <h3>Projets (<span id="projectCount">0</span>)</h3>
+                        </div>
+                        <div class="projects-grid" id="projectsGrid">
+                            <!-- Les projets seront affichés ici -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Détail Projet -->
+            <div class="page" id="project-detail-page">
+                <div class="project-detail-back">
+                    <button class="btn btn-secondary" onclick="switchPage('projects')">
+                        <i class="fas fa-arrow-left"></i> Retour aux projets
+                    </button>
+                </div>
+                <div class="project-detail-container">
+                    <!-- Header du projet -->
+                    <div class="project-detail-header">
+                        <div class="project-detail-info">
+                            <div class="project-detail-title-container">
+                                <h1 class="project-detail-title" id="projectDetailTitle">Nom du projet</h1>
+                                <button class="project-edit-btn" onclick="toggleProjectEdit()" id="projectEditBtn">
+                                    <i class="fas fa-edit"></i> Modifier le projet
+                                </button>
+                            </div>
+                            <div class="project-detail-url-container">
+                                <a href="#" target="_blank" class="project-detail-url" id="projectDetailUrl">
+                                    URL du projet <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                            <div class="project-detail-keywords" id="projectDetailKeywords">
+                                <!-- Les mots-clés seront affichés ici -->
+                            </div>
+                            <div class="project-detail-updated" id="projectDetailUpdated">
+                                Dernière mise à jour : <span id="projectDetailUpdatedDate">-</span>
+                            </div>
+                        </div>
+                        <div class="project-detail-objective">
+                            <span class="project-objective-tag" id="projectDetailObjective">Référencement</span>
+                        </div>
+                    </div>
+
+                    <!-- Formulaire d'édition du projet -->
+                    <div class="project-edit-form" id="projectEditForm" style="display: none;">
+                        <form id="projectDetailForm">
+                            <div class="edit-form-grid">
+                                <div class="form-group">
+                                    <label for="editProjectName">Nom du projet *</label>
+                                    <input type="text" id="editProjectName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editProjectUrl">URL du site *</label>
+                                    <input type="url" id="editProjectUrl" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editProjectObjective">Objectif *</label>
+                                    <select id="editProjectObjective" required>
+                                        <option value="">Sélectionner un objectif</option>
+                                        <option value="SEO">Référencement</option>
+                                        <option value="E-Réputation">E-Réputation</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editProjectTraffic">Trafic</label>
+                                    <input type="number" id="editProjectTraffic" min="0" placeholder="50000">
+                                </div>
+                                <div class="form-group">
+                                    <label for="editProjectTrustFlow">Trust Flow</label>
+                                    <input type="number" id="editProjectTrustFlow" min="0" max="100" placeholder="50">
+                                </div>
+                                <div class="form-group">
+                                    <label for="editProjectTTF">TTF</label>
+                                    <select id="editProjectTTF">
+                                        <option value="Business">Business</option>
+                                        <option value="Généraliste">Généraliste</option>
+                                        <option value="Technologie">Technologie</option>
+                                        <option value="Mode">Mode</option>
+                                        <option value="Sport">Sport</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editProjectReferringDomains">Domaines référents</label>
+                                    <input type="number" id="editProjectReferringDomains" min="0" placeholder="0">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="editProjectKeywords">Mots-clés à travailler</label>
+                                    <div class="keywords-container">
+                                        <div class="keywords-input-container">
+                                            <input type="text" id="editKeywordInput" placeholder="Ajouter un mot-clé...">
+                                            <button type="button" class="btn btn-sm btn-primary" onclick="addEditKeyword()">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="keywords-tags" id="editKeywordsTags">
+                                            <!-- Les mots-clés seront affichés ici -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="edit-form-actions">
+                                <button type="button" class="btn btn-secondary" onclick="cancelProjectEdit()">Annuler</button>
+                                <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- KPIs du projet -->
+                    <div class="project-kpis">
+                        <div class="kpi-card">
+                            <div class="kpi-number" id="projectDetailTraffic">0</div>
+                            <div class="kpi-label">Trafic</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-number" id="projectDetailTrustFlow">0</div>
+                            <div class="kpi-label">Trust Flow</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-number" id="projectDetailReferringDomains">0</div>
+                            <div class="kpi-label">Domaines référents</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-number" id="projectDetailSpotsCount">0</div>
+                            <div class="kpi-label">Spots</div>
+                        </div>
+                    </div>
+
+                    <!-- Section des spots -->
+                    <div class="project-spots-section">
+                        <div class="project-spots-header">
+                            <h2>Spots du projet (<span id="projectSpotsCount">0</span>)</h2>
+                            <button class="btn btn-primary" onclick="openAddSpotModal()">
+                                <i class="fas fa-plus"></i> + Ajouter un spot
+                            </button>
+                        </div>
+                        
+                        <div class="project-spots-table-container">
+                            <table class="project-spots-table" id="projectSpotsTable">
+                                <thead>
+                                    <tr>
+                                        <th>SITE</th>
+                                        <th>TYPE</th>
+                                        <th>THÉMATIQUE</th>
+                                        <th>TRUST FLOW</th>
+                                        <th>TRAFIC</th>
+                                        <th>STATUT</th>
+                                        <th>ACTIONS</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="projectSpotsTableBody">
+                                    <!-- Les spots seront affichés ici -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Catalogue -->
+            <div class="page" id="catalog-page">
+                <div class="catalog-header">
+                    <div class="catalog-title">
+                        <h2>Catalogue de Spots</h2>
+                        <p>Gérez votre base de données de sites</p>
+                    </div>
+        <div class="catalog-actions">
+            <button class="btn btn-info" onclick="refreshSitesFromSupabase()">
+                <i class="fas fa-sync-alt"></i> Actualiser
+            </button>
+            <button class="btn btn-success" onclick="openImportModal()">
+                <i class="fas fa-upload"></i> Importer
+            </button>
+            <button class="btn btn-info" onclick="downloadCSVModel()">
+                <i class="fas fa-download"></i> Modèle CSV
+            </button>
+            <button class="btn btn-success" onclick="downloadExcelModel()">
+                <i class="fas fa-download"></i> Modèle Excel
+            </button>
+            <button class="btn btn-info" onclick="exportToExcel()">
+                <i class="fas fa-download"></i> Exporter Excel
+            </button>
+            <button class="btn btn-primary" onclick="openSiteModal()">
+                <i class="fas fa-plus"></i> Ajouter
+            </button>
+        </div>
+                </div>
+
+                <div class="catalog-filters">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="catalogSearch" placeholder="Rechercher par nom ou URL...">
+                    </div>
+                    <div class="filter-dropdowns">
+                        <div class="filter-group">
+                            <i class="fas fa-filter"></i>
+                            <select id="typeFilter">
+                                <option value="">Tous les types</option>
+                                <option value="Forum">Forum</option>
+                                <option value="Blog">Blog</option>
+                                <option value="Annuaire">Annuaire</option>
+                                <option value="Média">Média</option>
+                                <option value="E-commerce">E-commerce</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <i class="fas fa-filter"></i>
+                            <select id="themeFilter">
+                                <option value="">Toutes les thématiques</option>
+                                <option value="Business">Business</option>
+                                <option value="Généraliste">Généraliste</option>
+                                <option value="Technologie">Technologie</option>
+                                <option value="Mode">Mode</option>
+                                <option value="Sport">Sport</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions en masse -->
+                <div class="bulk-actions" id="bulkActions" style="display: none;">
+                    <div class="bulk-actions-info">
+                        <span id="selectedCount">0</span> site(s) sélectionné(s)
+                    </div>
+                    <div class="bulk-actions-buttons">
+                        <button class="btn btn-secondary" onclick="editSelectedSites()">
+                            <i class="fas fa-edit"></i> Modifier
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteSelectedSites()">
+                            <i class="fas fa-trash"></i> Supprimer
+                        </button>
+                        <button class="btn btn-primary" onclick="showAddToProjectModal()">
+                            <i class="fas fa-plus"></i> Ajouter au projet
+                        </button>
+                        <button class="btn btn-outline" onclick="clearSelection()">
+                            <i class="fas fa-times"></i> Annuler sélection
+                        </button>
+                    </div>
+                </div>
+
+                <div class="catalog-content">
+                    <div class="catalog-info">
+                        <h3>Spots (<span id="sitesCount">0</span>)</h3>
+                    </div>
+                    <div class="catalog-table-container">
+                        <table class="catalog-table" id="catalogTable">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="selectAllSites"></th>
+                                    <th>URL</th>
+                                    <th>TYPE</th>
+                                    <th>THÉMATIQUE</th>
+                                    <th>TRAFIC</th>
+                                    <th>TRUST FLOW</th>
+                                    <th>TOPICAL TRUST FLOW (TTF)</th>
+                                    <th>FOLLOW</th>
+                                    <th>ACTIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="catalogTableBody">
+                                <!-- Les sites seront affichés ici -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Projet -->
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalProjectTitle">Nouveau Projet</h3>
+                <button class="modal-close" onclick="closeProjectModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="projectForm">
+                    <div class="form-group">
+                        <label for="projectName">Nom du projet *</label>
+                        <input type="text" id="projectName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectUrl">URL du site *</label>
+                        <input type="url" id="projectUrl" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectObjective">Objectif *</label>
+                        <select id="projectObjective" required>
+                            <option value="">Sélectionner un objectif</option>
+                            <option value="SEO">Référencement</option>
+                            <option value="E-Réputation">E-Réputation</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectTraffic">Trafic</label>
+                        <input type="number" id="projectTraffic" min="0" placeholder="50000">
+                    </div>
+                    <div class="form-group">
+                        <label for="projectTrustFlow">Trust Flow</label>
+                        <input type="number" id="projectTrustFlow" min="0" max="100" placeholder="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="projectTTF">TTF</label>
+                        <select id="projectTTF">
+                            <option value="Business">Business</option>
+                            <option value="Généraliste">Généraliste</option>
+                            <option value="Technologie">Technologie</option>
+                            <option value="Mode">Mode</option>
+                            <option value="Sport">Sport</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectReferringDomains">Domaines référents</label>
+                        <input type="number" id="projectReferringDomains" min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="projectKeywords">Mots-clés à travailler</label>
+                        <div class="keywords-container">
+                            <div class="keywords-input-container">
+                                <input type="text" id="keywordInput" placeholder="Ajouter un mot-clé...">
+                                <button type="button" class="btn btn-sm btn-primary" onclick="addKeyword()">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="keywords-tags" id="keywordsTags">
+                                <!-- Les mots-clés seront affichés ici -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeProjectModal()">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ajouter Spot -->
+    <div id="addSpotModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Ajouter un spot au projet</h3>
+                <button class="modal-close" onclick="closeAddSpotModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addSpotForm">
+                    <div class="form-group">
+                        <label for="spotUrl">URL du site *</label>
+                        <input type="url" id="spotUrl" required placeholder="https://exemple.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="spotType">Type</label>
+                        <select id="spotType">
+                            <option value="Forum">Forum</option>
+                            <option value="Blog">Blog</option>
+                            <option value="Annuaire">Annuaire</option>
+                            <option value="Média">Média</option>
+                            <option value="E-commerce">E-commerce</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="spotTheme">Thématique</label>
+                        <select id="spotTheme">
+                            <option value="Business">Business</option>
+                            <option value="Généraliste">Généraliste</option>
+                            <option value="Technologie">Technologie</option>
+                            <option value="Mode">Mode</option>
+                            <option value="Sport">Sport</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="spotTrustFlow">Trust Flow</label>
+                        <input type="number" id="spotTrustFlow" min="0" max="100" placeholder="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="spotTraffic">Trafic</label>
+                        <input type="number" id="spotTraffic" min="0" placeholder="10000">
+                    </div>
+                    <div class="form-group">
+                        <label for="spotStatus">Statut</label>
+                        <select id="spotStatus">
+                            <option value="A publier">A publier</option>
+                            <option value="Publié">Publié</option>
+                            <option value="Rejeté">Rejeté</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeAddSpotModal()">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Ajouter le spot</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Import Sites -->
+    <div id="importModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Importer des sites en masse</h3>
+                <button class="modal-close" onclick="closeImportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="import-instructions">
+                    <h4>Instructions d'import :</h4>
+                    <ol>
+                        <li>Téléchargez le modèle Excel ou CSV pour voir le format attendu</li>
+                        <li>Remplissez votre fichier avec vos sites</li>
+                        <li>Sélectionnez votre fichier (CSV, Excel .xlsx ou .xls)</li>
+                        <li>Cliquez sur "Importer"</li>
+                    </ol>
+                </div>
+                
+                <div class="form-group">
+                    <label for="importFile">Fichier à importer</label>
+                    <input type="file" id="importFile" accept="*" onchange="handleFileSelect(event)">
+                    <small class="form-help">Formats supportés : CSV (.csv), Excel (.xlsx, .xls)</small>
+                </div>
+                
+                <div class="import-preview" id="importPreview" style="display: none;">
+                    <h4>Aperçu des données :</h4>
+                    <div class="preview-table-container">
+                        <table class="preview-table" id="previewTable">
+                            <thead>
+                                <tr>
+                                    <th>URL</th>
+                                    <th>Type</th>
+                                    <th>Thématique</th>
+                                    <th>Trafic</th>
+                                    <th>Trust Flow</th>
+                                    <th>TTF</th>
+                                    <th>Follow</th>
+                                </tr>
+                            </thead>
+                            <tbody id="previewTableBody">
+                                <!-- Les données seront affichées ici -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="import-stats" id="importStats">
+                        <!-- Les statistiques seront affichées ici -->
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeImportModal()">Annuler</button>
+                    <button type="button" class="btn btn-primary" id="importBtn" onclick="importCSVData()" disabled>
+                        <i class="fas fa-upload"></i> Importer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ajouter au Projet -->
+    <div id="addToProjectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Ajouter au projet</h3>
+                <button class="modal-close" onclick="closeAddToProjectModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="selectProject">Sélectionner un projet</label>
+                    <select id="selectProject" required>
+                        <option value="">Choisir un projet...</option>
+                        <!-- Les projets seront ajoutés dynamiquement -->
+                    </select>
+                </div>
+                <div class="selected-sites-preview" id="selectedSitesPreview">
+                    <!-- Aperçu des sites sélectionnés -->
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeAddToProjectModal()">Annuler</button>
+                    <button type="button" class="btn btn-primary" onclick="addSitesToProject()">
+                        <i class="fas fa-plus"></i> Ajouter
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Site -->
+    <div id="siteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalSiteTitle">Nouveau Site</h3>
+                <button class="modal-close" onclick="closeSiteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="siteForm">
+                    <div class="form-group">
+                        <label for="siteUrl">URL *</label>
+                        <input type="url" id="siteUrl" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="siteType">Type</label>
+                        <select id="siteType">
+                            <option value="Forum">Forum</option>
+                            <option value="Blog">Blog</option>
+                            <option value="Annuaire">Annuaire</option>
+                            <option value="Média">Média</option>
+                            <option value="E-commerce">E-commerce</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="siteTheme">Thématique</label>
+                        <select id="siteTheme">
+                            <option value="Business">Business</option>
+                            <option value="Généraliste">Généraliste</option>
+                            <option value="Technologie">Technologie</option>
+                            <option value="Mode">Mode</option>
+                            <option value="Sport">Sport</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="siteTraffic">Trafic</label>
+                        <input type="number" id="siteTraffic" min="0" placeholder="10000">
+                    </div>
+                    <div class="form-group">
+                        <label for="siteTrustFlow">Trust Flow</label>
+                        <input type="number" id="siteTrustFlow" min="0" max="100" placeholder="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="siteTTF">Topical Trust Flow (TTF)</label>
+                        <select id="siteTTF">
+                            <option value="Business">Business</option>
+                            <option value="Généraliste">Généraliste</option>
+                            <option value="Technologie">Technologie</option>
+                            <option value="Mode">Mode</option>
+                            <option value="Sport">Sport</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="siteFollow">Follow</label>
+                        <select id="siteFollow">
+                            <option value="Oui">Oui</option>
+                            <option value="Non">Non</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeSiteModal()">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="supabase-service.js"></script>
+    <script src="ninja-linking-script.js"></script>
+</body>
+</html>
