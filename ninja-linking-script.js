@@ -2781,7 +2781,7 @@ function renderProjectSpots() {
     if (projectSpots.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="10" style="text-align: center; padding: 3rem; color: #64748b;">
+                <td colspan="11" style="text-align: center; padding: 3rem; color: #64748b;">
                     <i class="fas fa-globe" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.5;"></i>
                     <p>Aucun spot associé à ce projet</p>
                 </td>
