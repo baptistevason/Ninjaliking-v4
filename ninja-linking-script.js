@@ -2798,9 +2798,12 @@ function renderProjectSpots() {
         
         row.innerHTML = `
             <td>
-                <div>
+                <div class="project-spot-url-container">
                     <a href="${spot.url}" target="_blank" class="project-spot-url">
                         ${getDomainName(spot.url)} <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    <a href="https://app.seobserver.com/sites/view/${getDomainName(spot.url)}" target="_blank" class="seobserver-analysis-btn" title="Analyser le site avec SEObserver">
+                        <img src="seobserver-logo.jpg" alt="Analyser avec SEObserver" class="seobserver-logo-icon">
                     </a>
                 </div>
             </td>
@@ -3530,9 +3533,14 @@ function renderSites() {
         row.innerHTML = `
             <td><input type="checkbox" class="site-checkbox" data-site-id="${site.id}" onchange="handleSiteSelection()"></td>
             <td>
-                <a href="${site.url}" target="_blank" class="site-url">
-                    ${getDomainName(site.url)} <i class="fas fa-external-link-alt"></i>
-                </a>
+                <div class="site-url-container">
+                    <a href="${site.url}" target="_blank" class="site-url">
+                        ${getDomainName(site.url)} <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    <a href="https://app.seobserver.com/sites/view/${getDomainName(site.url)}" target="_blank" class="seobserver-analysis-btn" title="Analyser le site avec SEObserver">
+                        <img src="seobserver-logo.jpg" alt="Analyser avec SEObserver" class="seobserver-logo-icon">
+                    </a>
+                </div>
             </td>
             <td><span class="type-tag">${site.type}</span></td>
             <td>${site.theme}</td>
