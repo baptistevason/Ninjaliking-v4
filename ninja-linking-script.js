@@ -1433,6 +1433,17 @@ const serpFootprintsData = {
         '"mot-clé" filetype:ppt',
         '"mot-clé" filetype:txt',
         '"mot-clé" filetype:csv'
+    ],
+    'affiliation': [
+        '"programme d\'affiliation" "mot-clé"',
+        '"devenir partenaire" "mot-clé"',
+        '"affiliation" "mot-clé" site officiel',
+        '"rejoindre notre programme d\'affiliation" "mot-clé"',
+        '"partenaire affilié" "mot-clé"',
+        '"inscription affilié" "mot-clé"',
+        '"revenus d\'affiliation" "mot-clé"',
+        '"affiliation commission" "mot-clé"',
+        '"tableau de bord affilié" "mot-clé"'
     ]
 };
 
