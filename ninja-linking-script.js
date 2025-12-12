@@ -4427,7 +4427,7 @@ function downloadExcelModel() {
                 B8: { v: 'Autres types de sites', t: 's' }
             },
             'Thématiques': {
-                '!ref': 'A1:B6',
+                '!ref': 'A1:B7',
                 A1: { v: 'Thématique', t: 's' },
                 B1: { v: 'Description', t: 's' },
                 A2: { v: 'Business', t: 's' },
@@ -4439,7 +4439,9 @@ function downloadExcelModel() {
                 A5: { v: 'Mode', t: 's' },
                 B5: { v: 'Fashion et style', t: 's' },
                 A6: { v: 'Sport', t: 's' },
-                B6: { v: 'Sports et fitness', t: 's' }
+                B6: { v: 'Sports et fitness', t: 's' },
+                A7: { v: 'Bricolage', t: 's' },
+                B7: { v: 'Bricolage et travaux manuels', t: 's' }
             },
             'Instructions': {
                 '!ref': 'A1:D15',
@@ -4461,7 +4463,7 @@ function downloadExcelModel() {
                 A10: { v: '8. Format Trust Flow', t: 's' },
                 B10: { v: 'Nombre entier 0-100 (ex: 50)', t: 's' },
                 A11: { v: '9. Format TTF', t: 's' },
-                B11: { v: 'Business, Technologie, Généraliste, Mode, Sport', t: 's' },
+                B11: { v: 'Business, Technologie, Généraliste, Mode, Sport, Bricolage', t: 's' },
                 A12: { v: '10. Format Follow', t: 's' },
                 B12: { v: 'Oui ou Non', t: 's' },
                 A13: { v: '11. Sauvegarde', t: 's' },
@@ -5358,15 +5360,17 @@ function exportProjectSpotsToExcel() {
     // Créer un nouveau workbook
     const workbook = XLSX.utils.book_new();
     
-    // Préparer les données
+    // Préparer les données avec toutes les colonnes du tableau
     const spotsData = projectSpots.map(spot => ({
         'Site': spot.url,
-        'Type': spot.type,
-        'Thématique': spot.theme,
+        'URL Cible': spot.targetUrl || '',
+        'Type': spot.type || '',
+        'Thématique': spot.theme || '',
         'Trust Flow': spot.trustFlow || 0,
         'Trafic': spot.traffic || 0,
         'TTF': spot.ttf || 'Business',
         'Date Publication': spot.publicationDate ? new Date(spot.publicationDate).toLocaleDateString('fr-FR') : 'Non définie',
+        'Prix': spot.price ? spot.price.toFixed(2) : '0.00',
         'Statut': spot.status || 'A publier'
     }));
 
@@ -5376,12 +5380,14 @@ function exportProjectSpotsToExcel() {
     // Ajuster la largeur des colonnes
     const columnWidths = [
         { wch: 30 }, // Site
+        { wch: 30 }, // URL Cible
         { wch: 12 }, // Type
         { wch: 15 }, // Thématique
         { wch: 12 }, // Trust Flow
         { wch: 12 }, // Trafic
         { wch: 12 }, // TTF
         { wch: 15 }, // Date Publication
+        { wch: 10 }, // Prix
         { wch: 12 }  // Statut
     ];
     worksheet['!cols'] = columnWidths;
