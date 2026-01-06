@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 Réparation Connexion Supabase</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .status { padding: 15px; margin: 15px 0; border-radius: 5px; font-weight: bold; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        button { background: #007bff; color: white; border: none; padding: 15px 30px; border-radius: 5px; cursor: pointer; margin: 10px; font-size: 16px; }
+        button:hover { background: #0056b3; }
+        button.success { background: #28a745; }
+        button.success:hover { background: #218838; }
+        .config-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .data-item { margin: 10px 0; padding: 10px; background: #f8f9fa; border-radius: 3px; }
+        input, textarea { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 3px; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Réparation Connexion Supabase</h1>
+        
+        <div id="status" class="status info">
+            Diagnostic de la connexion Supabase...
+        </div>
+        
+        <div class="config-section">
+            <h3>🔍 Diagnostic de la Connexion</h3>
+            <div id="diagnostic-results"></div>
+            <button onclick="diagnoseConnection()">🔍 Diagnostiquer la Connexion</button>
+        </div>
+        
+        <div class="config-section">
+            <h3>⚙️ Configuration Supabase</h3>
+            <p>Vos credentials Supabase par défaut :</p>
+            <div class="data-item">
+                <strong>URL :</strong> https://kckdjgedbjjuhmcqcmpe.supabase.co
+            </div>
+            <div class="data-item">
+                <strong>Clé :</strong> eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtja2RqZ2VkYmpqdWhtY3FjbXBlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxMjQzMzMsImV4cCI6MjA3MzcwMDMzM30.-TUGbwjk_8OUGZKJdnU5CqyJHI8wm4o1j1LdzRnSKhg
+            </div>
+            
+            <h4>Configuration Personnalisée (optionnel)</h4>
+            <input type="text" id="customUrl" placeholder="URL Supabase personnalisée" />
+            <textarea id="customKey" placeholder="Clé Supabase personnalisée" rows="3"></textarea>
+            <button onclick="configureCustomSupabase()">🔧 Configurer Credentials Personnalisés</button>
+        </div>
+        
+        <div class="config-section">
+            <h3>🔄 Actions de Réparation</h3>
+            <button onclick="restoreDefaultConnection()" class="success">⚡ Restaurer Connexion par Défaut</button>
+            <button onclick="testConnection()">🧪 Tester la Connexion</button>
+            <button onclick="reconnectSupabase()">🔄 Reconnecter Supabase</button>
+            <button onclick="clearSupabaseCache()">🗑️ Nettoyer Cache Supabase</button>
+        </div>
+        
+        <div class="config-section">
+            <h3>📊 Résultats des Tests</h3>
+            <div id="test-results"></div>
+        </div>
+        
+        <div class="config-section">
+            <h3>🏠 Retour à l'Application</h3>
+            <button onclick="goToMainApp()">🏠 Aller à l'Application</button>
+            <button onclick="goToDataRecovery()">🚨 Récupération des Données</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-service.js"></script>
+    
+    <script>
+        let supabase = null;
+        
+        function log(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+        
+        function addDiagnostic(message) {
+            const div = document.getElementById('diagnostic-results');
+            const item = document.createElement('div');
+            item.className = 'data-item';
+            item.innerHTML = message;
+            div.appendChild(item);
+        }
+        
+        function addTestResult(message) {
+            const div = document.getElementById('test-results');
+            const item = document.createElement('div');
+            item.className = 'data-item';
+            item.innerHTML = message;
+            div.appendChild(item);
+        }
+        
+        function diagnoseConnection() {
+            log('🔍 Diagnostic de la connexion Supabase...', 'info');
+            
+            // Vider les résultats précédents
+            document.getElementById('diagnostic-results').innerHTML = '';
+            
+            // 1. Vérifier les credentials dans localStorage
+            const storedUrl = localStorage.getItem('supabase-url');
+            const storedKey = localStorage.getItem('supabase-anon-key');
+            const isAuth = localStorage.getItem('isAuthenticated');
+            const currentUser = localStorage.getItem('currentUser');
+            
+            addDiagnostic('<strong>📱 localStorage:</strong>');
+            addDiagnostic(`URL: ${storedUrl || 'Non configuré'}`);
+            addDiagnostic(`Clé: ${storedKey ? storedKey.substring(0, 20) + '...' : 'Non configuré'}`);
+            addDiagnostic(`Authentifié: ${isAuth || 'Non'}`);
+            addDiagnostic(`Utilisateur: ${currentUser || 'Aucun'}`);
+            
+            // 2. Vérifier les variables globales
+            addDiagnostic('<strong>🌐 Variables globales:</strong>');
+            addDiagnostic(`isSupabaseConfigured: ${typeof isSupabaseConfigured !== 'undefined' ? isSupabaseConfigured : 'Non défini'}`);
+            addDiagnostic(`isAuthenticated: ${typeof isAuthenticated !== 'undefined' ? isAuthenticated : 'Non défini'}`);
+            addDiagnostic(`db: ${typeof db !== 'undefined' ? (db ? 'Initialisé' : 'Non initialisé') : 'Non défini'}`);
+            
+            // 3. Vérifier la connexion réseau
+            addDiagnostic('<strong>🌐 Connexion réseau:</strong>');
+            addDiagnostic(`En ligne: ${navigator.onLine ? 'Oui' : 'Non'}`);
+            addDiagnostic(`User Agent: ${navigator.userAgent.substring(0, 50)}...`);
+            
+            log('✅ Diagnostic terminé', 'success');
+        }
+        
+        async function restoreDefaultConnection() {
+            log('⚡ Restauration de la connexion par défaut...', 'info');
+            
+            try {
+                // Credentials par défaut
+                const defaultUrl = 'https://kckdjgedbjjuhmcqcmpe.supabase.co';
+                const defaultKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtja2RqZ2VkYmpqdWhtY3FjbXBlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxMjQzMzMsImV4cCI6MjA3MzcwMDMzM30.-TUGbwjk_8OUGZKJdnU5CqyJHI8wm4o1j1LdzRnSKhg';
+                
+                // Sauvegarder dans localStorage
+                localStorage.setItem('supabase-url', defaultUrl);
+                localStorage.setItem('supabase-anon-key', defaultKey);
+                localStorage.setItem('supabase-configured', 'true');
+                
+                addTestResult('✅ Credentials par défaut restaurés');
+                
+                // Tester la connexion
+                await testConnection();
+                
+                log('✅ Connexion par défaut restaurée', 'success');
+                
+            } catch (error) {
+                log('❌ Erreur restauration: ' + error.message, 'error');
+                addTestResult(`❌ Erreur: ${error.message}`);
+            }
+        }
+        
+        async function configureCustomSupabase() {
+            const customUrl = document.getElementById('customUrl').value;
+            const customKey = document.getElementById('customKey').value;
+            
+            if (!customUrl || !customKey) {
+                addTestResult('❌ Veuillez remplir l\'URL et la clé');
+                return;
+            }
+            
+            log('🔧 Configuration des credentials personnalisés...', 'info');
+            
+            try {
+                localStorage.setItem('supabase-url', customUrl);
+                localStorage.setItem('supabase-anon-key', customKey);
+                localStorage.setItem('supabase-configured', 'true');
+                
+                addTestResult('✅ Credentials personnalisés sauvegardés');
+                
+                // Tester la connexion
+                await testConnection();
+                
+                log('✅ Configuration personnalisée terminée', 'success');
+                
+            } catch (error) {
+                log('❌ Erreur configuration: ' + error.message, 'error');
+                addTestResult(`❌ Erreur: ${error.message}`);
+            }
+        }
+        
+        async function testConnection() {
+            log('🧪 Test de la connexion Supabase...', 'info');
+            
+            try {
+                const url = localStorage.getItem('supabase-url');
+                const key = localStorage.getItem('supabase-anon-key');
+                
+                if (!url || !key) {
+                    addTestResult('❌ Credentials Supabase manquants');
+                    return;
+                }
+                
+                // Créer le client Supabase
+                supabase = createClient(url, key);
+                
+                // Test de connexion basique
+                const { data, error } = await supabase
+                    .from('projects')
+                    .select('id')
+                    .limit(1);
+                
+                if (error) {
+                    addTestResult(`❌ Erreur connexion: ${error.message}`);
+                    log('❌ Test de connexion échoué', 'error');
+                } else {
+                    addTestResult('✅ Connexion Supabase réussie');
+                    addTestResult(`📊 Données reçues: ${JSON.stringify(data)}`);
+                    log('✅ Test de connexion réussi', 'success');
+                }
+                
+            } catch (error) {
+                addTestResult(`❌ Erreur test: ${error.message}`);
+                log('❌ Erreur test de connexion: ' + error.message, 'error');
+            }
+        }
+        
+        async function reconnectSupabase() {
+            log('🔄 Reconnexion à Supabase...', 'info');
+            
+            try {
+                // Nettoyer les variables globales
+                if (typeof window !== 'undefined') {
+                    window.isSupabaseConfigured = false;
+                    window.isAuthenticated = false;
+                    window.db = null;
+                    window.currentUser = null;
+                }
+                
+                addTestResult('✅ Variables globales nettoyées');
+                
+                // Recharger la page pour réinitialiser
+                addTestResult('🔄 Rechargement de la page...');
+                setTimeout(() => {
+                    window.location.href = 'index.html?reconnect=true&t=' + Date.now();
+                }, 2000);
+                
+            } catch (error) {
+                log('❌ Erreur reconnexion: ' + error.message, 'error');
+                addTestResult(`❌ Erreur: ${error.message}`);
+            }
+        }
+        
+        function clearSupabaseCache() {
+            log('🗑️ Nettoyage du cache Supabase...', 'info');
+            
+            try {
+                // Nettoyer localStorage
+                localStorage.removeItem('supabase-url');
+                localStorage.removeItem('supabase-anon-key');
+                localStorage.removeItem('supabase-configured');
+                localStorage.removeItem('isAuthenticated');
+                localStorage.removeItem('currentUser');
+                
+                // Nettoyer sessionStorage
+                sessionStorage.clear();
+                
+                addTestResult('✅ Cache Supabase nettoyé');
+                addTestResult('✅ localStorage nettoyé');
+                addTestResult('✅ sessionStorage nettoyé');
+                
+                log('✅ Cache nettoyé', 'success');
+                
+            } catch (error) {
+                log('❌ Erreur nettoyage: ' + error.message, 'error');
+                addTestResult(`❌ Erreur: ${error.message}`);
+            }
+        }
+        
+        function goToMainApp() {
+            window.location.href = 'index.html?supabase-fixed=true&t=' + Date.now();
+        }
+        
+        function goToDataRecovery() {
+            window.location.href = 'emergency-data-recovery.html';
+        }
+        
+        // Auto-diagnostic au chargement
+        window.addEventListener('load', () => {
+            setTimeout(diagnoseConnection, 1000);
+        });
+    </script>
+</body>
+</html>
+
+
+
+

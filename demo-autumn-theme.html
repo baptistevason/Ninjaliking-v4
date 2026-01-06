@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Démo Thème Automne - RéputaLink</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="ninja-linking-styles.css?v=20241230">
+    <link rel="stylesheet" href="autumn-theme.css?v=20241230">
+    <link rel="stylesheet" href="theme-selector.css?v=20241230">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="autumn-theme">
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1>🍂 RéputaLink - Thème Automne</h1>
+                    <p>Découvrez l'ambiance chaleureuse de l'automne</p>
+                </div>
+                <div class="header-right">
+                    <div class="theme-selector" id="themeSelector">
+                        <div class="theme-option theme-autumn active" data-theme="autumn" title="Thème Automne">
+                            <i class="fas fa-leaf theme-icon"></i>
+                            <div class="theme-tooltip">Automne</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="navigation">
+            <div class="nav-container">
+                <div class="nav-buttons">
+                    <button class="nav-btn active">
+                        <i class="fas fa-home"></i>
+                        <span>Accueil</span>
+                    </button>
+                    <button class="nav-btn">
+                        <i class="fas fa-folder-open"></i>
+                        <span>Projets</span>
+                    </button>
+                    <button class="nav-btn">
+                        <i class="fas fa-database"></i>
+                        <span>Catalogue</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page active">
+                <div class="page-header">
+                    <h2>🍂 Démonstration du Thème Automne</h2>
+                    <p>Explorez les couleurs chaleureuses et l'ambiance cosy de l'automne</p>
+                </div>
+
+                <!-- Section KPI -->
+                <div class="kpi-section">
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <div class="kpi-number">1,247</div>
+                            <div class="kpi-label">Projets Actifs</div>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <div class="kpi-number">8,932</div>
+                            <div class="kpi-label">Liens Créés</div>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <div class="kpi-number">94%</div>
+                            <div class="kpi-label">Taux de Succès</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section Budget -->
+                <div class="project-budget-section">
+                    <div class="budget-header">
+                        <h3>💰 Budget et Dépenses</h3>
+                    </div>
+                    <div class="budget-cards">
+                        <div class="budget-card">
+                            <div class="budget-label">Budget alloué</div>
+                            <div class="budget-amount">2,500.00 €</div>
+                        </div>
+                        <div class="budget-card">
+                            <div class="budget-label">Dépenses totales</div>
+                            <div class="budget-amount">1,750.00 €</div>
+                        </div>
+                        <div class="budget-card">
+                            <div class="budget-label">Budget en attente</div>
+                            <div class="budget-amount">450.00 €</div>
+                        </div>
+                        <div class="budget-card">
+                            <div class="budget-label">Reste disponible</div>
+                            <div class="budget-amount">300.00 €</div>
+                        </div>
+                    </div>
+                    <div class="budget-progress">
+                        <div class="budget-progress-bar">
+                            <div class="budget-progress-fill" style="width: 70%;"></div>
+                        </div>
+                        <div class="budget-progress-text">70% du budget engagé</div>
+                    </div>
+                </div>
+
+                <!-- Section Cartes -->
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">🍂 Projet Automne</h3>
+                            <div class="card-actions">
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-edit"></i> Modifier
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p>Un projet avec l'ambiance chaleureuse de l'automne, parfait pour les campagnes de fin d'année.</p>
+                            <div class="card-stats">
+                                <span class="stat">
+                                    <i class="fas fa-link"></i> 45 spots
+                                </span>
+                                <span class="stat">
+                                    <i class="fas fa-euro-sign"></i> 1,200€
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">📊 Statistiques</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="stats-list">
+                                <div class="stat-item">
+                                    <span class="stat-label">Spots publiés</span>
+                                    <span class="stat-value">32</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">En attente</span>
+                                    <span class="stat-value">8</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">À publier</span>
+                                    <span class="stat-value">5</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section Boutons -->
+                <div class="buttons-section">
+                    <h3>🎨 Boutons du Thème Automne</h3>
+                    <div class="buttons-grid">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Bouton Principal
+                        </button>
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-cog"></i> Bouton Secondaire
+                        </button>
+                        <button class="btn btn-success">
+                            <i class="fas fa-check"></i> Succès
+                        </button>
+                        <button class="btn btn-warning">
+                            <i class="fas fa-exclamation"></i> Attention
+                        </button>
+                        <button class="btn btn-danger">
+                            <i class="fas fa-times"></i> Danger
+                        </button>
+                        <button class="btn btn-info">
+                            <i class="fas fa-info"></i> Information
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Section Formulaire -->
+                <div class="form-section">
+                    <h3>📝 Formulaire Automne</h3>
+                    <form class="demo-form">
+                        <div class="form-group">
+                            <label for="demoName">Nom du projet</label>
+                            <input type="text" id="demoName" placeholder="Mon projet automne">
+                        </div>
+                        <div class="form-group">
+                            <label for="demoType">Type de projet</label>
+                            <select id="demoType">
+                                <option value="">Sélectionner un type</option>
+                                <option value="seo">SEO</option>
+                                <option value="ereputation">E-Réputation</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="demoBudget">Budget (€)</label>
+                            <input type="number" id="demoBudget" placeholder="1000">
+                        </div>
+                        <div class="form-group">
+                            <label for="demoDescription">Description</label>
+                            <textarea id="demoDescription" placeholder="Décrivez votre projet..."></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Enregistrer
+                            </button>
+                            <button type="button" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Annuler
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Section Tableau -->
+                <div class="table-section">
+                    <h3>📋 Tableau Automne</h3>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Site</th>
+                                    <th>Type</th>
+                                    <th>Trust Flow</th>
+                                    <th>Trafic</th>
+                                    <th>Prix</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>https://example-blog.com</td>
+                                    <td>Blog</td>
+                                    <td>45</td>
+                                    <td>15,000</td>
+                                    <td>75.00 €</td>
+                                    <td><span class="spot-status-a-publier">A publier</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary">Modifier</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>https://example-forum.com</td>
+                                    <td>Forum</td>
+                                    <td>30</td>
+                                    <td>8,000</td>
+                                    <td>50.00 €</td>
+                                    <td><span class="spot-status-en-attente">En attente</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary">Modifier</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>https://example-media.com</td>
+                                    <td>Média</td>
+                                    <td>70</td>
+                                    <td>25,000</td>
+                                    <td>150.00 €</td>
+                                    <td><span class="spot-status-publie">Publié</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary">Modifier</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Section Notifications -->
+                <div class="notifications-section">
+                    <h3>🔔 Notifications Automne</h3>
+                    <div class="notifications-grid">
+                        <div class="notification success">
+                            <i class="fas fa-check-circle"></i>
+                            <div class="notification-content">
+                                <h4>Succès</h4>
+                                <p>Projet sauvegardé avec succès !</p>
+                            </div>
+                        </div>
+                        <div class="notification warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div class="notification-content">
+                                <h4>Attention</h4>
+                                <p>Budget proche de la limite.</p>
+                            </div>
+                        </div>
+                        <div class="notification error">
+                            <i class="fas fa-times-circle"></i>
+                            <div class="notification-content">
+                                <h4>Erreur</h4>
+                                <p>Impossible de sauvegarder.</p>
+                            </div>
+                        </div>
+                        <div class="notification info">
+                            <i class="fas fa-info-circle"></i>
+                            <div class="notification-content">
+                                <h4>Information</h4>
+                                <p>Nouvelle fonctionnalité disponible.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Animation des cartes au survol
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card, .kpi-card, .budget-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // Animation des boutons
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Effet de vague
+                    const ripple = document.createElement('span');
+                    ripple.style.position = 'absolute';
+                    ripple.style.borderRadius = '50%';
+                    ripple.style.background = 'rgba(255, 255, 255, 0.6)';
+                    ripple.style.transform = 'scale(0)';
+                    ripple.style.animation = 'ripple 0.6s linear';
+                    ripple.style.left = '50%';
+                    ripple.style.top = '50%';
+                    ripple.style.width = '20px';
+                    ripple.style.height = '20px';
+                    ripple.style.marginLeft = '-10px';
+                    ripple.style.marginTop = '-10px';
+                    
+                    this.style.position = 'relative';
+                    this.style.overflow = 'hidden';
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+
+            // Ajouter l'animation CSS pour l'effet ripple
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes ripple {
+                    to {
+                        transform: scale(4);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>

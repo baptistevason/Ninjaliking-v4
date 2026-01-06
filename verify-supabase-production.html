@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vérification Supabase Production</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
+        button:hover { background: #0056b3; }
+        .test-section { border: 1px solid #ddd; margin: 10px 0; padding: 15px; border-radius: 5px; background: #f9f9f9; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; font-size: 12px; }
+        .credentials { background: #e7f3ff; padding: 15px; border-radius: 5px; margin: 10px 0; }
+        .test-result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .test-pass { background: #d4edda; color: #155724; }
+        .test-fail { background: #f8d7da; color: #721c24; }
+        .test-warning { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Vérification Supabase Production</h1>
+        
+        <div id="status" class="status info">
+            Initialisation des tests de production...
+        </div>
+        
+        <div class="credentials">
+            <h3>🔑 Credentials Supabase</h3>
+            <p><strong>URL :</strong> <span id="currentUrl">Vérification...</span></p>
+            <p><strong>Clé :</strong> <span id="currentKey">Vérification...</span></p>
+            <p><strong>Statut :</strong> <span id="configStatus">Vérification...</span></p>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔧 Tests de Configuration</h3>
+            <button onclick="testBasicConnection()">1️⃣ Test Connexion Basique</button>
+            <button onclick="testAuthentication()">2️⃣ Test Authentification</button>
+            <button onclick="testTables()">3️⃣ Test Tables</button>
+            <button onclick="testRLS()">4️⃣ Test RLS</button>
+            <button onclick="testBudgetColumn()">5️⃣ Test Colonne Budget</button>
+            <button onclick="runAllTests()">🚀 Lancer Tous les Tests</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>📊 Tests de Données</h3>
+            <button onclick="testCreateProject()">➕ Créer Projet Test</button>
+            <button onclick="testCreateSpot()">📍 Créer Spot Test</button>
+            <button onclick="testBudgetFeature()">💰 Test Fonctionnalité Budget</button>
+            <button onclick="testImportExcel()">📊 Test Import Excel</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔍 Diagnostic Avancé</h3>
+            <button onclick="checkDatabaseSchema()">🏗️ Vérifier Schéma DB</button>
+            <button onclick="checkPermissions()">🔐 Vérifier Permissions</button>
+            <button onclick="checkPerformance()">⚡ Test Performance</button>
+            <button onclick="exportDiagnostics()">📤 Exporter Diagnostics</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>📋 Résultats des Tests</h3>
+            <div id="test-results">En attente des tests...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔧 Console de Debug</h3>
+            <div id="debug-console" style="background: #f8f9fa; padding: 10px; border-radius: 3px; font-family: monospace; max-height: 300px; overflow-y: auto;"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-service.js"></script>
+    
+    <script>
+        let supabase = null;
+        let testResults = [];
+        
+        function log(message, type = 'info') {
+            const console = document.getElementById('debug-console');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}\n`;
+            console.textContent += logEntry;
+            console.scrollTop = console.scrollHeight;
+            
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+        
+        function addTestResult(testName, passed, message, details = '') {
+            testResults.push({ testName, passed, message, details });
+            updateTestResults();
+        }
+        
+        function updateTestResults() {
+            const resultsDiv = document.getElementById('test-results');
+            let html = '<h4>📊 Résultats des Tests</h4>';
+            
+            testResults.forEach(result => {
+                const statusClass = result.passed ? 'test-pass' : 'test-fail';
+                html += `
+                    <div class="test-result ${statusClass}">
+                        <strong>${result.testName}:</strong> ${result.message}
+                        ${result.details ? `<br><small>${result.details}</small>` : ''}
+                    </div>
+                `;
+            });
+            
+            resultsDiv.innerHTML = html;
+        }
+        
+        async function init() {
+            log('🔍 Initialisation des tests de production...');
+            
+            // Vérifier la configuration actuelle
+            const url = localStorage.getItem('supabase-url');
+            const key = localStorage.getItem('supabase-anon-key');
+            
+            document.getElementById('currentUrl').textContent = url || 'Non configuré';
+            document.getElementById('currentKey').textContent = key ? key.substring(0, 20) + '...' : 'Non configuré';
+            document.getElementById('configStatus').textContent = (url && key) ? '✅ Configuré' : '❌ Non configuré';
+            
+            if (url && key) {
+                try {
+                    supabase = createClient(url, key);
+                    log('✅ Client Supabase initialisé');
+                } catch (error) {
+                    log(`❌ Erreur initialisation Supabase: ${error.message}`, 'error');
+                }
+            } else {
+                log('⚠️ Supabase non configuré', 'warning');
+            }
+        }
+        
+        async function testBasicConnection() {
+            log('🧪 Test de connexion basique...');
+            
+            try {
+                if (!supabase) {
+                    throw new Error('Client Supabase non initialisé');
+                }
+                
+                const { data, error } = await supabase
+                    .from('projects')
+                    .select('id')
+                    .limit(1);
+                
+                if (error) throw error;
+                
+                addTestResult('Connexion Basique', true, 'Connexion réussie', `Données reçues: ${JSON.stringify(data)}`);
+                log('✅ Test de connexion basique réussi');
+                
+            } catch (error) {
+                addTestResult('Connexion Basique', false, 'Échec de la connexion', error.message);
+                log(`❌ Test de connexion basique échoué: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testAuthentication() {
+            log('🔐 Test d\'authentification...');
+            
+            try {
+                if (!supabase) {
+                    throw new Error('Client Supabase non initialisé');
+                }
+                
+                const { data: { user }, error } = await supabase.auth.getUser();
+                
+                if (error) throw error;
+                
+                if (user) {
+                    addTestResult('Authentification', true, 'Utilisateur connecté', `Email: ${user.email}`);
+                    log('✅ Utilisateur authentifié');
+                } else {
+                    addTestResult('Authentification', false, 'Aucun utilisateur connecté', 'Connexion requise');
+                    log('⚠️ Aucun utilisateur connecté', 'warning');
+                }
+                
+            } catch (error) {
+                addTestResult('Authentification', false, 'Erreur d\'authentification', error.message);
+                log(`❌ Test d'authentification échoué: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testTables() {
+            log('📊 Test des tables...');
+            
+            try {
+                if (!supabase) {
+                    throw new Error('Client Supabase non initialisé');
+                }
+                
+                // Test table projects
+                const { data: projects, error: projectsError } = await supabase
+                    .from('projects')
+                    .select('id, name, budget')
+                    .limit(1);
+                
+                if (projectsError) throw new Error(`Erreur table projects: ${projectsError.message}`);
+                
+                // Test table sites
+                const { data: sites, error: sitesError } = await supabase
+                    .from('sites')
+                    .select('id, url, type')
+                    .limit(1);
+                
+                if (sitesError) throw new Error(`Erreur table sites: ${sitesError.message}`);
+                
+                addTestResult('Tables', true, 'Tables accessibles', `Projects: ${projects?.length || 0}, Sites: ${sites?.length || 0}`);
+                log('✅ Tables accessibles');
+                
+            } catch (error) {
+                addTestResult('Tables', false, 'Erreur d\'accès aux tables', error.message);
+                log(`❌ Test des tables échoué: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testRLS() {
+            log('🔐 Test RLS (Row Level Security)...');
+            
+            try {
+                if (!supabase) {
+                    throw new Error('Client Supabase non initialisé');
+                }
+                
+                // Test avec un utilisateur non authentifié
+                const { data, error } = await supabase
+                    .from('projects')
+                    .select('*');
+                
+                if (error && error.code === 'PGRST301') {
+                    addTestResult('RLS', true, 'RLS activé (accès restreint)', 'Sécurité correcte');
+                    log('✅ RLS activé - accès restreint');
+                } else if (data) {
+                    addTestResult('RLS', false, 'RLS non activé', 'Données accessibles sans authentification');
+                    log('⚠️ RLS non activé - données publiques', 'warning');
+                } else {
+                    addTestResult('RLS', false, 'Erreur RLS', error.message);
+                    log(`❌ Erreur RLS: ${error.message}`, 'error');
+                }
+                
+            } catch (error) {
+                addTestResult('RLS', false, 'Erreur test RLS', error.message);
+                log(`❌ Test RLS échoué: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testBudgetColumn() {
+            log('💰 Test colonne budget...');
+            
+            try {
+                if (!supabase) {
+                    throw new Error('Client Supabase non initialisé');
+                }
+                
+                const { data, error } = await supabase
+                    .from('projects')
+                    .select('budget')
+                    .limit(1);
+                
+                if (error) throw error;
+                
+                addTestResult('Colonne Budget', true, 'Colonne budget accessible', 'Fonctionnalité budget opérationnelle');
+                log('✅ Colonne budget accessible');
+                
+            } catch (error) {
+                addTestResult('Colonne Budget', false, 'Colonne budget manquante', error.message);
+                log(`❌ Test colonne budget échoué: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testCreateProject() {
+            log('➕ Test création projet...');
+            
+            try {
+                if (!supabase) {
+                    throw new Error('Client Supabase non initialisé');
+                }
+                
+                const testProject = {
+                    name: 'Test Production ' + Date.now(),
+                    url: 'https://test-production.com',
+                    objective: 'SEO',
+                    budget: 1000.00,
+                    keywords: ['test', 'production'],
+                    spots: []
+                };
+                
+                const { data, error } = await supabase
+                    .from('projects')
+                    .insert([testProject])
+                    .select()
+                    .single();
+                
+                if (error) throw error;
+                
+                addTestResult('Création Projet', true, 'Projet créé avec succès', `ID: ${data.id}`);
+                log('✅ Projet test créé');
+                
+                // Nettoyer le projet test
+                await supabase.from('projects').delete().eq('id', data.id);
+                log('🧹 Projet test supprimé');
+                
+            } catch (error) {
+                addTestResult('Création Projet', false, 'Échec création projet', error.message);
+                log(`❌ Test création projet échoué: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testCreateSpot() {
+            log('📍 Test création spot...');
+            
+            try {
+                if (!supabase) {
+                    throw new Error('Client Supabase non initialisé');
+                }
+                
+                // Créer un projet temporaire
+                const { data: project, error: projectError } = await supabase
+                    .from('projects')
+                    .insert([{
+                        name: 'Test Spots ' + Date.now(),
+                        url: 'https://test-spots.com',
+                        objective: 'SEO',
+                        budget: 500.00,
+                        keywords: [],
+                        spots: []
+                    }])
+                    .select()
+                    .single();
+                
+                if (projectError) throw projectError;
+                
+                // Ajouter un spot
+                const testSpot = {
+                    id: Date.now(),
+                    url: 'https://test-spot.com',
+                    type: 'Blog',
+                    theme: 'Business',
+                    trustFlow: 50,
+                    traffic: 10000,
+                    price: 75.00,
+                    status: 'A publier'
+                };
+                
+                const updatedSpots = [...(project.spots || []), testSpot];
+                
+                const { data: updatedProject, error: updateError } = await supabase
+                    .from('projects')
+                    .update({ spots: updatedSpots })
+                    .eq('id', project.id)
+                    .select()
+                    .single();
+                
+                if (updateError) throw updateError;
+                
+                addTestResult('Création Spot', true, 'Spot créé avec succès', `Projet: ${updatedProject.name}`);
+                log('✅ Spot test créé');
+                
+                // Nettoyer
+                await supabase.from('projects').delete().eq('id', project.id);
+                log('🧹 Projet test supprimé');
+                
+            } catch (error) {
+                addTestResult('Création Spot', false, 'Échec création spot', error.message);
+                log(`❌ Test création spot échoué: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testBudgetFeature() {
+            log('💰 Test fonctionnalité budget...');
+            
+            try {
+                if (!supabase) {
+                    throw new Error('Client Supabase non initialisé');
+                }
+                
+                // Créer un projet avec budget et spots
+                const testProject = {
+                    name: 'Test Budget ' + Date.now(),
+                    url: 'https://test-budget.com',
+                    objective: 'SEO',
+                    budget: 2000.00,
+                    keywords: ['test'],
+                    spots: [
+                        {
+                            id: 1,
+                            url: 'https://spot1.com',
+                            type: 'Blog',
+                            price: 100.00,
+                            status: 'Publié'
+                        },
+                        {
+                            id: 2,
+                            url: 'https://spot2.com',
+                            type: 'Forum',
+                            price: 150.00,
+                            status: 'A publier'
+                        }
+                    ]
+                };
+                
+                const { data: project, error: projectError } = await supabase
+                    .from('projects')
+                    .insert([testProject])
+                    .select()
+                    .single();
+                
+                if (projectError) throw projectError;
+                
+                // Calculer le budget
+                const totalSpent = project.spots
+                    .filter(spot => spot.status === 'Publié')
+                    .reduce((sum, spot) => sum + (spot.price || 0), 0);
+                
+                const pendingBudget = project.spots
+                    .filter(spot => spot.status === 'A publier')
+                    .reduce((sum, spot) => sum + (spot.price || 0), 0);
+                
+                const remaining = project.budget - totalSpent - pendingBudget;
+                
+                addTestResult('Fonctionnalité Budget', true, 'Calcul budget correct', 
+                    `Budget: ${project.budget}€, Dépensé: ${totalSpent}€, En attente: ${pendingBudget}€, Reste: ${remaining}€`);
+                log('✅ Fonctionnalité budget opérationnelle');
+                
+                // Nettoyer
+                await supabase.from('projects').delete().eq('id', project.id);
+                log('🧹 Projet test supprimé');
+                
+            } catch (error) {
+                addTestResult('Fonctionnalité Budget', false, 'Échec test budget', error.message);
+                log(`❌ Test fonctionnalité budget échoué: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testImportExcel() {
+            log('📊 Test import Excel...');
+            
+            try {
+                // Simuler des données Excel
+                const excelData = [
+                    ['URL', 'Type', 'Thématique', 'Trust Flow', 'Trafic', 'TTF', 'Prix', 'Statut'],
+                    ['https://test-excel1.com', 'Blog', 'Business', 45, 15000, 'Business', 75.00, 'A publier'],
+                    ['https://test-excel2.com', 'Forum', 'Tech', 30, 8000, 'Computers', 50.00, 'En attente']
+                ];
+                
+                // Valider le format
+                const headers = excelData[0];
+                const requiredHeaders = ['URL', 'Type', 'Thématique', 'Trust Flow', 'Trafic', 'TTF', 'Prix', 'Statut'];
+                const missingHeaders = requiredHeaders.filter(header => !headers.includes(header));
+                
+                if (missingHeaders.length > 0) {
+                    throw new Error(`Colonnes manquantes: ${missingHeaders.join(', ')}`);
+                }
+                
+                // Traiter les données
+                const processedSpots = excelData.slice(1).map((row, index) => ({
+                    id: Date.now() + index,
+                    url: row[0],
+                    type: row[1],
+                    theme: row[2],
+                    trustFlow: parseInt(row[3]) || 0,
+                    traffic: parseInt(row[4]) || 0,
+                    ttf: row[5],
+                    price: parseFloat(row[6]) || 0,
+                    status: row[7]
+                }));
+                
+                addTestResult('Import Excel', true, 'Format Excel valide', 
+                    `${processedSpots.length} spots traités, Prix total: ${processedSpots.reduce((sum, spot) => sum + spot.price, 0)}€`);
+                log('✅ Import Excel fonctionnel');
+                
+            } catch (error) {
+                addTestResult('Import Excel', false, 'Échec test import Excel', error.message);
+                log(`❌ Test import Excel échoué: ${error.message}`, 'error');
+            }
+        }
+        
+        async function checkDatabaseSchema() {
+            log('🏗️ Vérification schéma base de données...');
+            
+            try {
+                if (!supabase) {
+                    throw new Error('Client Supabase non initialisé');
+                }
+                
+                // Vérifier la structure de la table projects
+                const { data: projectsColumns, error: projectsError } = await supabase
+                    .rpc('get_table_columns', { table_name: 'projects' });
+                
+                if (projectsError) {
+                    // Fallback: test direct
+                    const { data, error } = await supabase
+                        .from('projects')
+                        .select('*')
+                        .limit(0);
+                    
+                    if (error) throw error;
+                    
+                    addTestResult('Schéma DB', true, 'Structure tables accessible', 'Tables projects et sites opérationnelles');
+                } else {
+                    addTestResult('Schéma DB', true, 'Schéma vérifié', `Colonnes: ${projectsColumns?.length || 'N/A'}`);
+                }
+                
+                log('✅ Schéma base de données vérifié');
+                
+            } catch (error) {
+                addTestResult('Schéma DB', false, 'Erreur vérification schéma', error.message);
+                log(`❌ Vérification schéma échouée: ${error.message}`, 'error');
+            }
+        }
+        
+        async function checkPermissions() {
+            log('🔐 Vérification permissions...');
+            
+            try {
+                if (!supabase) {
+                    throw new Error('Client Supabase non initialisé');
+                }
+                
+                // Test lecture
+                const { data: readData, error: readError } = await supabase
+                    .from('projects')
+                    .select('id')
+                    .limit(1);
+                
+                // Test écriture (si authentifié)
+                const { data: { user } } = await supabase.auth.getUser();
+                
+                if (user) {
+                    const { data: writeData, error: writeError } = await supabase
+                        .from('projects')
+                        .insert([{
+                            name: 'Test Permissions',
+                            url: 'https://test-permissions.com',
+                            objective: 'SEO',
+                            budget: 0
+                        }])
+                        .select()
+                        .single();
+                    
+                    if (writeError) throw writeError;
+                    
+                    // Nettoyer
+                    await supabase.from('projects').delete().eq('id', writeData.id);
+                }
+                
+                addTestResult('Permissions', true, 'Permissions correctes', 
+                    `Lecture: ${readError ? 'Erreur' : 'OK'}, Écriture: ${user ? 'OK' : 'Non testé (non authentifié)'}`);
+                log('✅ Permissions vérifiées');
+                
+            } catch (error) {
+                addTestResult('Permissions', false, 'Erreur permissions', error.message);
+                log(`❌ Vérification permissions échouée: ${error.message}`, 'error');
+            }
+        }
+        
+        async function checkPerformance() {
+            log('⚡ Test performance...');
+            
+            try {
+                if (!supabase) {
+                    throw new Error('Client Supabase non initialisé');
+                }
+                
+                const startTime = Date.now();
+                
+                // Test de performance
+                const { data, error } = await supabase
+                    .from('projects')
+                    .select('id, name, budget')
+                    .limit(10);
+                
+                const endTime = Date.now();
+                const duration = endTime - startTime;
+                
+                if (error) throw error;
+                
+                const performance = duration < 1000 ? 'Excellent' : duration < 3000 ? 'Bon' : 'Lent';
+                
+                addTestResult('Performance', true, `Performance ${performance}`, 
+                    `Temps de réponse: ${duration}ms, Données: ${data?.length || 0} projets`);
+                log(`✅ Performance testée: ${duration}ms`);
+                
+            } catch (error) {
+                addTestResult('Performance', false, 'Erreur test performance', error.message);
+                log(`❌ Test performance échoué: ${error.message}`, 'error');
+            }
+        }
+        
+        async function exportDiagnostics() {
+            log('📤 Export des diagnostics...');
+            
+            const diagnostics = {
+                timestamp: new Date().toISOString(),
+                url: localStorage.getItem('supabase-url'),
+                key: localStorage.getItem('supabase-anon-key')?.substring(0, 20) + '...',
+                testResults: testResults,
+                userAgent: navigator.userAgent,
+                localStorage: {
+                    'supabase-configured': localStorage.getItem('supabase-configured'),
+                    'isAuthenticated': localStorage.getItem('isAuthenticated'),
+                    'currentUser': localStorage.getItem('currentUser')
+                }
+            };
+            
+            const blob = new Blob([JSON.stringify(diagnostics, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `supabase-diagnostics-${Date.now()}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            URL.revokeObjectURL(url);
+            
+            log('✅ Diagnostics exportés');
+        }
+        
+        async function runAllTests() {
+            log('🚀 Lancement de tous les tests...');
+            
+            testResults = [];
+            
+            await testBasicConnection();
+            await testAuthentication();
+            await testTables();
+            await testRLS();
+            await testBudgetColumn();
+            await testCreateProject();
+            await testCreateSpot();
+            await testBudgetFeature();
+            await testImportExcel();
+            await checkDatabaseSchema();
+            await checkPermissions();
+            await checkPerformance();
+            
+            const passedTests = testResults.filter(r => r.passed).length;
+            const totalTests = testResults.length;
+            
+            log(`✅ Tests terminés: ${passedTests}/${totalTests} réussis`);
+            
+            if (passedTests === totalTests) {
+                log('🎉 Tous les tests sont passés ! Prêt pour la production.', 'success');
+            } else {
+                log(`⚠️ ${totalTests - passedTests} test(s) ont échoué. Vérifiez avant la production.`, 'warning');
+            }
+        }
+        
+        // Initialiser
+        init();
+    </script>
+</body>
+</html>

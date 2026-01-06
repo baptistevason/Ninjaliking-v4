@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔍 Vérification Colonne Budget</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .status { padding: 15px; margin: 15px 0; border-radius: 5px; font-weight: bold; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        button { background: #007bff; color: white; border: none; padding: 15px 30px; border-radius: 5px; cursor: pointer; margin: 10px; font-size: 16px; }
+        button:hover { background: #0056b3; }
+        button.success { background: #28a745; }
+        button.success:hover { background: #218838; }
+        .data-item { margin: 10px 0; padding: 10px; background: #f8f9fa; border-radius: 3px; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; font-size: 12px; }
+        .step { margin: 10px 0; padding: 15px; background: #e7f3ff; border-left: 4px solid #007bff; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Vérification Colonne Budget</h1>
+        
+        <div id="status" class="status info">
+            Vérification de la colonne budget dans Supabase...
+        </div>
+        
+        <div class="step">
+            <h3>🔍 Étape 1 : Vérifier la Structure de la Table</h3>
+            <p>Vérifions si la colonne budget existe dans la table projects</p>
+            <button onclick="checkTableStructure()">🔍 Vérifier Structure</button>
+            <div id="structure-results"></div>
+        </div>
+        
+        <div class="step">
+            <h3>🔧 Étape 2 : Ajouter la Colonne Budget</h3>
+            <p>Si la colonne n'existe pas, ajoutons-la</p>
+            <button onclick="addBudgetColumn()" class="success">➕ Ajouter Colonne Budget</button>
+            <div id="add-column-results"></div>
+        </div>
+        
+        <div class="step">
+            <h3>🧪 Étape 3 : Tester la Sauvegarde</h3>
+            <p>Testons la sauvegarde d'un projet avec budget</p>
+            <button onclick="testBudgetSave()">🧪 Tester Sauvegarde Budget</button>
+            <div id="test-results"></div>
+        </div>
+        
+        <div class="step">
+            <h3>📊 Étape 4 : Vérifier les Données</h3>
+            <p>Vérifions que les budgets sont bien sauvegardés</p>
+            <button onclick="checkBudgetData()">📊 Vérifier Données Budget</button>
+            <div id="data-results"></div>
+        </div>
+        
+        <div id="results" style="margin-top: 20px;"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-service.js"></script>
+    
+    <script>
+        let supabase = null;
+        let db = null;
+        
+        function log(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+        
+        function addResult(containerId, message) {
+            const container = document.getElementById(containerId);
+            const item = document.createElement('div');
+            item.className = 'data-item';
+            item.innerHTML = message;
+            container.appendChild(item);
+        }
+        
+        async function initSupabase() {
+            try {
+                // Credentials par défaut
+                const defaultUrl = 'https://kckdjgedbjjuhmcqcmpe.supabase.co';
+                const defaultKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtja2RqZ2VkYmpqdWhtY3FjbXBlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxMjQzMzMsImV4cCI6MjA3MzcwMDMzM30.-TUGbwjk_8OUGZKJdnU5CqyJHI8wm4o1j1LdzRnSKhg';
+                
+                const supabaseUrl = localStorage.getItem('supabase-url') || defaultUrl;
+                const supabaseKey = localStorage.getItem('supabase-anon-key') || defaultKey;
+                
+                supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+                
+                // Initialiser le service
+                db = new SupabaseService();
+                await db.initialize(supabaseUrl, supabaseKey);
+                
+                log('✅ Supabase initialisé', 'success');
+                return true;
+            } catch (error) {
+                log('❌ Erreur initialisation Supabase: ' + error.message, 'error');
+                return false;
+            }
+        }
+        
+        async function checkTableStructure() {
+            log('🔍 Vérification de la structure de la table...', 'info');
+            
+            try {
+                if (!supabase) {
+                    await initSupabase();
+                }
+                
+                // Vérifier la structure de la table projects
+                const { data, error } = await supabase
+                    .from('information_schema.columns')
+                    .select('column_name, data_type, is_nullable, column_default')
+                    .eq('table_name', 'projects')
+                    .order('ordinal_position');
+                
+                if (error) {
+                    addResult('structure-results', `❌ Erreur: ${error.message}`);
+                    log('❌ Erreur vérification structure', 'error');
+                    return;
+                }
+                
+                addResult('structure-results', '<h4>📊 Structure de la table projects:</h4>');
+                data.forEach(col => {
+                    const isBudget = col.column_name === 'budget';
+                    const style = isBudget ? 'background: #d4edda; border-left: 4px solid #28a745;' : '';
+                    addResult('structure-results', 
+                        `<div style="${style}">
+                            <strong>${col.column_name}</strong>: ${col.data_type} 
+                            ${col.is_nullable === 'YES' ? '(nullable)' : '(not null)'} 
+                            ${col.column_default ? `(défaut: ${col.column_default})` : ''}
+                            ${isBudget ? ' ✅' : ''}
+                        </div>`
+                    );
+                });
+                
+                const hasBudget = data.some(col => col.column_name === 'budget');
+                if (hasBudget) {
+                    addResult('structure-results', '✅ Colonne budget trouvée !');
+                    log('✅ Structure vérifiée - colonne budget présente', 'success');
+                } else {
+                    addResult('structure-results', '❌ Colonne budget manquante !');
+                    log('⚠️ Structure vérifiée - colonne budget manquante', 'warning');
+                }
+                
+            } catch (error) {
+                addResult('structure-results', `❌ Erreur: ${error.message}`);
+                log('❌ Erreur vérification', 'error');
+            }
+        }
+        
+        async function addBudgetColumn() {
+            log('🔧 Ajout de la colonne budget...', 'info');
+            
+            try {
+                if (!supabase) {
+                    await initSupabase();
+                }
+                
+                // Script SQL pour ajouter la colonne budget
+                const sqlScript = `
+                    -- Ajouter la colonne budget à la table projects
+                    ALTER TABLE projects 
+                    ADD COLUMN budget DECIMAL(10,2) DEFAULT 0.00;
+                    
+                    -- Ajouter un index pour les performances
+                    CREATE INDEX IF NOT EXISTS idx_projects_budget ON projects(budget) WHERE budget > 0;
+                `;
+                
+                addResult('add-column-results', '<h4>📝 Script SQL à exécuter:</h4>');
+                addResult('add-column-results', `<pre>${sqlScript}</pre>`);
+                
+                addResult('add-column-results', '<h4>📋 Instructions:</h4>');
+                addResult('add-column-results', '<ol>');
+                addResult('add-column-results', '<li>Allez dans votre dashboard Supabase</li>');
+                addResult('add-column-results', '<li>Ouvrez l\'éditeur SQL</li>');
+                addResult('add-column-results', '<li>Copiez et collez le script ci-dessus</li>');
+                addResult('add-column-results', '<li>Exécutez le script</li>');
+                addResult('add-column-results', '<li>Revenez ici et cliquez sur "Vérifier Structure"</li>');
+                addResult('add-column-results', '</ol>');
+                
+                log('📝 Script généré - exécutez-le dans Supabase', 'info');
+                
+            } catch (error) {
+                addResult('add-column-results', `❌ Erreur: ${error.message}`);
+                log('❌ Erreur génération script', 'error');
+            }
+        }
+        
+        async function testBudgetSave() {
+            log('🧪 Test de sauvegarde avec budget...', 'info');
+            
+            try {
+                if (!db) {
+                    await initSupabase();
+                }
+                
+                // Créer un projet de test avec budget
+                const testProject = {
+                    name: 'Test Budget ' + Date.now(),
+                    url: 'https://test-budget.com',
+                    objective: 'SEO',
+                    traffic: 1000,
+                    trustFlow: 50,
+                    ttf: 'Business',
+                    referringDomains: 10,
+                    publicationGoal: 5,
+                    budget: 1500.50,
+                    keywords: ['test', 'budget'],
+                    spots: []
+                };
+                
+                addResult('test-results', '<h4>🧪 Projet de test:</h4>');
+                addResult('test-results', `<pre>${JSON.stringify(testProject, null, 2)}</pre>`);
+                
+                // Tenter la sauvegarde
+                const result = await db.saveProject(testProject);
+                
+                if (result) {
+                    addResult('test-results', '✅ Projet sauvegardé avec succès !');
+                    addResult('test-results', `📊 ID du projet: ${result.id}`);
+                    addResult('test-results', `💰 Budget sauvegardé: ${result.budget} €`);
+                    log('✅ Test de sauvegarde réussi', 'success');
+                } else {
+                    addResult('test-results', '❌ Échec de la sauvegarde');
+                    log('❌ Test de sauvegarde échoué', 'error');
+                }
+                
+            } catch (error) {
+                addResult('test-results', `❌ Erreur: ${error.message}`);
+                log('❌ Erreur test sauvegarde', 'error');
+            }
+        }
+        
+        async function checkBudgetData() {
+            log('📊 Vérification des données budget...', 'info');
+            
+            try {
+                if (!supabase) {
+                    await initSupabase();
+                }
+                
+                // Récupérer les projets avec budget
+                const { data, error } = await supabase
+                    .from('projects')
+                    .select('id, name, budget')
+                    .not('budget', 'is', null)
+                    .order('created_at', { ascending: false });
+                
+                if (error) {
+                    addResult('data-results', `❌ Erreur: ${error.message}`);
+                    log('❌ Erreur récupération données', 'error');
+                    return;
+                }
+                
+                addResult('data-results', '<h4>📊 Projets avec budget:</h4>');
+                
+                if (data && data.length > 0) {
+                    data.forEach(project => {
+                        addResult('data-results', 
+                            `<div style="background: #d4edda; border-left: 4px solid #28a745; padding: 10px; margin: 5px 0;">
+                                <strong>${project.name}</strong> (ID: ${project.id})<br>
+                                💰 Budget: ${project.budget} €
+                            </div>`
+                        );
+                    });
+                    log(`✅ ${data.length} projets avec budget trouvés`, 'success');
+                } else {
+                    addResult('data-results', '⚠️ Aucun projet avec budget trouvé');
+                    log('⚠️ Aucune donnée budget trouvée', 'warning');
+                }
+                
+            } catch (error) {
+                addResult('data-results', `❌ Erreur: ${error.message}`);
+                log('❌ Erreur vérification données', 'error');
+            }
+        }
+        
+        // Initialiser au chargement
+        window.addEventListener('load', () => {
+            setTimeout(initSupabase, 1000);
+        });
+    </script>
+</body>
+</html>
+
+
+
+
