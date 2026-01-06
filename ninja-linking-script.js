@@ -1433,6 +1433,17 @@ const serpFootprintsData = {
         '"mot-clé" filetype:ppt',
         '"mot-clé" filetype:txt',
         '"mot-clé" filetype:csv'
+    ],
+    'affiliation': [
+        '"programme d\'affiliation" "mot-clé"',
+        '"devenir partenaire" "mot-clé"',
+        '"affiliation" "mot-clé" site officiel',
+        '"rejoindre notre programme d\'affiliation" "mot-clé"',
+        '"partenaire affilié" "mot-clé"',
+        '"inscription affilié" "mot-clé"',
+        '"revenus d\'affiliation" "mot-clé"',
+        '"affiliation commission" "mot-clé"',
+        '"tableau de bord affilié" "mot-clé"'
     ]
 };
 
@@ -2762,6 +2773,7 @@ function loadProjectSpots(projectId) {
 }
 
 function renderProjectSpots() {
+    // Rendu des spots du projet avec colonne URL CIBLE
     const tbody = document.getElementById('projectSpotsTableBody');
     const spotsCount = document.getElementById('projectSpotsCount');
     const kpiSpotsCount = document.getElementById('projectDetailSpotsCount');
@@ -2797,18 +2809,19 @@ function renderProjectSpots() {
         
         row.innerHTML = `
             <td>
-                <div>
+                <div class="project-spot-url-container">
                     <a href="${spot.url}" target="_blank" class="project-spot-url">
                         ${getDomainName(spot.url)} <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    <a href="https://app.seobserver.com/sites/view/${getDomainName(spot.url)}" target="_blank" class="seobserver-analysis-btn" title="Analyser le site avec SEObserver">
+                        <img src="seobserver-logo.jpg" alt="Analyser avec SEObserver" class="seobserver-logo-icon">
                     </a>
                 </div>
             </td>
             <td>
-                ${spot.targetUrl ? `
-                    <a href="${spot.targetUrl}" target="_blank" class="project-spot-target-url">
-                        ${spot.targetUrl}
-                    </a>
-                ` : '<span class="project-spot-no-target">-</span>'}
+                ${spot.targetUrl ? `<a href="${spot.targetUrl}" target="_blank" class="project-spot-url" title="${spot.targetUrl}">
+                    ${getDomainName(spot.targetUrl)} <i class="fas fa-external-link-alt"></i>
+                </a>` : '<span style="color: #94a3b8;">-</span>'}
             </td>
             <td><span class="project-spot-type">${spot.type}</span></td>
             <td><span class="project-spot-theme">${spot.theme}</span></td>
@@ -3531,9 +3544,14 @@ function renderSites() {
         row.innerHTML = `
             <td><input type="checkbox" class="site-checkbox" data-site-id="${site.id}" onchange="handleSiteSelection()"></td>
             <td>
-                <a href="${site.url}" target="_blank" class="site-url">
-                    ${getDomainName(site.url)} <i class="fas fa-external-link-alt"></i>
-                </a>
+                <div class="site-url-container">
+                    <a href="${site.url}" target="_blank" class="site-url">
+                        ${getDomainName(site.url)} <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    <a href="https://app.seobserver.com/sites/view/${getDomainName(site.url)}" target="_blank" class="seobserver-analysis-btn" title="Analyser le site avec SEObserver">
+                        <img src="seobserver-logo.jpg" alt="Analyser avec SEObserver" class="seobserver-logo-icon">
+                    </a>
+                </div>
             </td>
             <td><span class="type-tag">${site.type}</span></td>
             <td>${site.theme}</td>
@@ -3814,8 +3832,6 @@ function showSelectedSitesPreview() {
 
 async function addSitesToProject() {
     const projectId = parseInt(document.getElementById('selectProject').value);
-    const bulkTargetUrl = document.getElementById('bulkTargetUrl').value.trim();
-    
     if (!projectId) {
         alert('Veuillez sélectionner un projet');
         return;
@@ -3856,7 +3872,6 @@ async function addSitesToProject() {
             id: Date.now() + Math.random() + addedCount,
             projectId: projectId,
             url: site.url,
-            targetUrl: bulkTargetUrl || null,
             type: site.type,
             theme: site.theme,
             trustFlow: site.trustFlow || 0,
@@ -3888,8 +3903,6 @@ async function addSitesToProject() {
 
 function closeAddToProjectModal() {
     document.getElementById('addToProjectModal').style.display = 'none';
-    // Réinitialiser le champ URL cible
-    document.getElementById('bulkTargetUrl').value = '';
 }
 
 function clearSelection() {
@@ -4414,7 +4427,7 @@ function downloadExcelModel() {
                 B8: { v: 'Autres types de sites', t: 's' }
             },
             'Thématiques': {
-                '!ref': 'A1:B6',
+                '!ref': 'A1:B7',
                 A1: { v: 'Thématique', t: 's' },
                 B1: { v: 'Description', t: 's' },
                 A2: { v: 'Business', t: 's' },
@@ -4426,7 +4439,9 @@ function downloadExcelModel() {
                 A5: { v: 'Mode', t: 's' },
                 B5: { v: 'Fashion et style', t: 's' },
                 A6: { v: 'Sport', t: 's' },
-                B6: { v: 'Sports et fitness', t: 's' }
+                B6: { v: 'Sports et fitness', t: 's' },
+                A7: { v: 'Bricolage', t: 's' },
+                B7: { v: 'Bricolage et travaux manuels', t: 's' }
             },
             'Instructions': {
                 '!ref': 'A1:D15',
@@ -4448,7 +4463,7 @@ function downloadExcelModel() {
                 A10: { v: '8. Format Trust Flow', t: 's' },
                 B10: { v: 'Nombre entier 0-100 (ex: 50)', t: 's' },
                 A11: { v: '9. Format TTF', t: 's' },
-                B11: { v: 'Business, Technologie, Généraliste, Mode, Sport', t: 's' },
+                B11: { v: 'Business, Technologie, Généraliste, Mode, Sport, Bricolage', t: 's' },
                 A12: { v: '10. Format Follow', t: 's' },
                 B12: { v: 'Oui ou Non', t: 's' },
                 A13: { v: '11. Sauvegarde', t: 's' },
@@ -5345,15 +5360,17 @@ function exportProjectSpotsToExcel() {
     // Créer un nouveau workbook
     const workbook = XLSX.utils.book_new();
     
-    // Préparer les données
+    // Préparer les données avec toutes les colonnes du tableau
     const spotsData = projectSpots.map(spot => ({
         'Site': spot.url,
-        'Type': spot.type,
-        'Thématique': spot.theme,
+        'URL Cible': spot.targetUrl || '',
+        'Type': spot.type || '',
+        'Thématique': spot.theme || '',
         'Trust Flow': spot.trustFlow || 0,
         'Trafic': spot.traffic || 0,
         'TTF': spot.ttf || 'Business',
         'Date Publication': spot.publicationDate ? new Date(spot.publicationDate).toLocaleDateString('fr-FR') : 'Non définie',
+        'Prix': spot.price ? spot.price.toFixed(2) : '0.00',
         'Statut': spot.status || 'A publier'
     }));
 
@@ -5363,12 +5380,14 @@ function exportProjectSpotsToExcel() {
     // Ajuster la largeur des colonnes
     const columnWidths = [
         { wch: 30 }, // Site
+        { wch: 30 }, // URL Cible
         { wch: 12 }, // Type
         { wch: 15 }, // Thématique
         { wch: 12 }, // Trust Flow
         { wch: 12 }, // Trafic
         { wch: 12 }, // TTF
         { wch: 15 }, // Date Publication
+        { wch: 10 }, // Prix
         { wch: 12 }  // Statut
     ];
     worksheet['!cols'] = columnWidths;
@@ -5814,65 +5833,6 @@ function loadSavedTheme() {
     switchTheme(savedTheme);
 }
 
-// Fonction pour sauvegarder un nouveau spot
-async function saveNewSpot(e) {
-    e.preventDefault();
-
-    const url = document.getElementById('spotUrl').value.trim();
-    const targetUrl = document.getElementById('spotTargetUrl').value.trim();
-    const type = document.getElementById('spotType').value;
-    const theme = document.getElementById('spotTheme').value;
-    const trustFlow = parseInt(document.getElementById('spotTrustFlow').value) || 0;
-    const traffic = parseInt(document.getElementById('spotTraffic').value) || 0;
-    const status = document.getElementById('spotStatus').value;
-
-    if (!url) {
-        alert('Veuillez saisir une URL');
-        return;
-    }
-
-    const newSpot = {
-        id: Date.now(), // ID unique basé sur le timestamp
-        url: url,
-        targetUrl: targetUrl || null,
-        type: type,
-        theme: theme,
-        traffic: traffic,
-        trustFlow: trustFlow,
-        status: status,
-        createdAt: new Date().toISOString()
-    };
-
-    // Ajouter le spot au projet actuel (cette logique dépend de votre structure)
-    console.log('Nouveau spot créé:', newSpot);
-    
-    // Fermer le modal et vider le formulaire
-    closeAddSpotModal();
-    
-    // Afficher une notification de succès
-    showNotification('Spot ajouté avec succès !', 'success');
-}
-
-// Fonction pour fermer le modal d'ajout de spot
-function closeAddSpotModal() {
-    const modal = document.getElementById('addSpotModal');
-    if (modal) {
-        modal.style.display = 'none';
-        // Vider le formulaire
-        document.getElementById('addSpotForm').reset();
-    }
-}
-
-// Fonction pour ouvrir le modal d'ajout de spot
-function openAddSpotModal() {
-    const modal = document.getElementById('addSpotModal');
-    if (modal) {
-        modal.style.display = 'block';
-        // Vider le formulaire
-        document.getElementById('addSpotForm').reset();
-    }
-}
-
 // Fonction pour afficher une notification
 function showNotification(message, type = 'info') {
     // Créer l'élément de notification s'il n'existe pas
@@ -5917,12 +5877,3 @@ function showNotification(message, type = 'info') {
         notification.style.transform = 'translateX(100%)';
     }, 3000);
 }
-
-// Initialisation des événements
-document.addEventListener('DOMContentLoaded', function() {
-    // Ajouter l'événement de soumission du formulaire d'ajout de spot
-    const addSpotForm = document.getElementById('addSpotForm');
-    if (addSpotForm) {
-        addSpotForm.addEventListener('submit', saveNewSpot);
-    }
-});

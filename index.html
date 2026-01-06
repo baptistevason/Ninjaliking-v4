@@ -458,6 +458,14 @@
                         <h3>🔍 Fichiers téléchargeables</h3>
                         <p>PDF, DOC, XLS, etc.</p>
                     </div>
+                    
+                    <div class="category-card" data-category="affiliation">
+                        <div class="card-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h3>🤝 Affiliation</h3>
+                        <p>Programmes d'affiliation et partenariats</p>
+                    </div>
                 </div>
 
                 <!-- Sélection d'année (visible uniquement si des footprints avec année sont sélectionnés) -->
@@ -1133,7 +1141,7 @@
                                 <thead>
                                     <tr>
                                         <th class="sortable" data-sort="url" onclick="sortSpotsTable('url')">SITE</th>
-                                        <th class="sortable" data-sort="targetUrl" onclick="sortSpotsTable('targetUrl')">URL CIBLE</th>
+                                        <th>URL CIBLE</th>
                                         <th class="sortable" data-sort="type" onclick="sortSpotsTable('type')">TYPE</th>
                                         <th class="sortable" data-sort="theme" onclick="sortSpotsTable('theme')">THÉMATIQUE</th>
                                         <th class="sortable" data-sort="trustFlow" onclick="sortSpotsTable('trustFlow')">TF</th>
@@ -1216,6 +1224,8 @@
                                 <option value="Cuisine & Alimentation">Cuisine & Alimentation</option>
                                 <option value="Animaux">Animaux</option>
                                 <option value="Développement personnel">Développement personnel</option>
+                                <option value="Sport">Sport</option>
+                                <option value="Bricolage">Bricolage</option>
                             </select>
                         </div>
                     </div>
@@ -1376,9 +1386,8 @@
                         <input type="url" id="spotUrl" required placeholder="https://exemple.com">
                     </div>
                     <div class="form-group">
-                        <label for="spotTargetUrl">URL Cible</label>
-                        <input type="url" id="spotTargetUrl" placeholder="URL spécifique à optimiser (optionnel)">
-                        <small class="form-help">URL de la page spécifique à optimiser (ex: article, produit, etc.)</small>
+                        <label for="spotTargetUrl">Url cible</label>
+                        <input type="url" id="spotTargetUrl" placeholder="https://votre-site.com/page-cible">
                     </div>
                     <div class="form-group">
                         <label for="spotType">Type</label>
@@ -1409,6 +1418,8 @@
                             <option value="Cuisine & Alimentation">Cuisine & Alimentation</option>
                             <option value="Animaux">Animaux</option>
                             <option value="Développement personnel">Développement personnel</option>
+                            <option value="Sport">Sport</option>
+                            <option value="Bricolage">Bricolage</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -1482,9 +1493,8 @@
                         <input type="url" id="editSpotUrl" required placeholder="https://exemple.com">
                     </div>
                     <div class="form-group">
-                        <label for="editSpotTargetUrl">URL Cible</label>
-                        <input type="url" id="editSpotTargetUrl" placeholder="URL spécifique à optimiser (optionnel)">
-                        <small class="form-help">URL de la page spécifique à optimiser (ex: article, produit, etc.)</small>
+                        <label for="editSpotTargetUrl">Url cible</label>
+                        <input type="url" id="editSpotTargetUrl" placeholder="https://votre-site.com/page-cible">
                     </div>
                     <div class="form-group">
                         <label for="editSpotType">Type</label>
@@ -1515,6 +1525,8 @@
                             <option value="Cuisine & Alimentation">Cuisine & Alimentation</option>
                             <option value="Animaux">Animaux</option>
                             <option value="Développement personnel">Développement personnel</option>
+                            <option value="Sport">Sport</option>
+                            <option value="Bricolage">Bricolage</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -1642,11 +1654,6 @@
                         <option value="">Choisir un projet...</option>
                         <!-- Les projets seront ajoutés dynamiquement -->
                     </select>
-                </div>
-                <div class="form-group">
-                    <label for="bulkTargetUrl">URL Cible (optionnel)</label>
-                    <input type="url" id="bulkTargetUrl" placeholder="URL commune pour tous les sites ajoutés">
-                    <small class="form-help">Si renseignée, cette URL sera appliquée à tous les sites ajoutés au projet</small>
                 </div>
                 <div class="selected-sites-preview" id="selectedSitesPreview">
                     <!-- Aperçu des sites sélectionnés -->
@@ -1831,6 +1838,8 @@
                             <option value="Cuisine & Alimentation">Cuisine & Alimentation</option>
                             <option value="Animaux">Animaux</option>
                             <option value="Développement personnel">Développement personnel</option>
+                            <option value="Sport">Sport</option>
+                            <option value="Bricolage">Bricolage</option>
                         </select>
                     </div>
                     <div class="form-group">
