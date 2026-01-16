@@ -26,6 +26,19 @@ class SupabaseService {
             // Vérifier la session utilisateur existante
             await this.checkCurrentUser();
             
+            // Écouter les changements d'authentification pour mettre à jour l'état
+            this.supabase.auth.onAuthStateChange((event, session) => {
+                if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+                    if (session && session.user) {
+                        this.currentUser = session.user;
+                        console.log('✅ Session restaurée:', session.user.email);
+                    }
+                } else if (event === 'SIGNED_OUT') {
+                    this.currentUser = null;
+                    console.log('👋 Utilisateur déconnecté');
+                }
+            });
+            
             console.log('✅ Supabase initialisé avec succès');
             return true;
         } catch (error) {
@@ -57,9 +70,24 @@ class SupabaseService {
     // Vérifier l'utilisateur actuel
     async checkCurrentUser() {
         try {
-            const { data: { user } } = await this.supabase.auth.getUser();
-            this.currentUser = user;
-            return user;
+            // D'abord, vérifier la session dans le localStorage
+            const { data: { session } } = await this.supabase.auth.getSession();
+            
+            if (session && session.user) {
+                this.currentUser = session.user;
+                return session.user;
+            }
+            
+            // Si pas de session, essayer getUser() qui peut rafraîchir le token
+            const { data: { user }, error } = await this.supabase.auth.getUser();
+            
+            if (user && !error) {
+                this.currentUser = user;
+                return user;
+            }
+            
+            this.currentUser = null;
+            return null;
         } catch (error) {
             console.error('Erreur vérification utilisateur:', error);
             this.currentUser = null;

@@ -57,25 +57,39 @@ async function checkAuthentication() {
             isAuthenticated = true;
             currentUser = user;
             
+            // Mettre à jour les variables globales
+            window.isAuthenticated = true;
+            window.currentUser = user;
+            
             // Sauvegarder l'état d'authentification
             localStorage.setItem('isAuthenticated', 'true');
             localStorage.setItem('currentUser', JSON.stringify(user));
             
+            console.log('✅ Authentification vérifiée:', user.email);
             return true;
         } else {
             isAuthenticated = false;
             currentUser = null;
             
+            // Mettre à jour les variables globales
+            window.isAuthenticated = false;
+            window.currentUser = null;
+            
             // Nettoyer l'état d'authentification
             localStorage.removeItem('isAuthenticated');
             localStorage.removeItem('currentUser');
             
+            console.log('⚠️ Aucun utilisateur authentifié');
             return false;
         }
     } catch (error) {
         console.error('Erreur vérification authentification:', error);
         isAuthenticated = false;
         currentUser = null;
+        
+        // Mettre à jour les variables globales
+        window.isAuthenticated = false;
+        window.currentUser = null;
         
         // Nettoyer l'état d'authentification en cas d'erreur
         localStorage.removeItem('isAuthenticated');
@@ -431,6 +445,10 @@ async function handleLogin(event) {
             isAuthenticated = true;
             currentUser = result.user;
             
+            // Mettre à jour les variables globales
+            window.isAuthenticated = true;
+            window.currentUser = result.user;
+            
             // Sauvegarder l'état d'authentification
             localStorage.setItem('isAuthenticated', 'true');
             localStorage.setItem('currentUser', JSON.stringify(result.user));
@@ -443,6 +461,9 @@ async function handleLogin(event) {
                 localStorage.removeItem('rememberMe');
                 localStorage.removeItem('savedEmail');
             }
+            
+            // Charger les données après connexion
+            await loadData();
             
             showMainApp();
         } else {
@@ -979,7 +1000,37 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
     
-    // Vérifier l'état d'authentification d'abord
+    // Vérifier l'authentification Supabase d'abord (si configuré)
+    if (isSupabaseConfigured && db) {
+        const authResult = await checkAuthentication();
+        if (authResult) {
+            // Utilisateur authentifié via Supabase, charger les données
+            await loadData();
+            
+            // Restaurer la page précédente ou afficher la page par défaut
+            const savedPage = localStorage.getItem('currentPage');
+            if (savedPage && document.getElementById(`${savedPage}-page`)) {
+                switchPage(savedPage);
+                
+                // Si on est sur la page de détail du projet, restaurer le projet
+                if (savedPage === 'project-detail') {
+                    const savedProjectId = localStorage.getItem('currentProjectId');
+                    if (savedProjectId) {
+                        currentProjectId = parseInt(savedProjectId);
+                        // Attendre que les données soient chargées avant de charger le projet
+                        setTimeout(() => {
+                            loadProjectDetail(currentProjectId);
+                        }, 100);
+                    }
+                }
+            } else {
+                switchPage('ninjalinking');
+            }
+            return; // Sortir ici, l'utilisateur est connecté
+        }
+    }
+    
+    // Si pas de Supabase ou pas authentifié, vérifier le localStorage
     const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
     const rememberMe = localStorage.getItem('rememberMe') === 'true';
     const savedUserData = localStorage.getItem('currentUser');

@@ -523,19 +523,21 @@ body {
 /* Contenu principal */
 .main-content {
     flex: 1;
-    max-width: 2000px;
+    max-width: 100%;
     width: 100%;
     min-height: 3250px;
     margin: 0 auto;
-    padding: 2rem calc(2rem - 40px);
+    padding: 2rem 2rem;
     background: var(--gradient-bg);
 }
 
 /* Pour la page project-detail, permettre une largeur maximale plus grande */
 #project-detail-page .main-content {
-    max-width: 2000px;
+    max-width: 100%;
     width: 100%;
-    padding: 1.5rem calc(1rem - 40px);
+    padding: 1.5rem 0.5rem;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 /* Pour la page catalogue, permettre une largeur maximale plus grande */
@@ -1817,12 +1819,15 @@ body {
 .project-detail-container {
     background: #f8fafc;
     border-radius: 15px;
-    padding: 30px 0;
+    padding: 30px 0.5rem;
     margin-top: 20px;
+    margin-left: 0;
+    margin-right: 0;
     border: 2px solid #e9ecef;
     min-height: 80vh;
     max-width: 100%;
     width: 100%;
+    box-sizing: border-box;
 }
 
 .project-detail-header {
@@ -1830,8 +1835,11 @@ body {
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 20px;
+    margin-left: 0;
+    margin-right: 0;
     flex-wrap: wrap;
     gap: 15px;
+    padding: 0 0.5rem;
 }
 
 .project-detail-info {
@@ -2027,13 +2035,15 @@ body {
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 100%;
 }
 
 .project-spots-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 0;
+    padding: 20px 0.5rem;
     border-bottom: 1px solid #e2e8f0;
     background: #f8fafc;
     flex-wrap: wrap;
@@ -2056,12 +2066,17 @@ body {
 .project-spots-table-container {
     overflow-x: visible;
     width: 100%;
+    padding: 0;
+    margin: 0;
 }
 
 /* Pour la page project-detail, permettre une largeur plus grande */
 #project-detail-page .project-detail-container {
     max-width: 100%;
-    padding: 20px 0;
+    padding: 20px 0.5rem;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .project-spots-table {
@@ -2072,7 +2087,7 @@ body {
 
 .project-spots-table th {
     background: #f8fafc;
-    padding: 0.75rem;
+    padding: 0.75rem 0.5rem;
     text-align: left;
     font-weight: 600;
     color: #374151;
@@ -2085,43 +2100,45 @@ body {
 
 /* Largeurs optimisées pour les colonnes - flexibles pour s'adapter à l'écran */
 .project-spots-table th:nth-child(1) { /* SITE */
-    width: 12%;
+    width: auto;
+    min-width: 200px;
 }
 
 .project-spots-table th:nth-child(2) { /* URL CIBLE */
-    width: 12%;
+    width: auto;
+    min-width: 180px;
 }
 
 .project-spots-table th:nth-child(3) { /* TYPE */
-    width: 8%;
+    width: 7%;
 }
 
 .project-spots-table th:nth-child(4) { /* THÉMATIQUE */
-    width: 12%;
+    width: 10%;
 }
 
 .project-spots-table th:nth-child(5) { /* TF */
-    width: 8%;
+    width: 7%;
 }
 
 .project-spots-table th:nth-child(6) { /* TRAFIC */
-    width: 8%;
+    width: 7%;
 }
 
 .project-spots-table th:nth-child(7) { /* TTF */
-    width: 10%;
+    width: 9%;
 }
 
 .project-spots-table th:nth-child(8) { /* DATE */
-    width: 10%;
+    width: 9%;
 }
 
 .project-spots-table th:nth-child(9) { /* PRIX */
-    width: 8%;
+    width: 7%;
 }
 
 .project-spots-table th:nth-child(10) { /* STATUT */
-    width: 10%;
+    width: 9%;
 }
 
 .project-spots-table th:nth-child(11) { /* ACTIONS */
@@ -2133,7 +2150,7 @@ body {
     user-select: none;
     position: relative;
     transition: background-color 0.3s ease;
-    padding-right: 2rem;
+    padding-right: 1.5rem;
 }
 
 .project-spots-table th.sortable:hover {
@@ -2162,7 +2179,7 @@ body {
 }
 
 .project-spots-table td {
-    padding: 0.75rem;
+    padding: 0.75rem 0.5rem;
     border-bottom: 1px solid #f1f5f9;
     vertical-align: middle;
     font-size: 0.85rem;
@@ -2170,43 +2187,47 @@ body {
 
 /* Largeurs optimisées pour les cellules du tableau - flexibles pour s'adapter à l'écran */
 .project-spots-table td:nth-child(1) { /* SITE */
-    width: 12%;
+    width: auto;
+    min-width: 200px;
+    white-space: nowrap;
 }
 
 .project-spots-table td:nth-child(2) { /* URL CIBLE */
-    width: 12%;
+    width: auto;
+    min-width: 180px;
+    white-space: nowrap;
 }
 
 .project-spots-table td:nth-child(3) { /* TYPE */
-    width: 8%;
+    width: 7%;
 }
 
 .project-spots-table td:nth-child(4) { /* THÉMATIQUE */
-    width: 12%;
+    width: 10%;
 }
 
 .project-spots-table td:nth-child(5) { /* TF */
-    width: 8%;
+    width: 7%;
 }
 
 .project-spots-table td:nth-child(6) { /* TRAFIC */
-    width: 8%;
+    width: 7%;
 }
 
 .project-spots-table td:nth-child(7) { /* TTF */
-    width: 10%;
+    width: 9%;
 }
 
 .project-spots-table td:nth-child(8) { /* DATE */
-    width: 10%;
+    width: 9%;
 }
 
 .project-spots-table td:nth-child(9) { /* PRIX */
-    width: 8%;
+    width: 7%;
 }
 
 .project-spots-table td:nth-child(10) { /* STATUT */
-    width: 10%;
+    width: 9%;
 }
 
 .project-spots-table td:nth-child(11) { /* ACTIONS */
@@ -2231,7 +2252,7 @@ body {
     align-items: center;
     gap: 6px;
     transition: color 0.3s ease;
-    word-break: break-word;
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     flex: 1;
@@ -3736,12 +3757,13 @@ body {
     }
     
     .project-spots-table-container {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+        overflow-x: visible;
+        width: 100%;
     }
     
     .project-spots-table {
-        min-width: 800px;
+        width: 100%;
+        table-layout: auto;
     }
     
     .catalog-table-container {
