@@ -1,0 +1,1060 @@
+/* ============================================================
+   FLOWNINJA THEME — Ninja Linking Tool
+   Inspiré de flowninja.com : pills colorées, minimaliste moderne
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ── RESET & BASE ───────────────────────────────────────────── */
+body.flowninja-theme {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: #f4f5f7;
+    color: #111827;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ── VARIABLES PAR ONGLET ───────────────────────────────────── */
+:root {
+    --fn-ninja:    #15803d;   /* vert foncé  – Ninjalinking      */
+    --fn-serp:     #1d4ed8;   /* bleu navy   – Exploration SERP   */
+    --fn-erep:     #9f1239;   /* bordeaux    – E-Réputation        */
+    --fn-ia:       #5b21b6;   /* violet      – IA & Prompts        */
+    --fn-projects: #0e7490;   /* teal        – Projets             */
+    --fn-catalog:  #374151;   /* graphite    – Catalogue           */
+
+    --fn-radius-pill: 999px;
+    --fn-radius-card: 18px;
+    --fn-radius-input: 10px;
+    --fn-shadow-card: 0 1px 3px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.06);
+    --fn-shadow-hover: 0 4px 12px rgba(0,0,0,.12), 0 16px 40px rgba(0,0,0,.1);
+}
+
+/* ── HOMEPAGE ───────────────────────────────────────────────── */
+.flowninja-theme .homepage-container {
+    background: #f4f5f7;
+    min-height: 100vh;
+}
+
+.flowninja-theme .homepage-hero {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 2rem 4rem;
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+}
+
+.flowninja-theme .hero-content {
+    flex: 1;
+}
+
+.flowninja-theme .hero-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: #0f172a;
+    margin-bottom: 1.25rem;
+}
+
+.flowninja-theme .hero-title .stars-inline i {
+    color: var(--fn-ninja);
+    font-size: 0.6em;
+    vertical-align: middle;
+}
+
+.flowninja-theme .hero-subtitle {
+    font-size: 1.15rem;
+    color: #64748b;
+    max-width: 480px;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+}
+
+.flowninja-theme .hero-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+}
+
+.flowninja-theme .feature {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+    border: 1.5px solid #e5e7eb;
+    border-radius: var(--fn-radius-pill);
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+
+.flowninja-theme .feature i {
+    color: var(--fn-ninja);
+    font-size: 0.9rem;
+}
+
+.flowninja-theme .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.flowninja-theme .hero-image {
+    flex: 0 0 340px;
+}
+
+.flowninja-theme .hero-graphic {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    border-radius: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flowninja-theme .graphic-element {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: white;
+    box-shadow: 0 8px 20px rgba(0,0,0,.15);
+}
+
+.flowninja-theme .element-1 { background: var(--fn-ninja); top: 24px; left: 24px; }
+.flowninja-theme .element-2 { background: var(--fn-serp); top: 24px; right: 24px; }
+.flowninja-theme .element-3 { background: var(--fn-erep); bottom: 24px; left: 24px; }
+.flowninja-theme .element-4 { background: var(--fn-ia); bottom: 24px; right: 24px; }
+
+/* Homepage features section */
+.flowninja-theme .homepage-features {
+    background: white;
+    padding: 5rem 2rem;
+}
+
+.flowninja-theme .features-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.flowninja-theme .features-container h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #0f172a;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.flowninja-theme .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.flowninja-theme .feature-card {
+    background: #f8fafc;
+    border: 1.5px solid #e5e7eb;
+    border-radius: var(--fn-radius-card);
+    padding: 2rem;
+    transition: all 0.25s ease;
+}
+
+.flowninja-theme .feature-card:hover {
+    box-shadow: var(--fn-shadow-hover);
+    border-color: transparent;
+    transform: translateY(-3px);
+}
+
+.flowninja-theme .feature-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: white;
+    margin-bottom: 1.25rem;
+}
+
+.flowninja-theme .feature-card:nth-child(1) .feature-icon { background: var(--fn-ninja); }
+.flowninja-theme .feature-card:nth-child(2) .feature-icon { background: var(--fn-serp); }
+.flowninja-theme .feature-card:nth-child(3) .feature-icon { background: var(--fn-erep); }
+.flowninja-theme .feature-card:nth-child(4) .feature-icon { background: var(--fn-ia); }
+.flowninja-theme .feature-card:nth-child(5) .feature-icon { background: var(--fn-projects); }
+.flowninja-theme .feature-card:nth-child(6) .feature-icon { background: var(--fn-catalog); }
+
+.flowninja-theme .feature-card h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+}
+
+.flowninja-theme .feature-card p {
+    font-size: 0.9rem;
+    color: #64748b;
+    line-height: 1.6;
+}
+
+/* CTA section */
+.flowninja-theme .homepage-cta {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    padding: 5rem 2rem;
+    text-align: center;
+}
+
+.flowninja-theme .cta-content h2 {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+}
+
+.flowninja-theme .cta-content p {
+    color: #94a3b8;
+    font-size: 1.05rem;
+    max-width: 500px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+}
+
+/* ── AUTHENTIFICATION ───────────────────────────────────────── */
+.flowninja-theme .auth-container {
+    background: #f4f5f7;
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.flowninja-theme .auth-modal {
+    background: white;
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,.04), 0 24px 60px rgba(0,0,0,.12);
+    width: 100%;
+    max-width: 420px;
+    margin: 1rem;
+    border: none;
+}
+
+.flowninja-theme .auth-header h1 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+    text-shadow: none;
+}
+
+.flowninja-theme .auth-header p {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
+
+.flowninja-theme .auth-form h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 1.5rem;
+}
+
+/* ── HEADER PRINCIPAL ───────────────────────────────────────── */
+.flowninja-theme .header {
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0;
+    color: #0f172a;
+    box-shadow: none;
+}
+
+.flowninja-theme .header-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.flowninja-theme .header-left .btn-secondary {
+    background: #f1f5f9;
+    color: #374151;
+    border: 1.5px solid #e5e7eb;
+}
+
+.flowninja-theme .header-left .btn-secondary:hover {
+    background: #e2e8f0;
+    color: #111827;
+}
+
+.flowninja-theme .header-center h1 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #0f172a;
+}
+
+.flowninja-theme .header-center h1::first-letter {
+    color: var(--fn-ninja);
+}
+
+.flowninja-theme .header-center p {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-top: 0.1rem;
+}
+
+/* ── NAVIGATION — PILLS COLORÉES ───────────────────────────── */
+.flowninja-theme .navigation {
+    background: white;
+    border-bottom: 1px solid #f1f5f9;
+    padding: 0.75rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.flowninja-theme .nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.flowninja-theme .nav-buttons {
+    display: flex;
+    gap: 0.35rem;
+    background: #f1f5f9;
+    padding: 4px;
+    border-radius: var(--fn-radius-pill);
+}
+
+.flowninja-theme .nav-btn {
+    background: transparent;
+    border: none;
+    padding: 0.5rem 1.1rem;
+    border-radius: var(--fn-radius-pill);
+    cursor: pointer;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #64748b;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+}
+
+.flowninja-theme .nav-btn:hover {
+    color: #111827;
+    background: rgba(0,0,0,.05);
+}
+
+/* Active pill — chaque onglet a sa propre couleur */
+.flowninja-theme .nav-btn[data-page="ninjalinking"].active {
+    background: var(--fn-ninja);
+    color: white;
+    box-shadow: 0 2px 8px rgba(21,128,61,.35);
+}
+
+.flowninja-theme .nav-btn[data-page="serp"].active {
+    background: var(--fn-serp);
+    color: white;
+    box-shadow: 0 2px 8px rgba(29,78,216,.35);
+}
+
+.flowninja-theme .nav-btn[data-page="ereputation"].active {
+    background: var(--fn-erep);
+    color: white;
+    box-shadow: 0 2px 8px rgba(159,18,57,.35);
+}
+
+.flowninja-theme .nav-btn[data-page="ia"].active {
+    background: var(--fn-ia);
+    color: white;
+    box-shadow: 0 2px 8px rgba(91,33,182,.35);
+}
+
+.flowninja-theme .nav-btn[data-page="projects"].active {
+    background: var(--fn-projects);
+    color: white;
+    box-shadow: 0 2px 8px rgba(14,116,144,.35);
+}
+
+.flowninja-theme .nav-btn[data-page="catalog"].active {
+    background: var(--fn-catalog);
+    color: white;
+    box-shadow: 0 2px 8px rgba(55,65,81,.35);
+}
+
+/* ── SÉLECTEUR DE THÈME ─────────────────────────────────────── */
+.flowninja-theme .theme-selector {
+    background: #f1f5f9;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 3px;
+}
+
+.flowninja-theme .theme-option {
+    background: white;
+    border: 1px solid #e5e7eb;
+    color: #374151;
+    border-radius: 7px;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.flowninja-theme .theme-option:hover,
+.flowninja-theme .theme-option.active {
+    background: #0f172a;
+    color: white;
+    border-color: #0f172a;
+}
+
+/* ── MAIN CONTENT ───────────────────────────────────────────── */
+.flowninja-theme .main-content {
+    flex: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    width: 100%;
+    background: transparent;
+}
+
+/* ── PAGE HEADER ────────────────────────────────────────────── */
+.flowninja-theme .page-header {
+    margin-bottom: 2rem;
+}
+
+.flowninja-theme .page-header h2 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #0f172a;
+    margin-bottom: 0.35rem;
+}
+
+.flowninja-theme .page-header p {
+    color: #64748b;
+    font-size: 0.95rem;
+}
+
+/* ── CARDS ──────────────────────────────────────────────────── */
+.flowninja-theme .card,
+.flowninja-theme .category-card,
+.flowninja-theme .project-card {
+    background: white;
+    border: 1.5px solid #e5e7eb;
+    border-radius: var(--fn-radius-card);
+    box-shadow: var(--fn-shadow-card);
+    transition: all 0.25s ease;
+}
+
+.flowninja-theme .card:hover,
+.flowninja-theme .category-card:hover,
+.flowninja-theme .project-card:hover {
+    box-shadow: var(--fn-shadow-hover);
+    border-color: transparent;
+    transform: translateY(-2px);
+}
+
+.flowninja-theme .card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: white;
+    margin-bottom: 0.75rem;
+    background: var(--fn-ninja);
+}
+
+/* Category cards icons — couleur selon onglet actif */
+.flowninja-theme .category-card .card-icon {
+    background: var(--fn-ninja);
+}
+
+/* ── SEARCH SECTION ─────────────────────────────────────────── */
+.flowninja-theme .search-section {
+    background: white;
+    border: 1.5px solid #e5e7eb;
+    border-radius: var(--fn-radius-card);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--fn-shadow-card);
+}
+
+.flowninja-theme .search-form {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.flowninja-theme .search-form input {
+    flex: 1;
+    min-width: 200px;
+    padding: 0.7rem 1rem;
+    border: 1.5px solid #e5e7eb;
+    border-radius: var(--fn-radius-input);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.95rem;
+    background: #f8fafc;
+    color: #0f172a;
+    transition: all 0.2s;
+}
+
+.flowninja-theme .search-form input:focus {
+    outline: none;
+    border-color: var(--fn-ninja);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(21,128,61,.1);
+}
+
+/* ── CATEGORIES GRID ────────────────────────────────────────── */
+.flowninja-theme .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.flowninja-theme .category-card {
+    padding: 1.5rem;
+    cursor: pointer;
+    text-align: left;
+}
+
+.flowninja-theme .category-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0.5rem 0 0.4rem;
+}
+
+.flowninja-theme .category-card p {
+    font-size: 0.82rem;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+.flowninja-theme .category-card.selected {
+    border-color: var(--fn-ninja);
+    background: #f0fdf4;
+    box-shadow: 0 0 0 3px rgba(21,128,61,.15);
+}
+
+/* ── FOOTPRINTS / FAVORITES ─────────────────────────────────── */
+.flowninja-theme .footprints-section,
+.flowninja-theme .favorites-section {
+    background: white;
+    border: 1.5px solid #e5e7eb;
+    border-radius: var(--fn-radius-card);
+    padding: 1.5rem;
+    box-shadow: var(--fn-shadow-card);
+    margin-top: 1.5rem;
+}
+
+.flowninja-theme .footprints-header,
+.flowninja-theme .favorites-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.flowninja-theme .footprints-header h3,
+.flowninja-theme .favorites-header h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* ── BUTTONS ────────────────────────────────────────────────── */
+.flowninja-theme .btn {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 0.875rem;
+    border: none;
+    border-radius: 8px;
+    padding: 0.6rem 1.25rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.flowninja-theme .btn-primary {
+    background: #0f172a;
+    color: white;
+}
+
+.flowninja-theme .btn-primary:hover {
+    background: #1e293b;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,.2);
+}
+
+.flowninja-theme .btn-secondary {
+    background: #f1f5f9;
+    color: #374151;
+    border: 1.5px solid #e5e7eb;
+}
+
+.flowninja-theme .btn-secondary:hover {
+    background: #e2e8f0;
+    color: #111827;
+}
+
+.flowninja-theme .btn-danger {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1.5px solid #fecaca;
+}
+
+.flowninja-theme .btn-danger:hover {
+    background: #dc2626;
+    color: white;
+    border-color: #dc2626;
+}
+
+.flowninja-theme .btn-success {
+    background: #f0fdf4;
+    color: #16a34a;
+    border: 1.5px solid #bbf7d0;
+}
+
+.flowninja-theme .btn-success:hover {
+    background: #16a34a;
+    color: white;
+    border-color: #16a34a;
+}
+
+.flowninja-theme .btn-large {
+    padding: 0.85rem 2rem;
+    font-size: 1rem;
+    border-radius: 10px;
+}
+
+.flowninja-theme .btn-sm {
+    padding: 0.4rem 0.85rem;
+    font-size: 0.8rem;
+    border-radius: 6px;
+}
+
+/* ── FORMULAIRES ────────────────────────────────────────────── */
+.flowninja-theme .form-group {
+    margin-bottom: 1rem;
+}
+
+.flowninja-theme .form-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.4rem;
+}
+
+.flowninja-theme .form-group input,
+.flowninja-theme .form-group select,
+.flowninja-theme .form-group textarea {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border: 1.5px solid #e5e7eb;
+    border-radius: var(--fn-radius-input);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.95rem;
+    background: #f8fafc;
+    color: #0f172a;
+    transition: all 0.2s;
+    box-sizing: border-box;
+}
+
+.flowninja-theme .form-group input:focus,
+.flowninja-theme .form-group select:focus,
+.flowninja-theme .form-group textarea:focus {
+    outline: none;
+    border-color: #0f172a;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(15,23,42,.08);
+}
+
+/* ── TABLES ─────────────────────────────────────────────────── */
+.flowninja-theme .table {
+    background: white;
+    border: 1.5px solid #e5e7eb;
+    border-radius: var(--fn-radius-card);
+    overflow: hidden;
+    box-shadow: var(--fn-shadow-card);
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.flowninja-theme .table th {
+    background: #f8fafc;
+    color: #374151;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.85rem 1rem;
+    border-bottom: 1.5px solid #e5e7eb;
+}
+
+.flowninja-theme .table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.9rem;
+    color: #374151;
+    vertical-align: middle;
+}
+
+.flowninja-theme .table tr:last-child td {
+    border-bottom: none;
+}
+
+.flowninja-theme .table tr:hover td {
+    background: #f8fafc;
+}
+
+/* ── MODALS ─────────────────────────────────────────────────── */
+.flowninja-theme .modal {
+    background: white;
+    border: none;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.18);
+    overflow: hidden;
+}
+
+.flowninja-theme .modal-header {
+    background: #0f172a;
+    color: white;
+    padding: 1.5rem 2rem;
+    border-bottom: none;
+}
+
+.flowninja-theme .modal-header h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.flowninja-theme .modal-body {
+    background: white;
+    padding: 1.5rem 2rem;
+    color: #374151;
+}
+
+/* ── USER INFO ──────────────────────────────────────────────── */
+.flowninja-theme .user-info {
+    position: static;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.flowninja-theme .user-email {
+    background: #f1f5f9;
+    color: #374151;
+    border: 1.5px solid #e5e7eb;
+    border-radius: var(--fn-radius-pill);
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.4rem 0.9rem;
+    box-shadow: none;
+    backdrop-filter: none;
+}
+
+#logoutBtn.flowninja-theme,
+.flowninja-theme #logoutBtn {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1.5px solid #fecaca;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    padding: 0;
+}
+
+.flowninja-theme #logoutBtn:hover {
+    background: #dc2626;
+    color: white;
+}
+
+.flowninja-theme #loginBtn {
+    background: #0f172a;
+    color: white;
+    border: none;
+}
+
+.flowninja-theme #loginBtn:hover {
+    background: #1e293b;
+}
+
+/* ── CATALOG / PROJECTS ACTIONS ─────────────────────────────── */
+.flowninja-theme .catalog-actions,
+.flowninja-theme .projects-actions,
+.flowninja-theme .project-spots-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.flowninja-theme .catalog-actions .btn-primary,
+.flowninja-theme .projects-actions .btn-primary,
+.flowninja-theme .project-spots-actions .btn-primary {
+    background: #0f172a;
+    color: white;
+    border: none;
+}
+
+.flowninja-theme .catalog-actions .btn-success,
+.flowninja-theme .projects-actions .btn-success,
+.flowninja-theme .project-spots-actions .btn-success {
+    background: #16a34a;
+    color: white;
+    border: none;
+}
+
+.flowninja-theme .catalog-actions .btn-success:hover,
+.flowninja-theme .projects-actions .btn-success:hover,
+.flowninja-theme .project-spots-actions .btn-success:hover {
+    background: #15803d;
+    transform: translateY(-1px);
+}
+
+.flowninja-theme .catalog-actions .btn-info {
+    background: #1d4ed8;
+    color: white;
+    border: none;
+}
+
+.flowninja-theme .catalog-actions .btn-warning {
+    background: #d97706;
+    color: white;
+    border: none;
+}
+
+.flowninja-theme .catalog-actions .btn-outline {
+    background: transparent;
+    color: #374151;
+    border: 1.5px solid #e5e7eb;
+}
+
+.flowninja-theme .catalog-actions .btn-outline:hover {
+    background: #f1f5f9;
+    color: #111827;
+}
+
+/* ── SPOT ACTION BUTTONS ────────────────────────────────────── */
+.flowninja-theme .project-spot-action-btn {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.flowninja-theme .project-spot-action-btn.edit {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.flowninja-theme .project-spot-action-btn.edit:hover {
+    background: #1d4ed8;
+    color: white;
+}
+
+.flowninja-theme .project-spot-action-btn.delete {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.flowninja-theme .project-spot-action-btn.delete:hover {
+    background: #dc2626;
+    color: white;
+}
+
+/* ── BULK ACTIONS ───────────────────────────────────────────── */
+.flowninja-theme .bulk-actions {
+    background: white;
+    border: 1.5px solid #e5e7eb;
+    border-radius: var(--fn-radius-card);
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    box-shadow: var(--fn-shadow-card);
+}
+
+.flowninja-theme .bulk-actions-info {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+/* ── CHECKBOX ───────────────────────────────────────────────── */
+.flowninja-theme .checkbox-label {
+    background: #f8fafc;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #374151;
+    transition: all 0.2s;
+    box-shadow: none;
+}
+
+.flowninja-theme .checkbox-label:hover {
+    border-color: #0f172a;
+    background: white;
+    transform: none;
+}
+
+.flowninja-theme .checkmark {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #d1d5db;
+    border-radius: 5px;
+    background: white;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flowninja-theme .checkbox-label input[type="checkbox"]:checked + .checkmark {
+    background: #0f172a;
+    border-color: #0f172a;
+    box-shadow: none;
+}
+
+/* ── RESTRICTED CATALOG ─────────────────────────────────────── */
+.flowninja-theme .catalog-restricted {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    gap: 1.5rem;
+}
+
+.flowninja-theme .catalog-restricted .restricted-message {
+    background: #0f172a;
+    color: white;
+    padding: 1.5rem 2.5rem;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 1rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,.2);
+    border: none;
+    text-align: center;
+}
+
+.flowninja-theme .catalog-restricted .login-button,
+.flowninja-theme .catalog-restricted .signup-button {
+    background: #0f172a;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.75rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.flowninja-theme .catalog-restricted .login-button:hover {
+    background: #1e293b;
+    transform: translateY(-1px);
+}
+
+.flowninja-theme .catalog-restricted .signup-button {
+    background: #f1f5f9;
+    color: #374151;
+    border: 1.5px solid #e5e7eb;
+}
+
+.flowninja-theme .catalog-restricted .signup-button:hover {
+    background: #e2e8f0;
+}
+
+/* ── NOTIFICATIONS / TOASTS ─────────────────────────────────── */
+.flowninja-theme .notification,
+.flowninja-theme .toast {
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.12);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* ── SCROLLBAR ──────────────────────────────────────────────── */
+.flowninja-theme ::-webkit-scrollbar { width: 6px; height: 6px; }
+.flowninja-theme ::-webkit-scrollbar-track { background: #f1f5f9; }
+.flowninja-theme ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+.flowninja-theme ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* ── AUTH SWITCH ────────────────────────────────────────────── */
+.flowninja-theme .auth-switch {
+    color: #64748b;
+    font-size: 0.875rem;
+}
+
+.flowninja-theme .auth-switch a {
+    color: #0f172a;
+    font-weight: 600;
+}
+
+/* ── STARS INLINE ───────────────────────────────────────────── */
+.flowninja-theme .stars-inline i {
+    color: var(--fn-ninja);
+    text-shadow: none;
+}
