@@ -481,3 +481,100 @@ body.flowninja-theme.dark-theme[data-active-tab] .footprint-item:hover {
     background: rgba(var(--tab-rgb), .08);
     border-left-color: var(--tab-color);
 }
+
+/* ── BOUTONS CONTEXTUELS EN MODE SOMBRE ─────────────────────── */
+/* Specificity (0,4,1) > (0,3,0) — overrides flowninja-theme.css context rules */
+body.flowninja-theme.dark-theme .catalog-actions .btn-primary,
+body.flowninja-theme.dark-theme .projects-actions .btn-primary,
+body.flowninja-theme.dark-theme .project-spots-actions .btn-primary {
+    background: #238636;
+    color: white;
+    border: none;
+}
+
+body.flowninja-theme.dark-theme .catalog-actions .btn-primary:hover,
+body.flowninja-theme.dark-theme .projects-actions .btn-primary:hover,
+body.flowninja-theme.dark-theme .project-spots-actions .btn-primary:hover {
+    background: #2ea043;
+    box-shadow: 0 4px 12px rgba(46,160,67,.3);
+    transform: translateY(-1px);
+}
+
+body.flowninja-theme.dark-theme .catalog-actions .btn-success,
+body.flowninja-theme.dark-theme .projects-actions .btn-success,
+body.flowninja-theme.dark-theme .project-spots-actions .btn-success {
+    background: #238636;
+    color: white;
+    border: none;
+}
+
+body.flowninja-theme.dark-theme .catalog-actions .btn-success:hover,
+body.flowninja-theme.dark-theme .projects-actions .btn-success:hover,
+body.flowninja-theme.dark-theme .project-spots-actions .btn-success:hover {
+    background: #2ea043;
+    box-shadow: 0 4px 12px rgba(46,160,67,.3);
+    transform: translateY(-1px);
+}
+
+body.flowninja-theme.dark-theme .catalog-actions .btn-info,
+body.flowninja-theme.dark-theme .projects-actions .btn-info,
+body.flowninja-theme.dark-theme .project-spots-actions .btn-info {
+    background: #1f6feb;
+    color: white;
+    border: none;
+}
+
+body.flowninja-theme.dark-theme .catalog-actions .btn-info:hover,
+body.flowninja-theme.dark-theme .projects-actions .btn-info:hover,
+body.flowninja-theme.dark-theme .project-spots-actions .btn-info:hover {
+    background: #388bfd;
+    box-shadow: 0 4px 12px rgba(31,111,235,.3);
+    transform: translateY(-1px);
+}
+
+body.flowninja-theme.dark-theme .catalog-actions .btn-warning,
+body.flowninja-theme.dark-theme .projects-actions .btn-warning,
+body.flowninja-theme.dark-theme .project-spots-actions .btn-warning {
+    background: #9e6a03;
+    color: white;
+    border: none;
+}
+
+body.flowninja-theme.dark-theme .catalog-actions .btn-warning:hover,
+body.flowninja-theme.dark-theme .projects-actions .btn-warning:hover,
+body.flowninja-theme.dark-theme .project-spots-actions .btn-warning:hover {
+    background: #bb8009;
+    transform: translateY(-1px);
+}
+
+body.flowninja-theme.dark-theme .catalog-actions .btn-secondary,
+body.flowninja-theme.dark-theme .projects-actions .btn-secondary,
+body.flowninja-theme.dark-theme .project-spots-actions .btn-secondary {
+    background: #21262d;
+    color: #c9d1d9;
+    border: 1.5px solid #30363d;
+}
+
+body.flowninja-theme.dark-theme .catalog-actions .btn-secondary:hover,
+body.flowninja-theme.dark-theme .projects-actions .btn-secondary:hover,
+body.flowninja-theme.dark-theme .project-spots-actions .btn-secondary:hover {
+    background: #30363d;
+    color: #f0f6fc;
+    border-color: #8b949e;
+}
+
+body.flowninja-theme.dark-theme .catalog-actions .btn-outline,
+body.flowninja-theme.dark-theme .projects-actions .btn-outline,
+body.flowninja-theme.dark-theme .project-spots-actions .btn-outline {
+    background: #21262d;
+    color: #c9d1d9;
+    border: 1.5px solid #30363d;
+}
+
+body.flowninja-theme.dark-theme .catalog-actions .btn-outline:hover,
+body.flowninja-theme.dark-theme .projects-actions .btn-outline:hover,
+body.flowninja-theme.dark-theme .project-spots-actions .btn-outline:hover {
+    background: #30363d;
+    color: #f0f6fc;
+    border-color: #8b949e;
+}

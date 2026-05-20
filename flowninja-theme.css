@@ -873,51 +873,6 @@ body.flowninja-theme {
     align-items: center;
 }
 
-.flowninja-theme .catalog-actions .btn-primary,
-.flowninja-theme .projects-actions .btn-primary,
-.flowninja-theme .project-spots-actions .btn-primary {
-    background: #0f172a;
-    color: white;
-    border: none;
-}
-
-.flowninja-theme .catalog-actions .btn-success,
-.flowninja-theme .projects-actions .btn-success,
-.flowninja-theme .project-spots-actions .btn-success {
-    background: #16a34a;
-    color: white;
-    border: none;
-}
-
-.flowninja-theme .catalog-actions .btn-success:hover,
-.flowninja-theme .projects-actions .btn-success:hover,
-.flowninja-theme .project-spots-actions .btn-success:hover {
-    background: #15803d;
-    transform: translateY(-1px);
-}
-
-.flowninja-theme .catalog-actions .btn-info {
-    background: #1d4ed8;
-    color: white;
-    border: none;
-}
-
-.flowninja-theme .catalog-actions .btn-warning {
-    background: #d97706;
-    color: white;
-    border: none;
-}
-
-.flowninja-theme .catalog-actions .btn-outline {
-    background: transparent;
-    color: #374151;
-    border: 1.5px solid #e5e7eb;
-}
-
-.flowninja-theme .catalog-actions .btn-outline:hover {
-    background: #f1f5f9;
-    color: #111827;
-}
 
 /* ── SPOT ACTION BUTTONS ────────────────────────────────────── */
 .flowninja-theme .project-spot-action-btn {
@@ -1137,7 +1092,8 @@ body.flowninja-theme {
     --tab-shadow: rgba(91, 33, 182, .18);
 }
 
-.flowninja-theme[data-active-tab="projects"] {
+.flowninja-theme[data-active-tab="projects"],
+.flowninja-theme[data-active-tab="project-detail"] {
     --tab-color:  #0e7490;
     --tab-rgb:    14, 116, 144;
     --tab-tint:   #ecfeff;
