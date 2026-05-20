@@ -5856,24 +5856,27 @@ function switchTheme(theme) {
     const body = document.body;
     const themeOptions = document.querySelectorAll('.theme-option');
     
-    // Retirer toutes les classes de thème
+    // Retirer toutes les classes de thème (autumn-theme gardé pour nettoyage des anciens saves)
     body.classList.remove('white-theme', 'autumn-theme', 'dark-theme');
-    
+
     // Désactiver tous les boutons de thème
     themeOptions.forEach(option => {
         option.classList.remove('active');
     });
-    
+
     // Appliquer le nouveau thème
     switch(theme) {
         case 'white':
             body.classList.add('white-theme');
             break;
-        case 'autumn':
-            body.classList.add('autumn-theme');
-            break;
         case 'dark':
             body.classList.add('dark-theme');
+            break;
+        // 'autumn' remplacé par 'dark' — migration des préférences sauvegardées
+        case 'autumn':
+            body.classList.add('dark-theme');
+            localStorage.setItem('selectedTheme', 'dark');
+            theme = 'dark';
             break;
     }
     

@@ -1,480 +1,446 @@
-/* ============ THÈME AUTOMNE ============ */
-/* Couleurs inspirées de l'automne : feuilles dorées, orange, rouge, marron */
+/* ============================================================
+   THÈME SOMBRE — Ninja Linking Tool
+   Sélecteur : body.flowninja-theme.dark-theme
+   ============================================================ */
 
-:root {
-    /* Couleurs principales automne */
-    --primary: #d97706;           /* Orange doré */
-    --secondary: #92400e;          /* Marron chaud */
-    --accent: #ea580c;            /* Orange vif */
-    --success: #16a34a;           /* Vert forêt */
-    --warning: #f59e0b;            /* Jaune doré */
-    --danger: #dc2626;             /* Rouge feuille */
-    --info: #0891b2;               /* Bleu ciel automnal */
-    
-    /* Couleurs de fond */
-    --bg-primary: #fef3c7;        /* Crème chaud */
-    --bg-secondary: #fef7cd;       /* Beige doré */
-    --bg-accent: #fed7aa;          /* Pêche douce */
-    --bg-tertiary: #fde68a;        /* Jaune paille */
-    
-    /* Couleurs de texte */
-    --text-primary: #451a03;       /* Marron foncé */
-    --text-secondary: #92400e;    /* Marron moyen */
-    --text-muted: #a16207;        /* Marron clair */
-    --text-inverse: #fef3c7;       /* Crème */
-    
-    /* Couleurs de bordure */
-    --border-primary: #d97706;     /* Orange doré */
-    --border-secondary: #f59e0b;   /* Jaune doré */
-    --border-accent: #ea580c;      /* Orange vif */
-    
-    /* Ombres automne */
-    --shadow-sm: 0 1px 2px 0 rgba(217, 119, 6, 0.1);
-    --shadow: 0 4px 6px -1px rgba(217, 119, 6, 0.1), 0 2px 4px -1px rgba(217, 119, 6, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(217, 119, 6, 0.1), 0 4px 6px -2px rgba(217, 119, 6, 0.05);
-    --shadow-xl: 0 20px 25px -5px rgba(217, 119, 6, 0.1), 0 10px 10px -5px rgba(217, 119, 6, 0.04);
+/* ── BASE ───────────────────────────────────────────────────── */
+body.flowninja-theme.dark-theme {
+    background: #0d1117;
+    color: #e2e8f0;
 }
 
-/* Application du thème automne */
-body.autumn-theme {
-    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-    color: var(--text-primary);
+/* ── HOMEPAGE ───────────────────────────────────────────────── */
+body.flowninja-theme.dark-theme .homepage-container {
+    background: #0d1117;
 }
 
-/* S'assurer que le thème blanc n'est pas affecté */
-body.white-theme {
-    background: #ffffff !important;
-    color: #1a202c !important;
+body.flowninja-theme.dark-theme .hero-title {
+    color: #f8fafc;
 }
 
-/* Réinitialiser les variables CSS pour le thème blanc */
-body.white-theme {
-    --primary: #3b82f6;
-    --secondary: #6b7280;
-    --accent: #8b5cf6;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --danger: #ef4444;
-    --info: #06b6d4;
-    --bg-primary: #ffffff;
-    --bg-secondary: #f8fafc;
-    --bg-accent: #e2e8f0;
-    --bg-tertiary: #cbd5e1;
-    --text-primary: #1a202c;
-    --text-secondary: #4a5568;
-    --text-muted: #718096;
-    --text-inverse: #ffffff;
-    --border-primary: #e2e8f0;
-    --border-secondary: #cbd5e1;
-    --border-accent: #a0aec0;
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+body.flowninja-theme.dark-theme .hero-subtitle {
+    color: #94a3b8;
 }
 
-/* ============ HEADER AUTOMNE ============ */
-body.autumn-theme .header {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-    border-bottom: 3px solid var(--border-primary);
-    box-shadow: var(--shadow-lg);
+body.flowninja-theme.dark-theme .feature {
+    background: #161b22;
+    border-color: #30363d;
+    color: #e2e8f0;
 }
 
-bodybody.autumn-theme .header::before {
-    content: "🍂";
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 1.5rem;
-    opacity: 0.7;
+body.flowninja-theme.dark-theme .feature i {
+    color: #38bdf8;
 }
 
-bodybody.autumn-theme .header h1 {
-    color: var(--text-inverse);
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+body.flowninja-theme.dark-theme .hero-graphic {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
 }
 
-bodybody.autumn-theme .header .user-info {
-    color: var(--text-inverse);
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+body.flowninja-theme.dark-theme .homepage-features {
+    background: #161b22;
 }
 
-/* ============ NAVIGATION AUTOMNE ============ */
-bodybody.autumn-theme .nav {
-    background: linear-gradient(90deg, var(--secondary) 0%, var(--primary) 100%);
-    border-bottom: 2px solid var(--border-primary);
+body.flowninja-theme.dark-theme .features-container h2 {
+    color: #f8fafc;
 }
 
-bodybody.autumn-theme .nav-item {
-    color: var(--text-inverse);
-    border-bottom: 3px solid transparent;
-    transition: all 0.3s ease;
+body.flowninja-theme.dark-theme .feature-card {
+    background: #0d1117;
+    border-color: #30363d;
 }
 
-bodybody.autumn-theme .nav-item:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-bottom-color: var(--border-secondary);
+body.flowninja-theme.dark-theme .feature-card:hover {
+    border-color: #58a6ff;
+    box-shadow: 0 4px 12px rgba(88,166,255,.15), 0 16px 40px rgba(0,0,0,.4);
+}
+
+body.flowninja-theme.dark-theme .feature-card h3 {
+    color: #f8fafc;
+}
+
+body.flowninja-theme.dark-theme .feature-card p {
+    color: #94a3b8;
+}
+
+body.flowninja-theme.dark-theme .homepage-cta {
+    background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+}
+
+/* ── AUTH ───────────────────────────────────────────────────── */
+body.flowninja-theme.dark-theme .auth-container {
+    background: #0d1117;
+}
+
+body.flowninja-theme.dark-theme .auth-modal {
+    background: #161b22;
+    box-shadow: 0 4px 6px rgba(0,0,0,.3), 0 24px 60px rgba(0,0,0,.5);
+    border: 1px solid #30363d;
+}
+
+body.flowninja-theme.dark-theme .auth-header h1 {
+    color: #f8fafc;
+}
+
+body.flowninja-theme.dark-theme .auth-header p {
+    color: #8b949e;
+}
+
+body.flowninja-theme.dark-theme .auth-form h2 {
+    color: #f8fafc;
+}
+
+body.flowninja-theme.dark-theme .auth-switch {
+    color: #8b949e;
+}
+
+body.flowninja-theme.dark-theme .auth-switch a {
+    color: #58a6ff;
+}
+
+/* ── HEADER ─────────────────────────────────────────────────── */
+body.flowninja-theme.dark-theme .header {
+    background: #161b22;
+    border-bottom-color: #30363d;
+}
+
+body.flowninja-theme.dark-theme .header-center h1 {
+    color: #f8fafc;
+}
+
+body.flowninja-theme.dark-theme .header-center p {
+    color: #8b949e;
+}
+
+body.flowninja-theme.dark-theme .header-left .btn-secondary {
+    background: #21262d;
+    color: #e2e8f0;
+    border-color: #30363d;
+}
+
+body.flowninja-theme.dark-theme .header-left .btn-secondary:hover {
+    background: #30363d;
+    color: #f8fafc;
+}
+
+/* ── NAVIGATION ─────────────────────────────────────────────── */
+body.flowninja-theme.dark-theme .navigation {
+    background: #161b22;
+    border-bottom-color: #21262d;
+}
+
+body.flowninja-theme.dark-theme .nav-buttons {
+    background: #0d1117;
+}
+
+body.flowninja-theme.dark-theme .nav-btn {
+    color: #8b949e;
+}
+
+body.flowninja-theme.dark-theme .nav-btn:hover {
+    color: #f8fafc;
+    background: rgba(255,255,255,.06);
+}
+
+/* ── SÉLECTEUR DE THÈME ─────────────────────────────────────── */
+body.flowninja-theme.dark-theme .theme-selector {
+    background: #0d1117;
+    border-color: #30363d;
+}
+
+body.flowninja-theme.dark-theme .theme-option {
+    background: #21262d;
+    border-color: #30363d;
+    color: #8b949e;
+}
+
+body.flowninja-theme.dark-theme .theme-option:hover,
+body.flowninja-theme.dark-theme .theme-option.active {
+    background: #58a6ff;
+    color: white;
+    border-color: #58a6ff;
+}
+
+/* ── MAIN CONTENT ───────────────────────────────────────────── */
+body.flowninja-theme.dark-theme .main-content {
+    background: transparent;
+}
+
+/* ── PAGE HEADER ────────────────────────────────────────────── */
+body.flowninja-theme.dark-theme .page-header h2 {
+    color: #f8fafc;
+}
+
+body.flowninja-theme.dark-theme .page-header p {
+    color: #8b949e;
+}
+
+/* ── CARDS ──────────────────────────────────────────────────── */
+body.flowninja-theme.dark-theme .card,
+body.flowninja-theme.dark-theme .category-card,
+body.flowninja-theme.dark-theme .project-card {
+    background: #161b22;
+    border-color: #30363d;
+    box-shadow: 0 1px 3px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.2);
+}
+
+body.flowninja-theme.dark-theme .category-card:hover,
+body.flowninja-theme.dark-theme .card:hover,
+body.flowninja-theme.dark-theme .project-card:hover {
+    border-color: #58a6ff;
+    box-shadow: 0 4px 12px rgba(88,166,255,.12), 0 16px 40px rgba(0,0,0,.4);
     transform: translateY(-2px);
 }
 
-bodybody.autumn-theme .nav-item.active {
-    background: rgba(255, 255, 255, 0.2);
-    border-bottom-color: var(--border-secondary);
-    box-shadow: var(--shadow);
+body.flowninja-theme.dark-theme .category-card h3 {
+    color: #f8fafc;
 }
 
-/* ============ CARTES AUTOMNE ============ */
-body.autumn-theme .card {
-    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-accent) 100%);
-    border: 2px solid var(--border-secondary);
-    box-shadow: var(--shadow);
-    transition: all 0.3s ease;
+body.flowninja-theme.dark-theme .category-card p {
+    color: #8b949e;
 }
 
-body.autumn-theme .card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--border-primary);
+/* ── SEARCH SECTION ─────────────────────────────────────────── */
+body.flowninja-theme.dark-theme .search-section {
+    background: #161b22;
+    border-color: #30363d;
 }
 
-body.autumn-theme .card-header {
-    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
-    color: var(--text-inverse);
-    border-bottom: 2px solid var(--border-primary);
+body.flowninja-theme.dark-theme .search-form input {
+    background: #0d1117;
+    border-color: #30363d;
+    color: #e2e8f0;
 }
 
-body.autumn-theme .card-title {
-    color: var(--text-inverse);
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+body.flowninja-theme.dark-theme .search-form input::placeholder {
+    color: #6e7681;
 }
 
-/* ============ BOUTONS AUTOMNE ============ */
-body.autumn-theme .btn {
-    border-radius: 8px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    transition: all 0.3s ease;
-    box-shadow: var(--shadow-sm);
+body.flowninja-theme.dark-theme .search-form input:focus {
+    background: #0d1117;
+    border-color: #58a6ff;
+    box-shadow: 0 0 0 3px rgba(88,166,255,.15);
 }
 
-body.autumn-theme .btn-primary {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-    border: 2px solid var(--border-primary);
-    color: var(--text-inverse);
+/* ── FOOTPRINTS & FAVORIS ───────────────────────────────────── */
+body.flowninja-theme.dark-theme .footprints-section,
+body.flowninja-theme.dark-theme .favorites-section {
+    background: #161b22;
+    border-color: #30363d;
 }
 
-body.autumn-theme .btn-primary:hover {
-    background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+body.flowninja-theme.dark-theme .footprints-header h3,
+body.flowninja-theme.dark-theme .favorites-header h3 {
+    color: #f8fafc;
 }
 
-body.autumn-theme .btn-secondary {
-    background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
-    border: 2px solid var(--border-secondary);
-    color: var(--text-inverse);
+body.flowninja-theme.dark-theme .footprint-item {
+    color: #e2e8f0;
 }
 
-body.autumn-theme .btn-success {
-    background: linear-gradient(135deg, var(--success) 0%, #22c55e 100%);
-    border: 2px solid var(--success);
-    color: var(--text-inverse);
+body.flowninja-theme.dark-theme .footprint-item:hover {
+    background: #21262d;
 }
 
-body.autumn-theme .btn-warning {
-    background: linear-gradient(135deg, var(--warning) 0%, #fbbf24 100%);
-    border: 2px solid var(--warning);
-    color: var(--text-primary);
+/* ── FORMULAIRES ────────────────────────────────────────────── */
+body.flowninja-theme.dark-theme .form-group label {
+    color: #c9d1d9;
 }
 
-body.autumn-theme .btn-danger {
-    background: linear-gradient(135deg, var(--danger) 0%, #ef4444 100%);
-    border: 2px solid var(--danger);
-    color: var(--text-inverse);
+body.flowninja-theme.dark-theme .form-group input,
+body.flowninja-theme.dark-theme .form-group select,
+body.flowninja-theme.dark-theme .form-group textarea {
+    background: #0d1117;
+    border-color: #30363d;
+    color: #e2e8f0;
 }
 
-body.autumn-theme .btn-info {
-    background: linear-gradient(135deg, var(--info) 0%, #06b6d4 100%);
-    border: 2px solid var(--info);
-    color: var(--text-inverse);
+body.flowninja-theme.dark-theme .form-group input::placeholder,
+body.flowninja-theme.dark-theme .form-group textarea::placeholder {
+    color: #6e7681;
 }
 
-/* ============ FORMULAIRES AUTOMNE ============ */
-body.autumn-theme .form-group input,
-body.autumn-theme .form-group select,
-body.autumn-theme .form-group textarea {
-    background: var(--bg-primary);
-    border: 2px solid var(--border-secondary);
-    color: var(--text-primary);
-    transition: all 0.3s ease;
+body.flowninja-theme.dark-theme .form-group input:focus,
+body.flowninja-theme.dark-theme .form-group select:focus,
+body.flowninja-theme.dark-theme .form-group textarea:focus {
+    background: #0d1117;
+    border-color: #58a6ff;
+    box-shadow: 0 0 0 3px rgba(88,166,255,.15);
 }
 
-body.autumn-theme .form-group input:focus,
-body.autumn-theme .form-group select:focus,
-body.autumn-theme .form-group textarea:focus {
-    border-color: var(--border-primary);
-    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
-    background: var(--bg-secondary);
+/* ── BOUTONS ────────────────────────────────────────────────── */
+body.flowninja-theme.dark-theme .btn-primary {
+    background: #238636;
+    color: white;
+    border: none;
 }
 
-body.autumn-theme .form-group label {
-    color: var(--text-secondary);
-    font-weight: 600;
+body.flowninja-theme.dark-theme .btn-primary:hover {
+    background: #2ea043;
+    box-shadow: 0 4px 12px rgba(46,160,67,.3);
 }
 
-/* ============ TABLEAUX AUTOMNE ============ */
-body.autumn-theme .table {
-    background: var(--bg-primary);
-    border: 2px solid var(--border-secondary);
-    border-radius: 8px;
-    overflow: hidden;
+body.flowninja-theme.dark-theme .btn-secondary {
+    background: #21262d;
+    color: #c9d1d9;
+    border-color: #30363d;
 }
 
-body.autumn-theme .table th {
-    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
-    color: var(--text-inverse);
-    border-bottom: 2px solid var(--border-primary);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+body.flowninja-theme.dark-theme .btn-secondary:hover {
+    background: #30363d;
+    color: #f8fafc;
+    border-color: #8b949e;
 }
 
-body.autumn-theme .table td {
-    border-bottom: 1px solid var(--border-secondary);
-    color: var(--text-primary);
+body.flowninja-theme.dark-theme .btn-danger {
+    background: rgba(248,81,73,.15);
+    color: #f85149;
+    border-color: rgba(248,81,73,.4);
 }
 
-body.autumn-theme .table tr:hover {
-    background: var(--bg-accent);
+body.flowninja-theme.dark-theme .btn-danger:hover {
+    background: #f85149;
+    color: white;
 }
 
-body.autumn-theme .table tr:nth-child(even) {
-    background: var(--bg-tertiary);
+body.flowninja-theme.dark-theme .btn-success {
+    background: rgba(46,160,67,.15);
+    color: #3fb950;
+    border-color: rgba(46,160,67,.4);
 }
 
-/* ============ MODALS AUTOMNE ============ */
-body.autumn-theme .modal {
-    background: rgba(0, 0, 0, 0.6);
+body.flowninja-theme.dark-theme .btn-success:hover {
+    background: #2ea043;
+    color: white;
 }
 
-body.autumn-theme .modal-content {
-    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-    border: 3px solid var(--border-primary);
-    box-shadow: var(--shadow-xl);
-    border-radius: 12px;
+/* ── TABLES ─────────────────────────────────────────────────── */
+body.flowninja-theme.dark-theme .table {
+    background: #161b22;
+    border-color: #30363d;
 }
 
-body.autumn-theme .modal-header {
-    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
-    color: var(--text-inverse);
-    border-bottom: 2px solid var(--border-primary);
-    border-radius: 8px 8px 0 0;
+body.flowninja-theme.dark-theme .table th {
+    background: #0d1117;
+    color: #8b949e;
+    border-bottom-color: #30363d;
 }
 
-body.autumn-theme .modal-close {
-    color: var(--text-inverse);
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    transition: all 0.3s ease;
+body.flowninja-theme.dark-theme .table td {
+    border-bottom-color: #21262d;
+    color: #e2e8f0;
 }
 
-body.autumn-theme .modal-close:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.1);
+body.flowninja-theme.dark-theme .table tr:hover td {
+    background: #1c2128;
 }
 
-/* ============ STATUTS AUTOMNE ============ */
-body.autumn-theme .spot-status-a-publier {
-    background: linear-gradient(135deg, var(--warning) 0%, #fbbf24 100%);
-    color: var(--text-primary);
-    border: 1px solid var(--warning);
+/* ── MODALS ─────────────────────────────────────────────────── */
+body.flowninja-theme.dark-theme .modal {
+    background: #161b22;
+    border: 1px solid #30363d;
 }
 
-body.autumn-theme .spot-status-en-attente {
-    background: linear-gradient(135deg, var(--info) 0%, #06b6d4 100%);
-    color: var(--text-inverse);
-    border: 1px solid var(--info);
+body.flowninja-theme.dark-theme .modal-header {
+    background: #0d1117;
 }
 
-body.autumn-theme .spot-status-publie {
-    background: linear-gradient(135deg, var(--success) 0%, #22c55e 100%);
-    color: var(--text-inverse);
-    border: 1px solid var(--success);
+body.flowninja-theme.dark-theme .modal-body {
+    background: #161b22;
+    color: #e2e8f0;
 }
 
-body.autumn-theme .spot-status-rejete {
-    background: linear-gradient(135deg, var(--danger) 0%, #ef4444 100%);
-    color: var(--text-inverse);
-    border: 1px solid var(--danger);
+/* ── USER INFO ──────────────────────────────────────────────── */
+body.flowninja-theme.dark-theme .user-email {
+    background: #21262d;
+    color: #c9d1d9;
+    border-color: #30363d;
 }
 
-/* ============ BUDGET AUTOMNE ============ */
-bodybody.autumn-theme .project-budget-section {
-    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-accent) 100%);
-    border: 2px solid var(--border-secondary);
-    box-shadow: var(--shadow);
+/* ── CHECKBOX ───────────────────────────────────────────────── */
+body.flowninja-theme.dark-theme .checkbox-label {
+    background: #0d1117;
+    border-color: #30363d;
+    color: #e2e8f0;
 }
 
-bodybody.autumn-theme .budget-card {
-    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-tertiary) 100%);
-    border: 2px solid var(--border-secondary);
-    transition: all 0.3s ease;
+body.flowninja-theme.dark-theme .checkbox-label:hover {
+    border-color: #58a6ff;
 }
 
-bodybody.autumn-theme .budget-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--border-primary);
+body.flowninja-theme.dark-theme .checkmark {
+    background: #21262d;
+    border-color: #30363d;
 }
 
-bodybody.autumn-theme .budget-progress-bar {
-    background: var(--bg-primary);
-    border: 2px solid var(--border-secondary);
+body.flowninja-theme.dark-theme .checkbox-label input[type="checkbox"]:checked + .checkmark {
+    background: #1f6feb;
+    border-color: #1f6feb;
 }
 
-bodybody.autumn-theme .budget-progress-fill {
-    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+/* ── BULK ACTIONS ───────────────────────────────────────────── */
+body.flowninja-theme.dark-theme .bulk-actions {
+    background: #161b22;
+    border-color: #30363d;
 }
 
-/* ============ KPI AUTOMNE ============ */
-body.autumn-theme .kpi-card {
-    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-accent) 100%);
-    border: 2px solid var(--border-secondary);
-    transition: all 0.3s ease;
+body.flowninja-theme.dark-theme .bulk-actions-info {
+    color: #c9d1d9;
 }
 
-body.autumn-theme .kpi-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--border-primary);
+/* ── CATALOG RESTRICTED ─────────────────────────────────────── */
+body.flowninja-theme.dark-theme .catalog-restricted .restricted-message {
+    background: #161b22;
+    border: 1px solid #30363d;
 }
 
-body.autumn-theme .kpi-number {
-    color: var(--primary);
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+body.flowninja-theme.dark-theme .catalog-restricted .login-button {
+    background: #238636;
+    border: none;
 }
 
-body.autumn-theme .kpi-label {
-    color: var(--text-secondary);
-    font-weight: 600;
+body.flowninja-theme.dark-theme .catalog-restricted .signup-button {
+    background: #21262d;
+    color: #c9d1d9;
+    border-color: #30363d;
 }
 
-/* ============ IMPORT EXCEL AUTOMNE ============ */
-body.autumn-theme .import-instructions {
-    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-accent) 100%);
-    border-left: 4px solid var(--border-primary);
+/* ── SCROLLBAR ──────────────────────────────────────────────── */
+body.flowninja-theme.dark-theme ::-webkit-scrollbar-track {
+    background: #0d1117;
 }
 
-body.autumn-theme .import-stats {
-    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-tertiary) 100%);
-    border: 2px solid var(--border-secondary);
+body.flowninja-theme.dark-theme ::-webkit-scrollbar-thumb {
+    background: #30363d;
 }
 
-body.autumn-theme .preview-table {
-    background: var(--bg-primary);
-    border: 2px solid var(--border-secondary);
+body.flowninja-theme.dark-theme ::-webkit-scrollbar-thumb:hover {
+    background: #484f58;
 }
 
-body.autumn-theme .preview-table th {
-    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
-    color: var(--text-inverse);
-    border-bottom: 2px solid var(--border-primary);
+/* ── COULEURS PAR ONGLET EN MODE SOMBRE ─────────────────────── */
+/* Cartes sélectionnées — fond sombre légèrement teinté */
+body.flowninja-theme.dark-theme[data-active-tab] .category-card.selected {
+    background: rgba(var(--tab-rgb), .12);
+    border-color: var(--tab-color);
+    box-shadow: 0 0 0 2px rgba(var(--tab-rgb), .2);
 }
 
-body.autumn-theme .preview-table td {
-    border-bottom: 1px solid var(--border-secondary);
-    color: var(--text-primary);
+/* Focus inputs en mode sombre */
+body.flowninja-theme.dark-theme[data-active-tab] .search-form input:focus,
+body.flowninja-theme.dark-theme[data-active-tab] .main-app .form-group input:focus,
+body.flowninja-theme.dark-theme[data-active-tab] .main-app .form-group select:focus,
+body.flowninja-theme.dark-theme[data-active-tab] .main-app .form-group textarea:focus {
+    border-color: var(--tab-color);
+    box-shadow: 0 0 0 3px rgba(var(--tab-rgb), .2);
 }
 
-body.autumn-theme .preview-table tr:hover {
-    background: var(--bg-accent);
+/* Hover des lignes de table en mode sombre */
+body.flowninja-theme.dark-theme[data-active-tab] .table tr:hover td {
+    background: rgba(var(--tab-rgb), .06);
 }
 
-/* ============ ANIMATIONS AUTOMNE ============ */
-body.autumn-theme .card,
-body.autumn-theme .btn,
-body.autumn-theme .kpi-card {
-    position: relative;
-    overflow: hidden;
-}
-
-body.autumn-theme .card::before,
-body.autumn-theme .btn::before,
-body.autumn-theme .kpi-card::before {
-    content: "🍂";
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    font-size: 1.2rem;
-    opacity: 0.1;
-    animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-10px) rotate(10deg); }
-}
-
-/* ============ RESPONSIVE AUTOMNE ============ */
-@media (max-width: 768px) {
-    body.autumn-theme .header::before {
-        display: none;
-    }
-    
-    body.autumn-theme .card,
-    body.autumn-theme .kpi-card {
-        margin-bottom: 1rem;
-    }
-    
-    body.autumn-theme .btn {
-        width: 100%;
-        margin-bottom: 0.5rem;
-    }
-}
-
-/* ============ SCROLLBAR AUTOMNE ============ */
-body.autumn-theme ::-webkit-scrollbar {
-    width: 8px;
-}
-
-body.autumn-theme ::-webkit-scrollbar-track {
-    background: var(--bg-primary);
-}
-
-body.autumn-theme ::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-    border-radius: 4px;
-}
-
-body.autumn-theme ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
-}
-
-/* ============ NOTIFICATIONS AUTOMNE ============ */
-body.autumn-theme .notification {
-    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-accent) 100%);
-    border: 2px solid var(--border-primary);
-    box-shadow: var(--shadow-lg);
-}
-
-body.autumn-theme .notification.success {
-    border-color: var(--success);
-    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-}
-
-body.autumn-theme .notification.error {
-    border-color: var(--danger);
-    background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
-}
-
-body.autumn-theme .notification.warning {
-    border-color: var(--warning);
-    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-}
-
-body.autumn-theme .notification.info {
-    border-color: var(--info);
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+/* Items de footprints en mode sombre */
+body.flowninja-theme.dark-theme[data-active-tab] .footprint-item:hover {
+    background: rgba(var(--tab-rgb), .08);
+    border-left-color: var(--tab-color);
 }
