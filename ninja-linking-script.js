@@ -117,6 +117,10 @@ function showHomepage() {
     document.getElementById('homepage-container').style.display = 'block';
     document.getElementById('auth-container').style.display = 'none';
     document.getElementById('main-app').style.display = 'none';
+    // Effacer le hash pour ne pas conserver une URL de page privée
+    if (window.location.hash) {
+        history.pushState(null, '', window.location.pathname);
+    }
 }
 
 // Afficher le formulaire d'authentification
@@ -1013,97 +1017,67 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
     
+    // Helper : détermine quelle page afficher après login
+    // Priorité : hash URL → localStorage → ninjalinking par défaut
+    function resolveStartPage() {
+        return getPageFromHash() || localStorage.getItem('currentPage') || 'ninjalinking';
+    }
+
+    // Helper : gère la restauration du projet si on revient sur project-detail
+    function maybeRestoreProjectDetail(pageId) {
+        if (pageId === 'project-detail') {
+            const savedProjectId = localStorage.getItem('currentProjectId');
+            if (savedProjectId) {
+                currentProjectId = parseInt(savedProjectId);
+                setTimeout(() => loadProjectDetail(currentProjectId), 100);
+            }
+        }
+    }
+
     // Vérifier l'authentification Supabase d'abord (si configuré)
     if (isSupabaseConfigured && db) {
         const authResult = await checkAuthentication();
         if (authResult) {
-            // Utilisateur authentifié via Supabase, charger les données
             await loadData();
-            
-            // Restaurer la page précédente ou afficher la page par défaut
-            const savedPage = localStorage.getItem('currentPage');
-            if (savedPage && document.getElementById(`${savedPage}-page`)) {
-                switchPage(savedPage);
-                
-                // Si on est sur la page de détail du projet, restaurer le projet
-                if (savedPage === 'project-detail') {
-                    const savedProjectId = localStorage.getItem('currentProjectId');
-                    if (savedProjectId) {
-                        currentProjectId = parseInt(savedProjectId);
-                        // Attendre que les données soient chargées avant de charger le projet
-                        setTimeout(() => {
-                            loadProjectDetail(currentProjectId);
-                        }, 100);
-                    }
-                }
+            const startPage = resolveStartPage();
+            if (document.getElementById(`${startPage}-page`)) {
+                switchPage(startPage);
+                maybeRestoreProjectDetail(startPage);
             } else {
                 switchPage('ninjalinking');
             }
-            return; // Sortir ici, l'utilisateur est connecté
+            return;
         }
     }
-    
+
     // Si pas de Supabase ou pas authentifié, vérifier le localStorage
     const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
     const rememberMe = localStorage.getItem('rememberMe') === 'true';
     const savedUserData = localStorage.getItem('currentUser');
-    
+
     if (isAuthenticated && savedUserData) {
-        // Utilisateur connecté, restaurer les variables globales
         window.isAuthenticated = true;
         window.currentUser = JSON.parse(savedUserData);
-        
-        // Charger les données
         await loadData();
-        
-        // Restaurer la page précédente ou afficher la page par défaut
-        const savedPage = localStorage.getItem('currentPage');
-        if (savedPage && document.getElementById(`${savedPage}-page`)) {
-            switchPage(savedPage);
-            
-            // Si on est sur la page de détail du projet, restaurer le projet
-            if (savedPage === 'project-detail') {
-                const savedProjectId = localStorage.getItem('currentProjectId');
-                if (savedProjectId) {
-                    currentProjectId = parseInt(savedProjectId);
-                    // Attendre que les données soient chargées avant de charger le projet
-                    setTimeout(() => {
-                        loadProjectDetail(currentProjectId);
-                    }, 100);
-                }
-            }
+        const startPage = resolveStartPage();
+        if (document.getElementById(`${startPage}-page`)) {
+            switchPage(startPage);
+            maybeRestoreProjectDetail(startPage);
         } else {
             switchPage('ninjalinking');
         }
     } else if (rememberMe && savedUserData) {
-        // "Se souvenir de moi" activé, restaurer les variables globales
         window.isAuthenticated = true;
         window.currentUser = JSON.parse(savedUserData);
-        
-        // Charger les données
         await loadData();
-        
-        // Restaurer la page précédente ou afficher la page par défaut
-        const savedPage = localStorage.getItem('currentPage');
-        if (savedPage && document.getElementById(`${savedPage}-page`)) {
-            switchPage(savedPage);
-            
-            // Si on est sur la page de détail du projet, restaurer le projet
-            if (savedPage === 'project-detail') {
-                const savedProjectId = localStorage.getItem('currentProjectId');
-                if (savedProjectId) {
-                    currentProjectId = parseInt(savedProjectId);
-                    // Attendre que les données soient chargées avant de charger le projet
-                    setTimeout(() => {
-                        loadProjectDetail(currentProjectId);
-                    }, 100);
-                }
-            }
+        const startPage = resolveStartPage();
+        if (document.getElementById(`${startPage}-page`)) {
+            switchPage(startPage);
+            maybeRestoreProjectDetail(startPage);
         } else {
             switchPage('ninjalinking');
         }
     } else {
-        // Utilisateur non connecté, afficher la page d'accueil
         console.log('❌ Utilisateur non connecté, affichage de la page d\'accueil');
         showHomepage();
     }
@@ -1114,13 +1088,22 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 });
 
+// ── HASH ROUTING ────────────────────────────────────────────
+// Retourne l'identifiant de page contenu dans le hash de l'URL,
+// ou null si le hash ne correspond à aucune page connue.
+function getPageFromHash() {
+    const validPages = ['ninjalinking', 'serp', 'ereputation', 'ia', 'projects', 'catalog'];
+    const hash = window.location.hash.replace(/^#\/?/, '').trim();
+    return validPages.includes(hash) ? hash : null;
+}
+
 function initializeApp() {
     console.log('🔧 Initialisation de l\'application...');
-    
+
     // Navigation
     const navButtons = document.querySelectorAll('.nav-btn');
     console.log(`📱 Boutons de navigation trouvés: ${navButtons.length}`);
-    
+
     navButtons.forEach((btn, index) => {
         console.log(`🔗 Bouton ${index + 1}:`, btn.dataset.page, btn.textContent);
         btn.addEventListener('click', (e) => {
@@ -1128,6 +1111,14 @@ function initializeApp() {
             console.log('🖱️ Clic sur le bouton:', btn.dataset.page);
             switchPage(btn.dataset.page);
         });
+    });
+
+    // Gestion du bouton Précédent/Suivant du navigateur
+    window.addEventListener('popstate', () => {
+        const pageId = getPageFromHash();
+        if (pageId && isAuthenticated) {
+            switchPage(pageId);
+        }
     });
 
     // Catégories de footprints
@@ -1253,7 +1244,11 @@ async function switchPage(pageId) {
         return;
     }
     
-    // Sauvegarder la page actuelle dans le localStorage
+    // Mettre à jour l'URL (hash routing) pour survivre aux actualisations
+    if (window.location.hash !== '#' + pageId) {
+        history.pushState({ page: pageId }, '', '#' + pageId);
+    }
+    // Garder aussi localStorage comme fallback
     localStorage.setItem('currentPage', pageId);
     
     // Désactiver tous les boutons de navigation
