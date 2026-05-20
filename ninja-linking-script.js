@@ -50,51 +50,64 @@ async function initSupabase() {
 // Vérifier l'authentification
 async function checkAuthentication() {
     if (!db) return false;
-    
+
     try {
         const user = await db.checkCurrentUser();
         if (user) {
             isAuthenticated = true;
             currentUser = user;
-            
-            // Mettre à jour les variables globales
             window.isAuthenticated = true;
             window.currentUser = user;
-            
-            // Sauvegarder l'état d'authentification
             localStorage.setItem('isAuthenticated', 'true');
             localStorage.setItem('currentUser', JSON.stringify(user));
-            
             console.log('✅ Authentification vérifiée:', user.email);
             return true;
-        } else {
-            isAuthenticated = false;
-            currentUser = null;
-            
-            // Mettre à jour les variables globales
-            window.isAuthenticated = false;
-            window.currentUser = null;
-            
-            // Nettoyer l'état d'authentification
-            localStorage.removeItem('isAuthenticated');
-            localStorage.removeItem('currentUser');
-            
-            console.log('⚠️ Aucun utilisateur authentifié');
-            return false;
         }
-    } catch (error) {
-        console.error('Erreur vérification authentification:', error);
+
+        // Supabase n'a pas trouvé de session active — on vérifie le localStorage
+        // avant de déconnecter, au cas où la session Supabase est en cours de refresh.
+        const storedAuth = localStorage.getItem('isAuthenticated');
+        const storedUser = localStorage.getItem('currentUser');
+        if (storedAuth === 'true' && storedUser) {
+            try {
+                currentUser = JSON.parse(storedUser);
+                isAuthenticated = true;
+                window.isAuthenticated = true;
+                window.currentUser = currentUser;
+                console.log('✅ Session restaurée depuis localStorage:', currentUser.email);
+                return true;
+            } catch (e) { /* données corrompues, on continue */ }
+        }
+
+        // Aucune session valide
         isAuthenticated = false;
         currentUser = null;
-        
-        // Mettre à jour les variables globales
         window.isAuthenticated = false;
         window.currentUser = null;
-        
-        // Nettoyer l'état d'authentification en cas d'erreur
-        localStorage.removeItem('isAuthenticated');
-        localStorage.removeItem('currentUser');
-        
+        console.log('⚠️ Aucun utilisateur authentifié');
+        return false;
+
+    } catch (error) {
+        console.error('Erreur vérification authentification:', error);
+
+        // En cas d'erreur réseau / Supabase, on se fie au localStorage
+        const storedAuth = localStorage.getItem('isAuthenticated');
+        const storedUser = localStorage.getItem('currentUser');
+        if (storedAuth === 'true' && storedUser) {
+            try {
+                currentUser = JSON.parse(storedUser);
+                isAuthenticated = true;
+                window.isAuthenticated = true;
+                window.currentUser = currentUser;
+                console.log('✅ Session conservée (erreur Supabase):', currentUser.email);
+                return true;
+            } catch (e) { /* données corrompues */ }
+        }
+
+        isAuthenticated = false;
+        currentUser = null;
+        window.isAuthenticated = false;
+        window.currentUser = null;
         return false;
     }
 }

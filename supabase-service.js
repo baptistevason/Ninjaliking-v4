@@ -19,25 +19,36 @@ class SupabaseService {
                 await this.loadSupabaseLibrary();
             }
             
-            // Créer le client Supabase
-            this.supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+            // Créer le client Supabase avec persistance explicite
+            this.supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey, {
+                auth: {
+                    persistSession: true,
+                    autoRefreshToken: true,
+                    detectSessionInUrl: true,
+                    storage: window.localStorage,
+                    storageKey: 'ninja-linking-auth',
+                }
+            });
             this.isInitialized = true;
-            
-            // Vérifier la session utilisateur existante
-            await this.checkCurrentUser();
-            
-            // Écouter les changements d'authentification pour mettre à jour l'état
+
+            // Écouter les changements d'authentification (incluant la restauration initiale)
             this.supabase.auth.onAuthStateChange((event, session) => {
-                if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+                if (['SIGNED_IN', 'TOKEN_REFRESHED', 'INITIAL_SESSION'].includes(event)) {
                     if (session && session.user) {
                         this.currentUser = session.user;
-                        console.log('✅ Session restaurée:', session.user.email);
+                        // Synchroniser avec le localStorage de l'app
+                        localStorage.setItem('isAuthenticated', 'true');
+                        localStorage.setItem('currentUser', JSON.stringify(session.user));
+                        console.log('✅ Session Supabase active:', session.user.email);
                     }
                 } else if (event === 'SIGNED_OUT') {
                     this.currentUser = null;
                     console.log('👋 Utilisateur déconnecté');
                 }
             });
+
+            // Vérifier la session utilisateur existante
+            await this.checkCurrentUser();
             
             console.log('✅ Supabase initialisé avec succès');
             return true;
