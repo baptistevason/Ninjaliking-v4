@@ -628,13 +628,14 @@ body.flowninja-theme {
 }
 
 .flowninja-theme .btn-secondary {
-    background: #f1f5f9;
+    background: white;
     color: #374151;
-    border: 1.5px solid #e5e7eb;
+    border: 1.5px solid #d1d5db;
 }
 
 .flowninja-theme .btn-secondary:hover {
-    background: #e2e8f0;
+    background: #f1f5f9;
+    border-color: #9ca3af;
     color: #111827;
 }
 
@@ -651,15 +652,53 @@ body.flowninja-theme {
 }
 
 .flowninja-theme .btn-success {
-    background: #f0fdf4;
-    color: #16a34a;
-    border: 1.5px solid #bbf7d0;
+    background: #16a34a;
+    color: white;
+    border: none;
 }
 
 .flowninja-theme .btn-success:hover {
-    background: #16a34a;
+    background: #15803d;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(21,128,61,.3);
+}
+
+/* Variantes manquantes — visibles dans tous les contextes */
+.flowninja-theme .btn-info {
+    background: #2563eb;
     color: white;
-    border-color: #16a34a;
+    border: none;
+}
+
+.flowninja-theme .btn-info:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37,99,235,.3);
+}
+
+.flowninja-theme .btn-warning {
+    background: #d97706;
+    color: white;
+    border: none;
+}
+
+.flowninja-theme .btn-warning:hover {
+    background: #b45309;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(217,119,6,.3);
+}
+
+.flowninja-theme .btn-outline {
+    background: white;
+    color: #374151;
+    border: 1.5px solid #d1d5db;
+    font-weight: 500;
+}
+
+.flowninja-theme .btn-outline:hover {
+    background: #f8fafc;
+    border-color: #9ca3af;
+    color: #111827;
 }
 
 .flowninja-theme .btn-large {
