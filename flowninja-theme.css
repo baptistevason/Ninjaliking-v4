@@ -1058,3 +1058,178 @@ body.flowninja-theme {
     color: var(--fn-ninja);
     text-shadow: none;
 }
+
+/* ============================================================
+   SYSTÈME DE COULEURS PAR ONGLET
+   data-active-tab est posé sur <body> par switchPage()
+   Les variables CSS héritent vers tous les descendants.
+   ============================================================ */
+
+/* — Variables par onglet — */
+.flowninja-theme[data-active-tab="ninjalinking"] {
+    --tab-color:  #15803d;
+    --tab-rgb:    21, 128, 61;
+    --tab-tint:   #f0fdf4;
+    --tab-border: #bbf7d0;
+    --tab-shadow: rgba(21, 128, 61, .18);
+}
+
+.flowninja-theme[data-active-tab="serp"] {
+    --tab-color:  #1d4ed8;
+    --tab-rgb:    29, 78, 216;
+    --tab-tint:   #eff6ff;
+    --tab-border: #bfdbfe;
+    --tab-shadow: rgba(29, 78, 216, .18);
+}
+
+.flowninja-theme[data-active-tab="ereputation"] {
+    --tab-color:  #9f1239;
+    --tab-rgb:    159, 18, 57;
+    --tab-tint:   #fff1f2;
+    --tab-border: #fecdd3;
+    --tab-shadow: rgba(159, 18, 57, .18);
+}
+
+.flowninja-theme[data-active-tab="ia"] {
+    --tab-color:  #5b21b6;
+    --tab-rgb:    91, 33, 182;
+    --tab-tint:   #f5f3ff;
+    --tab-border: #ddd6fe;
+    --tab-shadow: rgba(91, 33, 182, .18);
+}
+
+.flowninja-theme[data-active-tab="projects"] {
+    --tab-color:  #0e7490;
+    --tab-rgb:    14, 116, 144;
+    --tab-tint:   #ecfeff;
+    --tab-border: #a5f3fc;
+    --tab-shadow: rgba(14, 116, 144, .18);
+}
+
+.flowninja-theme[data-active-tab="catalog"] {
+    --tab-color:  #374151;
+    --tab-rgb:    55, 65, 81;
+    --tab-tint:   #f9fafb;
+    --tab-border: #d1d5db;
+    --tab-shadow: rgba(55, 65, 81, .18);
+}
+
+/* — Application des variables — */
+
+/* Icônes des cartes de catégorie */
+.flowninja-theme[data-active-tab] .card-icon {
+    background: var(--tab-color);
+}
+
+/* Cartes sélectionnées */
+.flowninja-theme[data-active-tab] .category-card.selected {
+    border-color: var(--tab-color);
+    background: var(--tab-tint);
+    box-shadow: 0 0 0 3px var(--tab-shadow);
+}
+
+.flowninja-theme[data-active-tab] .category-card:hover {
+    border-color: var(--tab-border);
+}
+
+/* Focus des inputs et selects */
+.flowninja-theme[data-active-tab] .search-form input:focus,
+.flowninja-theme[data-active-tab] .main-app .form-group input:focus,
+.flowninja-theme[data-active-tab] .main-app .form-group select:focus,
+.flowninja-theme[data-active-tab] .main-app .form-group textarea:focus {
+    border-color: var(--tab-color);
+    box-shadow: 0 0 0 3px var(--tab-shadow);
+}
+
+/* Boutons primaires dans l'app */
+.flowninja-theme[data-active-tab] .main-app .btn-primary {
+    background: var(--tab-color);
+    border-color: var(--tab-color);
+}
+
+.flowninja-theme[data-active-tab] .main-app .btn-primary:hover {
+    background: var(--tab-color);
+    opacity: 0.88;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--tab-shadow);
+}
+
+/* Checkboxes natives (footprints) */
+.flowninja-theme[data-active-tab] .footprint-checkbox {
+    accent-color: var(--tab-color);
+    width: 16px;
+    height: 16px;
+}
+
+/* Checkboxes custom (.checkbox-label) */
+.flowninja-theme[data-active-tab] .checkbox-label input[type="checkbox"]:checked + .checkmark {
+    background: var(--tab-color);
+    border-color: var(--tab-color);
+    box-shadow: 0 2px 6px var(--tab-shadow);
+}
+
+.flowninja-theme[data-active-tab] .checkbox-label:hover {
+    border-color: var(--tab-border);
+}
+
+/* En-têtes de table */
+.flowninja-theme[data-active-tab] .table th {
+    border-bottom-color: var(--tab-border);
+}
+
+/* Lignes survolées dans la table */
+.flowninja-theme[data-active-tab] .table tr:hover td {
+    background: var(--tab-tint);
+}
+
+/* Items de footprints */
+.flowninja-theme[data-active-tab] .footprint-item {
+    border-left: 3px solid transparent;
+    transition: border-color 0.15s;
+}
+
+.flowninja-theme[data-active-tab] .footprint-item:hover {
+    border-left-color: var(--tab-color);
+    background: var(--tab-tint);
+}
+
+/* Sections footprints / favoris — bordure supérieure */
+.flowninja-theme[data-active-tab] .footprints-section,
+.flowninja-theme[data-active-tab] .favorites-section {
+    border-top: 3px solid var(--tab-color);
+}
+
+/* Titres de sections */
+.flowninja-theme[data-active-tab] .footprints-header h3,
+.flowninja-theme[data-active-tab] .favorites-header h3,
+.flowninja-theme[data-active-tab] .page-header h2 {
+    color: var(--tab-color);
+}
+
+/* Bouton succès (actions catalogue/projets) */
+.flowninja-theme[data-active-tab] .catalog-actions .btn-success,
+.flowninja-theme[data-active-tab] .projects-actions .btn-success,
+.flowninja-theme[data-active-tab] .project-spots-actions .btn-success {
+    background: var(--tab-color);
+    border-color: var(--tab-color);
+    color: white;
+}
+
+/* Bouton edit des spots */
+.flowninja-theme[data-active-tab] .project-spot-action-btn.edit {
+    background: var(--tab-tint);
+    color: var(--tab-color);
+    border-color: var(--tab-border);
+}
+
+.flowninja-theme[data-active-tab] .project-spot-action-btn.edit:hover {
+    background: var(--tab-color);
+    color: white;
+    border-color: var(--tab-color);
+}
+
+/* Lien actif dans les selects/filtres */
+.flowninja-theme[data-active-tab] select option:checked {
+    background: var(--tab-tint);
+    color: var(--tab-color);
+}

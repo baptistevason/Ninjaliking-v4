@@ -1250,6 +1250,9 @@ async function switchPage(pageId) {
     }
     // Garder aussi localStorage comme fallback
     localStorage.setItem('currentPage', pageId);
+
+    // Appliquer la couleur de thème de l'onglet actif sur le body
+    document.body.setAttribute('data-active-tab', pageId);
     
     // Désactiver tous les boutons de navigation
     const allNavButtons = document.querySelectorAll('.nav-btn');
