@@ -322,6 +322,33 @@ body.flowninja-theme {
     margin-top: 0.1rem;
 }
 
+/* ── LOGO RÉPUTALINK ────────────────────────────────────────── */
+.flowninja-theme .header-logo {
+    display: flex;
+    align-items: center;
+    line-height: 1;
+}
+
+.flowninja-theme .header-logo-text {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    background: linear-gradient(
+        135deg,
+        #c8980a 0%,
+        #e8c84a 28%,
+        #f5df90 52%,
+        #dab030 76%,
+        #a87a08 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    filter: drop-shadow(0 1px 3px rgba(180, 130, 10, 0.25));
+}
+
 /* ── NAVIGATION — PILLS COLORÉES ───────────────────────────── */
 .flowninja-theme .navigation {
     background: white;

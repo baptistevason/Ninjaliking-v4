@@ -111,6 +111,23 @@ body.flowninja-theme.dark-theme .header-center p {
     color: #8b949e;
 }
 
+/* Logo doré — version sombre (éclat amplifié sur fond sombre) */
+body.flowninja-theme.dark-theme .header-logo-text {
+    background: linear-gradient(
+        135deg,
+        #d4a012 0%,
+        #f0d060 28%,
+        #fff0a8 52%,
+        #e8c040 76%,
+        #b88c10 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    filter: drop-shadow(0 1px 4px rgba(220, 170, 20, 0.35));
+}
+
 body.flowninja-theme.dark-theme .header-left .btn-secondary {
     background: #21262d;
     color: #e2e8f0;
